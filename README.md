@@ -7,7 +7,7 @@ Algoritmo Genético implementado desde cero.
 
 | Integrante | Responsabilidad |
 |---|---|
-| Por completar | Rol 1: representación y extracción |
+| JMjuanma | Rol 1: representación y extracción |
 | Por completar | Rol 2: síntesis y fitness |
 | Por completar | Roles 3 + 5: operadores, evaluación e integración |
 | Por completar | Rol 4: dinámica poblacional |
@@ -44,10 +44,20 @@ Instalación:
 - resultados/: mediciones, tablas, figuras y audios.
 - documentacion/: contratos, diseño, informe y presentación.
 
-## Acuerdos pendientes
+## Estado de Avance por Rol
 
-Consultar documentacion/contratos/contrato_cromosoma.md
-y documentacion/diseno/dia1.md.
+### Rol 1 — Representación y Extracción (JMjuanma)
+- **Audio de entrada:** Grabación real calibrada y convertida a WAV mono 22050 Hz 16-bit (`datos/audio/silbidos/silbido_01.wav`), con SNR de 40.8 dB y 0% clipping.
+- **Extracción de notas:** Detección de F0 tramo a tramo (pYIN/autocorrelación), filtrado de mediana y segmentación temporal registrada en `datos/procesados/melodia_01.csv`.
+- **Representación cromosómica:** Vector continuo $\mathbb{R}^8$ acotado en $[0.0, 1.0]^8$ mediante esquema desacoplado `GENES_SCHEMA` (3 armónicos, ADSR y ruido de soplo).
+- **Validación:** Inversión formal `decodificar(codificar(x)) == x` verificada con error de precisión máquina ($< 10^{-15}$).
+- **Espacio de búsqueda:** Cuantificado en $1.76 \times 10^{21}$ estados posibles ($70.6$ bits), justificando la intratabilidad de fuerza bruta.
+- **Entregables:** `src/representacion.py`, `src/extraccion.py`, `notebooks/01_rol1_representacion.ipynb`, `documentacion/contratos/contrato_cromosoma.md` y `documentacion/diseno/dia1.md`.
+
+## Acuerdos y Diseño
+
+Consultar `documentacion/contratos/contrato_cromosoma.md`
+y `documentacion/diseno/dia1.md`.
 
 ## Reproducibilidad
 
@@ -79,7 +89,3 @@ Entrega final:
 - WAV: silbido, generación 0, referencia y mejor evolucionado.
 - Informe de 3–4 páginas con cinco respuestas teóricas.
 - Presentación de 10 minutos con demo.
-
-## Estado
-
-Estructura inicial. Todavía no hay implementación funcional.
