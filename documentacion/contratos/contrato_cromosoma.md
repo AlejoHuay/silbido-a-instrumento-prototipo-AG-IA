@@ -1,6 +1,6 @@
 # Contrato del Cromosoma y Especificación de Interfaces (Rol 1)
 
-**Estado:** APROBADO (Versión 1.0 - Día 1)  
+**Estado:** APROBADO (Versión 1.1 - Día 1 con Audio Real Integrado)  
 **Responsables Directos:** Rol 1 (Representación y Extracción) y Rol 2 (Síntesis y Fitness)  
 **Consumidores:** Rol 3 (Operadores), Rol 4 (Dinámica Poblacional) y Rol 5 (Meta-evaluación)  
 
@@ -40,7 +40,7 @@
 - **`decodificar_a_array(cromosoma: np.ndarray) -> np.ndarray`**:
   - Mapeo inverso a arreglo NumPy directo para cálculos vectorizados de alta velocidad en el Rol 2.
 - **Garantía de Invertibilidad:**
-  $$\left| \text{decodificar}(\text{codificar}(x)) - x \right| < 10^{-5} \quad \forall x \in \text{Rango}$$
+  $$\left| \text{decodificar}(\text{codificar}(x)) - x \right| < 10^{-15} \quad \forall x \in \text{Rango}$$
 - **Tratamiento de valores fuera de rango:**
   - `restringir_limites(cromosoma)` aplica recorte rígido (*clipping*) mediante `np.clip(g, 0.0, 1.0)` tras cualquier operador genético (cruce o mutación).
 
@@ -58,34 +58,28 @@
 
 ---
 
-## 4. Contrato de Datos de la Melodía
+## 4. Contrato de Datos de la Melodía y Audio Real
 
 - **Formato compartido:**
   - Audio original y procesado: WAV mono, $22050\text{ Hz}$, PCM 16-bit.
   - Representación en memoria: `notas_midi` (`int32[N]`) y `duraciones_s` (`float64[N]`).
   - Silencios: representados estrictamente con el valor `-1`.
   - Persistencia: archivo CSV en `datos/procesados/melodia_01.csv` con cabecera `nota_midi,duracion_s`.
-- **Melodía base prevista:** Sol5–La5–Si5–La5–Sol5 (MIDI: 79, 81, 83, 81, 79).
-- **Archivos acordados:**
+- **Registro Real Extraído:**
+  - Audio origen: `datos/audio/silbidos/sample.wav` (convertido a `datos/audio/silbidos/silbido_01.wav`).
+  - Frecuencia media fundamental: $\approx 1708\text{ Hz}$ (Octava 6, notas entre Mi6 y Si6).
+  - Duración total de la melodía: $2.69\text{ s}$.
+  - Relación Señal/Ruido: $40.8\text{ dB}$ (señal limpia y apta).
+- **Archivos de Trabajo:**
   - Silbido de entrada: `datos/audio/silbidos/silbido_01.wav`.
-  - Referencia de flauta: `datos/audio/referencias/flauta_referencia_01.wav`.
+  - Referencia de flauta: `datos/audio/referencias/flauta_referencia_01.wav` (o precursora en `datos/audio/referencias/pre1.wav`).
   - Eventos procesados: `datos/procesados/melodia_01.csv`.
 
 ---
 
-## 5. Protocolo de Calibración para la Grabación Definitiva (Checkpoints)
+## 5. Firmas y Aprobación de Interfaces
 
-Cuando el integrante del equipo grabe el silbido humano real, se ejecutará `diagnosticar_audio_silbido()` para validar:
-1. **Ausencia de Clipping:** $\le 0.1\%$ de muestras al límite de saturación.
-2. **Relación Señal/Ruido (SNR):** $\ge 15\text{ dB}$.
-3. **Estabilidad de Tono:** Ausencia de transiciones violentas que falseen la escala diatónica.
-4. **Respeto a los silencios:** Claridad de corte entre notas sucesivas ($\ge 0.05\text{ s}$).
-
----
-
-## 6. Firmas y Aprobación de Interfaces
-
-- **Rol 1 (Representación y Extracción):** Aprobado e Implementado.
+- **Rol 1 (Representación y Extracción):** Aprobado e Implementado con audio real procesado.
 - **Rol 2 (Síntesis y Fitness):** Compatible con `decodificar_a_array` y `datos/procesados/melodia_01.csv`.
 - **Rol 3 (Operadores):** Compatible con individuos normalizados $[0.0, 1.0]^8$ y `restringir_limites`.
 - **Rol 4 (Dinámica Poblacional):** Compatible con `generar_poblacion_inicial(tam_poblacion)`.
