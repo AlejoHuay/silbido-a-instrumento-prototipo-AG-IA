@@ -5,94 +5,108 @@ from pathlib import Path
 import numpy as np
 import soundfile as sf
 
+from .representacion import (
+    GENES_SCHEMA,
+    decodificar,
+    validar_individuo,
+)
+
 
 FRECUENCIA_MUESTREO = 22050
 
-# Propuesta de interfaz compartida con el Rol 1.
-# Cada gen está normalizado al intervalo [0, 1].
-NOMBRES_GENES = (
-    "amplitud_1",
-    "amplitud_2",
-    "amplitud_3",
-    "ataque_s",
-    "liberacion_s",
-)
-
-LIMITES_FISICOS = np.array(
-    [
-        [0.50, 1.00],
-        [0.00, 0.50],
-        [0.00, 0.30],
-        [0.005, 0.150],
-        [0.010, 0.200],
-    ],
-    dtype=float,
+# Ganancia fija basada en los límites del contrato compartido.
+MAXIMO_AMPLITUD = sum(
+    especificacion.max_val
+    for especificacion in GENES_SCHEMA
+    if especificacion.nombre in (
+        "amp_arm1",
+        "amp_arm2",
+        "amp_arm3",
+        "ruido_soplo",
+    )
 )
 
 
 def _parametros_sintesis(gen):
-    """Valida el cromosoma y convierte sus genes a unidades físicas."""
+    """Valida los ocho genes y devuelve sus valores físicos."""
     genes = np.asarray(gen, dtype=float)
 
-    if genes.shape != (len(NOMBRES_GENES),):
-        raise ValueError("El cromosoma debe contener exactamente 5 genes.")
+    valido, mensaje = validar_individuo(genes)
 
-    if not np.all(np.isfinite(genes)):
-        raise ValueError("Los genes deben ser números finitos.")
+    if not valido:
+        raise ValueError(f"Cromosoma inválido: {mensaje}")
 
-    if np.any((genes < 0.0) | (genes > 1.0)):
-        raise ValueError("Todos los genes deben estar entre 0 y 1.")
-
-    minimos = LIMITES_FISICOS[:, 0]
-    maximos = LIMITES_FISICOS[:, 1]
-
-    return minimos + genes * (maximos - minimos)
+    return decodificar(genes)
 
 
-def _crear_envolvente(n_muestras, ataque_s, liberacion_s):
-    """Construye ataque, sostenimiento y liberación dentro del evento."""
-    ataque = max(2, round(ataque_s * FRECUENCIA_MUESTREO))
-    liberacion = max(2, round(liberacion_s * FRECUENCIA_MUESTREO))
-
-    # Para notas cortas, ajusta ambos tiempos proporcionalmente.
-    if ataque + liberacion > n_muestras:
-        proporcion = ataque / (ataque + liberacion)
-        ataque = int(round(n_muestras * proporcion))
-        ataque = max(2, min(ataque, n_muestras - 2))
-        liberacion = n_muestras - ataque
-
-    envolvente = np.ones(n_muestras, dtype=float)
-
-    # Rampas suaves para reducir clics en los extremos.
-    envolvente[:ataque] = np.sin(
-        np.linspace(0.0, np.pi / 2.0, ataque)
-    ) ** 2
-
-    envolvente[-liberacion:] = np.cos(
-        np.linspace(0.0, np.pi / 2.0, liberacion)
-    ) ** 2
-
-    return envolvente
-
-
-def sintetizar_instrumento(notas, duraciones, gen):
+def _crear_envolvente(n_muestras, parametros):
     """
-    Genera audio mono a 22050 Hz.
+    Construye una envolvente ADSR dentro de la duración del evento.
 
-    Parámetros
-    ----------
-    notas : secuencia de enteros
-        Notas MIDI entre 0 y 127. El valor -1 representa silencio.
-    duraciones : secuencia de números
-        Segundos por evento, incluyendo ataque y liberación.
-    gen : secuencia de 5 números
-        Cromosoma normalizado al intervalo [0, 1].
-
-    Retorno
-    -------
-    np.ndarray
-        Audio unidimensional de tipo float32.
+    Si ataque, decaimiento y relajación no caben, sus tiempos
+    se reducen proporcionalmente sin extender la nota.
     """
+    duracion = (n_muestras - 1) / FRECUENCIA_MUESTREO
+
+    etapas = np.array([
+        parametros["ataque_s"],
+        parametros["decaimiento_s"],
+        parametros["relajacion_s"],
+    ], dtype=float)
+
+    if etapas.sum() > duracion:
+        etapas *= duracion / etapas.sum()
+
+    ataque, decaimiento, relajacion = etapas
+    sostenido = parametros["sostenido_rel"]
+
+    puntos_tiempo = [
+        0.0,
+        ataque,
+        ataque + decaimiento,
+        max(ataque + decaimiento, duracion - relajacion),
+        duracion,
+    ]
+
+    puntos_amplitud = [
+        0.0,
+        1.0,
+        sostenido,
+        sostenido,
+        0.0,
+    ]
+
+    tiempo = np.arange(n_muestras) / FRECUENCIA_MUESTREO
+
+    return np.interp(
+        tiempo,
+        puntos_tiempo,
+        puntos_amplitud,
+    )
+
+
+def sintetizar_instrumento(
+    notas,
+    duraciones,
+    gen,
+    *,
+    semilla=2026,
+):
+    """
+    Genera audio mono float32 a 22050 Hz.
+
+    notas:
+        Notas MIDI enteras entre 0 y 127.
+        El valor -1 representa silencio.
+    duraciones:
+        Segundos por evento, incluyendo toda la envolvente ADSR.
+    gen:
+        Cromosoma normalizado de ocho genes definido por el Rol 1.
+    semilla:
+        Semilla fija para que el ruido de soplo sea reproducible.
+    """
+    parametros = _parametros_sintesis(gen)
+
     notas = np.asarray(notas, dtype=float)
     duraciones = np.asarray(duraciones, dtype=float)
 
@@ -121,10 +135,6 @@ def sintetizar_instrumento(notas, duraciones, gen):
     ):
         raise ValueError("Las duraciones deben ser positivas y finitas.")
 
-    a1, a2, a3, ataque_s, liberacion_s = _parametros_sintesis(gen)
-    amplitudes = (a1, a2, a3)
-
-    # Redondear fronteras acumuladas evita acumular errores por evento.
     fronteras = np.rint(
         np.concatenate(([0.0], np.cumsum(duraciones)))
         * FRECUENCIA_MUESTREO
@@ -136,9 +146,18 @@ def sintetizar_instrumento(notas, duraciones, gen):
         raise ValueError("Cada evento debe durar al menos 4 muestras.")
 
     audio = np.zeros(int(fronteras[-1]), dtype=float)
+    rng = np.random.default_rng(semilla)
     nyquist = FRECUENCIA_MUESTREO / 2.0
 
-    for indice, (nota, n_muestras) in enumerate(zip(notas, longitudes)):
+    amplitudes = (
+        parametros["amp_arm1"],
+        parametros["amp_arm2"],
+        parametros["amp_arm3"],
+    )
+
+    for indice, (nota, n_muestras) in enumerate(
+        zip(notas, longitudes)
+    ):
         if nota == -1:
             continue
 
@@ -153,29 +172,33 @@ def sintetizar_instrumento(notas, duraciones, gen):
         for armonico, amplitud in enumerate(amplitudes, start=1):
             frecuencia_armonico = armonico * frecuencia
 
-            # Omite armónicos que producirían aliasing.
             if frecuencia_armonico < nyquist:
                 evento += amplitud * np.sin(
                     2.0 * np.pi * frecuencia_armonico * tiempo
                 )
 
-        evento *= _crear_envolvente(
-            n_muestras, ataque_s, liberacion_s
+        # Modelo inicial de ruido de soplo, acotado entre -1 y 1.
+        evento += parametros["ruido_soplo"] * rng.uniform(
+            -1.0,
+            1.0,
+            n_muestras,
         )
 
-        # Ganancia fija: la suma máxima de amplitudes es 1,8.
-        # No normalizar cada individuo por su propio pico.
-        evento *= 0.9 / 1.8
+        evento *= _crear_envolvente(n_muestras, parametros)
+
+        # Misma ganancia para todos los individuos.
+        evento *= 0.9 / MAXIMO_AMPLITUD
 
         inicio = fronteras[indice]
         fin = fronteras[indice + 1]
+
         audio[inicio:fin] = evento
 
     return audio.astype(np.float32)
 
 
 def guardar_wav(ruta, audio):
-    """Guarda audio mono como WAV PCM de 16 bits a 22050 Hz."""
+    """Guarda WAV mono a 22050 Hz, PCM de 16 bits."""
     audio = np.asarray(audio, dtype=float)
 
     if audio.ndim != 1 or audio.size == 0:
