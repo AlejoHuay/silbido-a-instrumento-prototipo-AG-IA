@@ -1,0 +1,102 @@
+{
+  "coleccion": "University of Iowa Musical Instrument Samples",
+  "pagina": "https://theremin.music.uiowa.edu/MIS-Pitches-2012/MISFlute2012.html",
+  "condiciones": "https://theremin.music.uiowa.edu/MIS.html",
+  "tecnica": "Sin vibrato; dinámica ff",
+  "ganancia_global": 5.00563215753986,
+  "fade_bordes_s": 0.005,
+  "notas": [
+    -1,
+    93,
+    96,
+    -1,
+    92,
+    95,
+    92,
+    -1,
+    95,
+    -1,
+    91,
+    92,
+    95,
+    -1,
+    88,
+    89
+  ],
+  "duraciones_s": [
+    0.128,
+    0.244,
+    0.104,
+    0.139,
+    0.244,
+    0.255,
+    0.279,
+    0.035,
+    0.232,
+    0.035,
+    0.093,
+    0.163,
+    0.221,
+    0.046,
+    0.104,
+    0.383
+  ],
+  "muestras": [
+    {
+      "midi": 88,
+      "archivo": "Flute.nonvib.ff.E6.stereo.aif",
+      "url": "https://theremin.music.uiowa.edu/sound files/MIS Pitches - 2014/Woodwinds/Flute/Flute.nonvib.ff.E6.stereo.aif",
+      "sr_original": 44100,
+      "inicio_s": 0.034829931972789115,
+      "duracion_disponible_s": 2.043356009070295
+    },
+    {
+      "midi": 89,
+      "archivo": "Flute.nonvib.ff.F6.stereo.aif",
+      "url": "https://theremin.music.uiowa.edu/sound files/MIS Pitches - 2014/Woodwinds/Flute/Flute.nonvib.ff.F6.stereo.aif",
+      "sr_original": 44100,
+      "inicio_s": 0.034829931972789115,
+      "duracion_disponible_s": 1.6718367346938776
+    },
+    {
+      "midi": 91,
+      "archivo": "Flute.nonvib.ff.G6.stereo.aif",
+      "url": "https://theremin.music.uiowa.edu/sound files/MIS Pitches - 2014/Woodwinds/Flute/Flute.nonvib.ff.G6.stereo.aif",
+      "sr_original": 44100,
+      "inicio_s": 0.034829931972789115,
+      "duracion_disponible_s": 1.9156462585034013
+    },
+    {
+      "midi": 92,
+      "archivo": "Flute.nonvib.ff.Ab6.stereo.aif",
+      "url": "https://theremin.music.uiowa.edu/sound files/MIS Pitches - 2014/Woodwinds/Flute/Flute.nonvib.ff.Ab6.stereo.aif",
+      "sr_original": 44100,
+      "inicio_s": 0.023219954648526078,
+      "duracion_disponible_s": 1.9969160997732427
+    },
+    {
+      "midi": 93,
+      "archivo": "Flute.nonvib.ff.A6.stereo.aif",
+      "url": "https://theremin.music.uiowa.edu/sound files/MIS Pitches - 2014/Woodwinds/Flute/Flute.nonvib.ff.A6.stereo.aif",
+      "sr_original": 44100,
+      "inicio_s": 0.034829931972789115,
+      "duracion_disponible_s": 2.0549659863945577
+    },
+    {
+      "midi": 95,
+      "archivo": "Flute.nonvib.ff.B6.stereo.aif",
+      "url": "https://theremin.music.uiowa.edu/sound files/MIS Pitches - 2014/Woodwinds/Flute/Flute.nonvib.ff.B6.stereo.aif",
+      "sr_original": 44100,
+      "inicio_s": 0.08126984126984127,
+      "duracion_disponible_s": 2.2407256235827666
+    },
+    {
+      "midi": 96,
+      "archivo": "Flute.nonvib.ff.C7.stereo.aif",
+      "url": "https://theremin.music.uiowa.edu/sound files/MIS Pitches - 2014/Woodwinds/Flute/Flute.nonvib.ff.C7.stereo.aif",
+      "sr_original": 44100,
+      "inicio_s": 0.023219954648526078,
+      "duracion_disponible_s": 2.0085260770975055
+    }
+  ]
+}
