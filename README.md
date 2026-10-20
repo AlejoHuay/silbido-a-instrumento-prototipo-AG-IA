@@ -35,6 +35,19 @@ Instalación:
 
     python -m pip install -r requirements.txt
 
+Para ejecutar y verificar los notebooks en un entorno local limpio:
+
+    py -3.10 -m venv .venv
+    .\.venv\Scripts\python -m pip install -r requirements-notebooks.txt
+    .\.venv\Scripts\python scripts\verificar_notebooks.py
+
+`requirements-notebooks.txt` incluye las dependencias del proyecto (también
+`pandas`) y añade el kernel y el ejecutor automatizado de Jupyter. El verificador
+usa un kernel nuevo por notebook y una copia temporal del repositorio, por lo
+que las celdas que generan WAV, CSV o figuras no alteran el árbol de trabajo.
+La evidencia de la última corrida está en
+[`documentacion/verificacion_notebooks.md`](documentacion/verificacion_notebooks.md).
+
 ## Organización
 
 - notebooks/: trabajo por rol y notebook de integración.

@@ -1,0 +1,6 @@
+-r requirements.txt
+
+# Ejecución y verificación automatizada en kernels Jupyter limpios.
+ipykernel
+nbclient
+nbformat
