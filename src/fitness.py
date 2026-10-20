@@ -32,7 +32,10 @@ def _validar_audio(audio, nombre):
 
 
 def _validar_par(audio, referencia):
-    """Exige audios previamente alineados y de igual longitud."""
+    """Valida ambos audios y comprueba que tengan igual longitud.
+
+       La alineación temporal y la frecuencia de muestreo de 22050 Hz
+       deben garantizarse al preparar los audios."""
     audio = _validar_audio(audio, "El audio sintetizado")
     referencia = _validar_audio(referencia, "La referencia")
 

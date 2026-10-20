@@ -3,6 +3,7 @@
   "pagina": "https://theremin.music.uiowa.edu/MIS-Pitches-2012/MISFlute2012.html",
   "condiciones": "https://theremin.music.uiowa.edu/MIS.html",
   "tecnica": "Sin vibrato; dinámica ff",
+  "frecuencia_muestreo": 22050,
   "ganancia_global": 5.00563215753986,
   "fade_bordes_s": 0.005,
   "notas": [
@@ -48,6 +49,7 @@
       "url": "https://theremin.music.uiowa.edu/sound files/MIS Pitches - 2014/Woodwinds/Flute/Flute.nonvib.ff.E6.stereo.aif",
       "sr_original": 44100,
       "inicio_s": 0.034829931972789115,
+      "fin_s": 2.078185941043084,
       "duracion_disponible_s": 2.043356009070295
     },
     {
@@ -56,6 +58,7 @@
       "url": "https://theremin.music.uiowa.edu/sound files/MIS Pitches - 2014/Woodwinds/Flute/Flute.nonvib.ff.F6.stereo.aif",
       "sr_original": 44100,
       "inicio_s": 0.034829931972789115,
+      "fin_s": 1.7066666666666668,
       "duracion_disponible_s": 1.6718367346938776
     },
     {
@@ -64,6 +67,7 @@
       "url": "https://theremin.music.uiowa.edu/sound files/MIS Pitches - 2014/Woodwinds/Flute/Flute.nonvib.ff.G6.stereo.aif",
       "sr_original": 44100,
       "inicio_s": 0.034829931972789115,
+      "fin_s": 1.9504761904761905,
       "duracion_disponible_s": 1.9156462585034013
     },
     {
@@ -72,6 +76,7 @@
       "url": "https://theremin.music.uiowa.edu/sound files/MIS Pitches - 2014/Woodwinds/Flute/Flute.nonvib.ff.Ab6.stereo.aif",
       "sr_original": 44100,
       "inicio_s": 0.023219954648526078,
+      "fin_s": 2.020136054421769,
       "duracion_disponible_s": 1.9969160997732427
     },
     {
@@ -80,6 +85,7 @@
       "url": "https://theremin.music.uiowa.edu/sound files/MIS Pitches - 2014/Woodwinds/Flute/Flute.nonvib.ff.A6.stereo.aif",
       "sr_original": 44100,
       "inicio_s": 0.034829931972789115,
+      "fin_s": 2.089795918367347,
       "duracion_disponible_s": 2.0549659863945577
     },
     {
@@ -88,6 +94,7 @@
       "url": "https://theremin.music.uiowa.edu/sound files/MIS Pitches - 2014/Woodwinds/Flute/Flute.nonvib.ff.B6.stereo.aif",
       "sr_original": 44100,
       "inicio_s": 0.08126984126984127,
+      "fin_s": 2.3219954648526078,
       "duracion_disponible_s": 2.2407256235827666
     },
     {
@@ -96,6 +103,7 @@
       "url": "https://theremin.music.uiowa.edu/sound files/MIS Pitches - 2014/Woodwinds/Flute/Flute.nonvib.ff.C7.stereo.aif",
       "sr_original": 44100,
       "inicio_s": 0.023219954648526078,
+      "fin_s": 2.0317460317460316,
       "duracion_disponible_s": 2.0085260770975055
     }
   ]
