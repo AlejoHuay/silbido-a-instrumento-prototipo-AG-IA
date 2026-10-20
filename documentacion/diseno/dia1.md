@@ -1,95 +1,117 @@
-# Día 1 — Diseño del Algoritmo Genético
+# Día 1 — Diseño e integración del algoritmo genético
 
-**Proyecto**Proyecto:** DelDel SilbidoSilbido aa la Flauta — Síntesis Instrumental con Algoritmos Genéticos  
-**Curso:** Inteligencia Artificial | **Entregable:** Diseñola Flauta — Síntesis Instrumental con Algoritmos Genéticos  
-**Curso:** Inteligencia Artificial | **Entregable:** Diseño de ArquitecturaArquitectura (1(1 página)  
-**Estado:** Definido y acordado por los 4 integrantes (Roles 1 al 5) con audio real procesado.
+**Proyecto:** Del silbido a la flauta — síntesis instrumental con algoritmos
+genéticos.
+**Documento de entrega:** [diseño conjunto](diseno_completo_ag_dia1.md), pendiente
+de decisiones, paginación y firmas. Este archivo es el anexo técnico.
+**Alcance:** diseño y contratos disponibles para revisar el Día 1.
+No afirma que exista un ciclo generacional completo ni que se hayan
+ejecutado experimentos. Las firmas de conformidad deben completarse por el
+equipo.
 
-------
+## Objetivo y datos
 
-## 1. Objetivo y Melodía
-Convertir un silbido humano en la misma melodía interpretada por una flauta sintetizada, optimizando sus parámetros tímbricos mediante un Algoritmo Genético continuo desde cero (sin Deep Learning ni frameworks externos de AG).
-- **Melodía objetivo:** Sol5–La5–Si5–La5–Sol5 (Notas MIDI: 79–81–83–81–79).
-- **Formato de datos:** Audio WAV mono, 22050 Hz, PCM 16-bit. Melodía en CSV: `nota_midi,duracion_s` (silencios con `-1`).
-- **Archivos base:** `datos/audio/silbidos/silbido_01.wav`, `datos/audio/referencias/flauta_referencia_01.wav`, `datos/procesados/melodia_01.csv`.
-## 1. Objetivo y Melodía
-Convertir un silbido humano real en la misma melodía interpretada por una flauta sintetizada, optimizando sus parámetros tímbricos mediante un Algoritmo Genético continuo desde cero (sin Deep Learning ni frameworks externos de AG).
-- **Entrada real:** Silbido humano grabado y calibrado ($2.69\text{ s}$, registro en octava 6 centrado en $\approx 1708\text{ Hz}$, SNR $40.8\text{ dB}$, sin clipping).
-- **Melodía extraída:** Secuencia de notas MIDI y duraciones reales registradas en `datos/procesados/melodia_01.csv` (silencios codificados como `-1`).
-- **Formato estándar:** WAV mono, 22050 Hz, PCM 16-bit.
-- **Archivos base:** `datos/audio/silbidos/silbido_01.wav`, `datos/audio/referencias/flauta_referencia_01.wav`, `datos/procesados/melodia_01.csv`.
+Usar las notas y duraciones extraídas del silbido para sintetizar una flauta y
+optimizar sus parámetros tímbricos. La melodía procesada se lee de
+`datos/procesados/melodia_01.csv`; el audio de referencia utilizado por la
+prueba de integración es `datos/audio/referencias/flauta_referencia_01.wav`.
+La lectura del CSV no vuelve a ejecutar la extracción desde el WAV original.
 
-------
+La síntesis y el fitness requieren audio mono a 22050 Hz, alineado y con igual
+número de muestras. El fitness rechaza longitudes incompatibles; no recorta ni
+remuestrea automáticamente. Los silencios de la melodía se representan como
+nota MIDI `-1`.
 
-## 2. Representación del Cromosoma (Rol 1)
-Cromosoma continuo en $\mathbb{R}^8$ normalizado en el hipercubo $[0.0, 1.0]^8$, desacoplado mediante esquema modular extensible:
-$$\vec{g} = [a_1, a_2, a_3, \text{Ataque}, \text{Decaimiento}, \text{Sostenido}, \text{Relajación}, \text{Soplo}]$$
-- **Armónicos:** $a_1 \in [0.10, 1.00]$ (fundamental dominante), $a_2 \in [0.00, 0.80]$ (brillo), $a_3 \in [0.00, 0.50]$ (color tímbrico).
-- **Envolvente ADSR:** Ataque $\in [0.005, 0.250]\text{ s}$, Decaimiento $\in [0.005, 0.300]\text{ s}$, Sostenido $\in [0.10, 1.00]$, Relajación $\in [0.005, 0.300]\text{ s}$.
-- **Turbulencia:** Ruido de aliento $b_n \in [0.00, 0.25]$ (resonancia del bisel de la flauta).
-- **Espacio de búsqueda:** $S \approx 1.76 \times 10^{21}$ estados a resolución $10^{-3}$ ($\approx 70.6$ bits). Inviable por fuerza bruta (>50 mil millones de años).
-## 2. Representación del Cromosoma (Rol 1)
-Cromosoma continuo en $\mathbb{R}^8$ normalizado en el hipercubo $[0.0, 1.0]^8$, desacoplado mediante esquema modular extensible:
-$$\vec{g} = [a_1, a_2, a_3, \text{Ataque}, \text{Decaimiento}, \text{Sostenido}, \text{Relajación}, \text{Soplo}]$$
-- **Armónicos:** $a_1 \in [0.10, 1.00]$ (fundamental dominante), $a_2 \in [0.00, 0.80]$ (brillo), $a_3 \in [0.00, 0.50]$ (color tímbrico).
-- **Envolvente ADSR:** Ataque $\in [0.005, 0.250]\text{ s}$, Decaimiento $\in [0.005, 0.300]\text{ s}$, Sostenido $\in [0.10, 1.00]$, Relajación $\in [0.005, 0.300]\text{ s}$.
-- **Turbulencia:** Ruido de aliento $b_n \in [0.00, 0.25]$ (resonancia del bisel de la flauta).
-- **Espacio de búsqueda:** $S \approx 1.76 \times 10^{21}$ estados a resolución $10^{-3}$ ($\approx 70.6$ bits). Inviable por fuerza bruta (>50 mil millones de años). Invertibilidad $\text{decodificar}(\text{codificar}(x)) \approx x$ con error $< 10^{-15}$.
+## Cromosoma — Rol 1
 
-------
+El genotipo es un vector continuo de ocho `float64` normalizados en
+`[0, 1]^8`. En orden:
 
-## 3. Síntesis y Función de Fitness (Rol 2)
-- **Síntesis acústica:** $s(t) = \text{ADSR}(t) \cdot \sum_{k=1}^3 a_k \sin(2\pi k f_0 t) + b_n \cdot \eta(t)$, generada a 22050 Hz mono.
-- **Fitness Principal ($F_{\text{STFT}}$):** Comparación de espectrogramas STFT en escala dB (ventana Hann 1024, hop 256). Se descarta el MSE temporal porque penaliza drásticamente los desfases de fase pese a ser inaudibles al oído humano (*Ley de Ohm acústica*).
-- **Segunda Métrica ($F_{\text{Croma}}$):** Distancia euclídea media sobre vectores cromáticos (12 pitch classes) para asegurar afinación y pureza armónica.
-- **Formulación del Fitness (Maximización acotada en $(0, 1]$):**
-  $$\text{Fitness}(\vec{g}) = \frac{1}{1 + \mathcal{D}_{\text{STFT}}(\text{cand}, \text{ref}) + 0.5 \cdot \mathcal{D}_{\text{Croma}}(\text{cand}, \text{ref})}$$
-## 3. Síntesis y Función de Fitness (Rol 2)
-- **Síntesis acústica:** $s(t) = \text{ADSR}(t) \cdot \sum_{k=1}^3 a_k \sin(2\pi k f_0 t) + b_n \cdot \eta(t)$, generada a 22050 Hz mono.
-- **Fitness Principal ($F_{\text{STFT}}$):** Comparación de espectrogramas STFT en escala dB (Hann 1024, hop 256). Se descarta el MSE temporal porque penaliza drásticamente los desfases de fase pese a ser inaudibles al oído humano (*Ley de Ohm acústica*).
-- **Segunda Métrica ($F_{\text{Croma}}$):** Distancia euclídea media sobre vectores cromáticos (12 pitch classes) para asegurar afinación y pureza armónica.
-- **Formulación del Fitness (Maximización acotada en $(0, 1]$):**
-  $$\text{Fitness}(\vec{g}) = \frac{1}{1 + \mathcal{D}_{\text{STFT}}(\text{cand}, \text{ref}) + 0.5 \cdot \mathcal{D}_{\text{Croma}}(\text{cand}, \text{ref})}$$
+| Índice | Gen | Rango físico |
+|---:|---|---:|
+| 0 | `amp_arm1` | 0.10–1.00 |
+| 1 | `amp_arm2` | 0.00–0.80 |
+| 2 | `amp_arm3` | 0.00–0.50 |
+| 3 | `ataque_s` | 0.005–0.250 s |
+| 4 | `decaimiento_s` | 0.005–0.300 s |
+| 5 | `sostenido_rel` | 0.10–1.00 |
+| 6 | `relajacion_s` | 0.005–0.300 s |
+| 7 | `ruido_soplo` | 0.00–0.25 |
 
-------
+`codificar()` transforma valores físicos a la escala normalizada y los recorta
+a `[0,1]`; `decodificar()` realiza la transformación inversa. `validar_individuo()`
+comprueba forma, finitud, límites y que ataque + decaimiento + relajación no
+supere 1 s. La síntesis acepta el cromosoma normalizado, valida sus ocho genes
+y genera ruido reproducible si se proporciona la misma semilla.
 
-#### 4. Operadores Genéticos (Rol 3)
--3)
-- **Selección:****Selección:** TorneoTorneo deterministadeterminista con $k=3$$k=3$ (alta(alta presión selectiva)presión selectiva) y SUSSUS (Stochastic(Stochastic UniversalUniversal Sampling,Sampling, preservaciónpreservación de diversidad)de diversidad).
-- **Cruce:** Blend-$\alpha$ ($\text{BLX-}0.5$, exploración en espacio continuo) y Cruce Uniforme continuo ($p=0.5$).
-- **Mutación:** Gaussiana con clipping ($\sigma = 0.08$) y No Uniforme adaptativa decreciente con- **Cruce:** Blend-$\alpha$ ($\text{BLX-}0.5$, exploración en espacio continuo) y Cruce Uniforme continuo ($p=0.5$).
-- **Mutación:** Gaussiana con clipping ($\sigma = 0.08$) y No Uniforme adaptativa decreciente con la generacióngeneración ($t/G_{\max}$)($t/G_{\max}$).
+## Síntesis y fitness — Rol 2
 
-------
+`sintetizar_instrumento()` genera audio mono `float32` a 22050 Hz mediante
+síntesis aditiva de tres armónicos, envolvente ADSR y ruido de soplo. Recibe
+notas MIDI, duraciones, cromosoma y una semilla opcional para la síntesis.
+La fórmula efectiva es `(0.9/2.55) * ADSR * (armónicos + ruido)`: el ruido
+también recibe la envolvente. Se omiten armónicos sobre Nyquist y se comprimen
+los tiempos ADSR proporcionalmente si no caben en la duración del evento.
 
-## 5. Dinámica Poblacional y Meta-Evaluación (Roles 4 y 5)
-- **Población y Ciclo:** $N \in \{20, 50, 100\}$, generaciones $G=50$, elitismo de 2 individuos ($k_e=2$). Parada por estancamiento ($\Delta F < 10^{-4}$ durante 10 generaciones) o generación máxima.
-- **Plan Experimental:** Matriz de 12 configuraciones factoriales evaluadas en 5 semillas (`42, 101, 2024, 7, 999`).
-- **Línea Base (Baseline):** Comparativa estadística contra Búsqueda Aleatoria pura (Random Search) con idéntico número de evaluaciones ($N \times G$).
-- **Métricas:** Media, desviación estándar, varianza, curvas de convergencia y análisis de sensibilidad (diagrama tornado).
-## 5. Dinámica Poblacional y Meta-Evaluación (Roles 4 y 5)
-- **Población y Ciclo:** $N \in \{20, 50, 100\}$, generaciones $G=50$, elitismo de 2 individuos ($k_e=2$). Parada por estancamiento ($\Delta F < 10^{-4}$ durante 10 generaciones) o generación máxima.
-- **Plan Experimental:** Matriz de 12 configuraciones factoriales evaluadas en 5 semillas (`42, 101, 2024, 7, 999`).
-- **Línea Base (Baseline):** Comparativa estadística contra Búsqueda Aleatoria pura (Random Search) con idéntico número de evaluaciones ($N \times G$).
-- **Métricas:** Media, desviación estándar, varianza, curvas de convergencia y análisis de sensibilidad (diagrama tornado).
+`evaluar_individuo()` sintetiza el candidato y devuelve **una métrica elegida**:
 
-------
+- `metrica="stft"`: la magnitud STFT usa ventana Hann, `N_FFT=2048`,
+  `SALTO=256`, conversión a dB con piso de `-80 dB` y referencia fija de
+  amplitud 1. El error es la media del error absoluto en dB y el fitness a
+  maximizar es `1 / (1 + error_stft_db / 10)`.
+- `metrica="croma"`: similitud coseno media por cuadro entre cromas de 12
+  clases de altura, en `[0,1]`, a maximizar.
 
-## 6. Firmas de Conformidad del Equipo
-## 6. Firmas de Conformidad del Equipo
+`evaluar_audio()` devuelve ambas métricas por separado
+(`error_stft_db`, `fitness_stft`, `fitness_croma`). El código no combina STFT y
+croma en un fitness compuesto. La referencia y el candidato deben ser mono,
+finitos, tener al menos 2048 muestras y ser de igual longitud.
 
-| Rol | Responsabilidad | Integrante | Firma |
-|:---|:---|:---|:---|
-| **Rol 1** | Codificador (Representación y Extracción) | ___________________________ | ___________________________ |
-| **Rol 2** | Traductor (Síntesis y Fitness) | ___________________________ | ___________________________ |
-| **Rol 3 y 5** | Motor Evolutivo, Meta-evaluación e Integración | ___________________________ | ___________________________ |
-| **Rol 4** | Estratega (Dinámica Poblacional) | ___________________________ | ___________________________ |
-| Rol | Responsabilidad | Integrante | Firma |
-|:---|:---|:---|:---|
-| **Rol 1** | Codificador (Representación y Extracción) | JMjuanma | ___________________________ |
-| **Rol 2** | Traductor (Síntesis y Fitness) | ___________________________ | ___________________________ |
-| **Rol 3 y 5** | Motor Evolutivo, Meta-evaluación e Integración | ___________________________ | ___________________________ |
-| **Rol 4** | Estratega (Dinámica Poblacional) | ___________________________ | ___________________________ |
+## Parámetros de dinámica — Rol 4, Día 1
 
-**Fecha de Aprobación:** 19 de octubre de 2026
-**Fecha de Aprobación:** 19 de octubre de 2026
+Parámetros base implementados por el Rol 4:
+
+- Población base: 50 individuos; tamaños previstos: 20, 50 y 100.
+- Máximo: 50 reemplazos después de evaluar la generación 0.
+- Elitismo base: 2 individuos, copiados independientemente.
+- Selección: torneo con `k=3`, reutilizando `seleccion_torneo()` del Rol 3.
+- Aptitud: maximización; se conserva la correspondencia entre orden de
+  población y vector de fitness.
+- Parada: mejora acumulada menor que `1e-4` en ventana de 10 transiciones
+  (11 mejores globales); no hay contador reiniciable de mejoras individuales.
+- Un `numpy.random.Generator` compartido por corrida.
+- Estadísticas disponibles: fitness máximo, media, desviación estándar y
+  diversidad genética (media de desviaciones estándar por gen).
+
+`src/configuracion.py` prepara 12 configuraciones y declara las semillas
+previstas `42, 101, 2024, 7, 999` como réplicas. Según la implementación
+actual, la matriz factorial completa es N={20,50,100} × élites={1,2} ×
+p_mutación={0.02,0.08}. Son 12 configuraciones y cinco réplicas por configuración,
+no resultados obtenidos. Niveles y tasas deben ratificarse. El plan detallado,
+las tres combinaciones propuestas y la comparación de métricas están en
+[el plan del Rol 5](../analisis_rol5.md).
+
+## Estado real de integración y pendientes
+
+Hay funciones de inicialización, evaluación de población, elitismo,
+estadísticas y detección de estancamiento, además de selección por torneo.
+Todavía no hay un ciclo completo de generaciones integrado. Las interfaces de
+cruce y mutación, así como sus decisiones de parámetros, permanecen a cargo
+del Rol 3 y pendientes de confirmación. Por tanto, no se declara operativo el
+algoritmo genético completo.
+
+El notebook `notebooks/00_integracion.ipynb` comprueba con datos reales la
+conexión entre la melodía procesada, el cromosoma, la síntesis y el fitness.
+No ejecuta el AG ni el plan factorial.
+
+## Decisiones a confirmar
+
+1. Ratificar los factores que forman las 12 configuraciones, en particular
+   elitismo alternativo y probabilidades de mutación.
+2. Definir los contratos de cruce/mutación y el ciclo generacional del AG.
+3. Ratificar STFT como propuesta base y croma como comparación separada. El diseño
+   anterior describía STFT con `N_FFT=1024`, distancia euclídea de croma y una
+   combinación de ambas; esas definiciones contradicen `src/fitness.py`.
+4. Instrumentar en el Día 2 el contador de llamadas reales del pseudocódigo
+   del Rol 4: incluye población inicial y reevaluaciones efectivas. El baseline
+   igualará ese contador por corrida, también con parada temprana.

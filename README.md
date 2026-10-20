@@ -9,8 +9,9 @@ Algoritmo Genético implementado desde cero.
 |---|---|
 | JMjuanma | Rol 1: representación y extracción |
 | Por completar | Rol 2: síntesis y fitness |
-| Por completar | Roles 3 + 5: operadores, evaluación e integración |
+| Por completar | Rol 3: operadores genéticos |
 | Por completar | Rol 4: dinámica poblacional |
+| Por completar | Rol 5: integración reproducible y análisis experimental |
 
 ## Objetivo
 
@@ -61,10 +62,18 @@ Instalación:
 - **Integración:** conexión verificada con `seleccion_torneo()` del Rol 3; cruces y mutaciones permanecen pendientes de sus contratos del Día 2.
 - **Entregables:** `src/configuracion.py`, `src/algoritmo_genetico.py`, `notebooks/04_rol4_dinamica.ipynb` y `documentacion/contratos/interfaz_dinamica_rol4.md`.
 
+### Rol 5 — Analista (en progreso)
+- **Día 1:** notebook reproducible con prueba inicial de representación, melodía procesada, síntesis y fitness; documentación del plan y de las discrepancias verificadas.
+- **No ejecutado:** el notebook no corre el AG ni las 12 configuraciones. El ciclo generacional completo depende de las interfaces de cruce/mutación del Rol 3 y de su integración por el Rol 4.
+- **Pendiente de ratificación:** los niveles exactos de los factores que generan las 12 configuraciones y la métrica oficial del experimento.
+- **Entregables de esta etapa:** `notebooks/00_integracion.ipynb`, `documentacion/diseno/dia1.md`, `documentacion/analisis_rol5.md` y `tests/test_rol5.py`.
+
 ## Acuerdos y Diseño
 
-Consultar `documentacion/contratos/contrato_cromosoma.md`
-y `documentacion/diseno/dia1.md`.
+Documento de entrega del Día 1: [diseño conjunto](documentacion/diseno/diseno_completo_ag_dia1.md).
+Estado: borrador revisado; decisiones, paginación y firmas pendientes.
+`documentacion/diseno/dia1.md` es el anexo técnico; los contratos detallan
+las interfaces. Evidencia de revisión: [revisión de cierre](documentacion/revision_cierre_dia1.md).
 
 ## Reproducibilidad
 
@@ -82,7 +91,7 @@ y `documentacion/diseno/dia1.md`.
 - Compartir cambios mediante commits y revisión.
 - Coordinar modificaciones de interfaces antes de integrarlas.
 - No sobrescribir el trabajo de otros integrantes.
-- Coordinar la edición de 00_integracion.ipynb con Roles 3 + 5.
+- Coordinar la edición de 00_integracion.ipynb con el Rol 5 y los responsables de las interfaces afectadas.
 
 ## Entregables
 

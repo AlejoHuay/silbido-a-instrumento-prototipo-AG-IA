@@ -83,7 +83,10 @@ Ante archivos o dependencias ausentes, informa el error sin sustituirlos.
 
 ## Inconsistencias pendientes de coordinación
 
-Confirmadas en la base `81b09dd`; se registran sin cambiar decisiones de otros roles:
+Confirmadas en la base `81b09dd`. El Rol 5 corrigió varias en `171b794`;
+la revisión de cierre alinea las restantes. La lista siguiente describe esa
+base histórica, no el estado vigente. Entrega y decisiones pendientes:
+[diseño conjunto](../diseno/diseno_completo_ag_dia1.md).
 
 - `documentacion/diseno/dia1.md` indica STFT de 1024 muestras; `src/fitness.py`
   usa `N_FFT = 2048`.
