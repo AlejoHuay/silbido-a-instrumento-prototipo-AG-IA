@@ -80,7 +80,34 @@ Documento de entrega: [diseño conjunto](../diseno/diseno_completo_ag_dia1.md).
 
 ---
 
-## 5. Compatibilidad técnica; aprobación pendiente
+## 5. Definición y Ámbito de Aplicación de Probabilidades (Acuerdo Rol 1 con Roles 3 y 4)
+
+Para disipar la ambigüedad en la aplicación de operadores genéticos sobre cromosomas continuos en $[0, 1]^8$, el Rol 1 establece formalmente los niveles de granularidad:
+
+### A. Probabilidad de Cruce ($p_{\text{cruce}} = 0.90$)
+- **Nivel de aplicación:** **Por pareja de progenitores**.
+- **Semántica:** Una vez seleccionados dos padres $(p_1, p_2)$ mediante torneo o SUS:
+  - Con probabilidad $p_{\text{cruce}}$, la pareja se cruza mediante el operador (BLX-$0.5$ o uniforme continuo) generando dos descendientes.
+  - Con probabilidad $1 - p_{\text{cruce}}$, la pareja no se recombina y sus descendientes son copias/clones independientes en memoria de los padres.
+- **Detalle de Cruce Uniforme Continuo ($p_{\text{swap}} = 0.50$):** Cuando ocurre un cruce uniforme, cada gen se intercambia entre los padres con probabilidad fija $p_{\text{swap}} = 0.50$. Esta es una regla interna del operador, independiente de $p_{\text{cruce}}$.
+
+### B. Probabilidad de Mutación ($p_{\text{mutación}}$: Base = $0.05$, Factoriales = $\{0.02, 0.08\}$)
+- **Nivel de aplicación:** **Por gen (por alelo) independiente**, **NO por individuo completo**.
+- **Justificación Acústica y Genética:**
+  - En un espacio continuo $[0, 1]^8$, mutar a nivel de individuo completo (modificar todos los 8 genes a la vez) causaría una perturbación acústica caótica y destructiva en el fenotipo, rompiendo la localidad y los bloques constructores ya afinados (hipermutación disruptiva).
+  - Al aplicarse **gen a gen**, cada parámetro $g_j \in [0, 1]$ ($j \in \{0, \dots, 7\}$) muta de forma independiente con probabilidad $p_{\text{mutación}}$:
+    $$\forall j \in \{0, \dots, 7\}, \quad \text{si } \text{rng.random}() < p_{\text{mutación}} \implies g_j' = \text{clip}(g_j + \Delta g_j, 0.0, 1.0)$$
+  - **Número esperado de genes mutados por descendiente:** $\mathbb{E} = D \times p_{\text{mutación}} = 8 \times p_{\text{mutación}}$.
+    - Con $p_m = 0.05$ (base): $\mathbb{E} = 8 \times 0.05 = 0.40$ genes por individuo (un gen alterado cada 2.5 individuos, propiciando explotación local fina).
+    - Con $p_m = 0.02$ (nivel experimental bajo): $\mathbb{E} = 8 \times 0.02 = 0.16$ genes por individuo.
+    - Con $p_m = 0.08$ (nivel experimental alto): $\mathbb{E} = 8 \times 0.08 = 0.64$ genes por individuo.
+- **Regla de Integración Rol 4 / Rol 3 (Anti-Doble Filtro):**
+  - El ciclo de dinámica (Rol 4) debe pasar cada descendiente directamente a la función de mutación del Rol 3 junto con la tasa $p_{\text{mutación}}$: `hijo = mutacion(hijo, probabilidad_mutacion, ...)`.
+  - Rol 4 **NO** debe realizar un `if rng.random() < p_mut:` previo a nivel de individuo, evitando una doble atenuación cuadrática innecesaria ($p_m \times p_m$).
+
+---
+
+## 6. Compatibilidad técnica; aprobación pendiente
 
 - **Rol 1 (Representación y Extracción):** Implementado con audio real procesado; no se encontraron firmas que acrediten aprobación colectiva.
 - **Rol 2 (Síntesis y Fitness):** La síntesis usa `decodificar()` y consume los eventos de `datos/procesados/melodia_01.csv`.

@@ -144,9 +144,12 @@ El baseline se ejecutará con el E observado, misma métrica, datos y semilla de
 cada corrida. El runner todavía no existe: el conteo del AG no está verificado
 experimentalmente. Consultar el plan detallado del Rol 5.
 
-Las probabilidades 0.90/0.05 son valores del código; queda pendiente acordar
-con Rol 3 si la mutación se aplica por hijo o por gen y evitar una segunda
-aplicación de la probabilidad dentro del operador. Las llamadas de reproducción
-son pseudocódigo, no firmas publicadas. No se añaden operadores ficticios.
+Acuerdo de granularidad de probabilidades (definido por Rol 1 con Roles 3 y 4):
+- Cruce (p_cruce = 0.90): se aplica por pareja de padres seleccionados. En cruce
+  uniforme, cada gen se intercambia con p_swap = 0.50 interno.
+- Mutación (p_mutación base 0.05, factoriales 0.02 y 0.08): se aplica por gen de
+  forma independiente dentro del operador de Rol 3. Rol 4 pasa el individuo y la
+  tasa sin filtro previo por hijo, evitando atenuación cuadrática (p_m x p_m).
+Las llamadas de reproducción son pseudocódigo, no firmas publicadas. No se añaden operadores ficticios.
 
 Documento de entrega: [diseño conjunto](../diseno/diseno_completo_ag_dia1.md).
