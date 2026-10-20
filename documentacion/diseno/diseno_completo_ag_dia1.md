@@ -21,11 +21,12 @@ media del croma, también a maximizar. Sin fitness combinado. Ratificación pend
 **Operadores y dinámica.** Torneo disponible: `seleccion_torneo(P,F,k=3,rng=rng)`;
 sin reemplazo, gana el mayor, empate por orden sorteado y salida copiada.
 Previsiones del Día 2: SUS, cruces BLX-0.5/uniforme y mutaciones gaussiana
-(sigma 0.08)/no uniforme. Firmas y aplicación de probabilidades aún por acordar.
-Base implementada: N=50, elitismo=2, G=50 reemplazos tras generación 0,
-p_cruce=0.90 y p_mutación=0.05 (tasas provisionales). Un Generator por corrida.
-Parar cuando `max(H[-10:]) - H[-11] < 1e-4`: mejora global acumulada en diez
-transiciones; requiere once registros. Es ventana móvil, no contador reiniciable.
+(sigma 0.08)/no uniforme. **Ámbito de probabilidades precisado por Rol 1:** cruce
+por pareja ($p_{\text{cruce}}=0.90$) con intercambio gen a gen en uniforme ($p_{\text{swap}}=0.5$);
+mutación por gen independiente ($p_m \in \{0.02, 0.05, 0.08\}$) dentro del operador,
+sin filtro previo en Rol 4 para evitar doble atenuación. Base: N=50, elitismo=2,
+G=50 reemplazos tras generación 0. Parar cuando `max(H[-10:]) - H[-11] < 1e-4`:
+mejora global acumulada en diez transiciones; requiere once registros (ventana móvil).
 
 **Ciclo completo previsto (reproducción pendiente del Día 2).**
 Crear RNG y población → evaluar en orden y contar llamadas → copiar mejor global,
