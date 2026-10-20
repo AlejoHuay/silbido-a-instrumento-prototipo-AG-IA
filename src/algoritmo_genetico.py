@@ -146,10 +146,13 @@ def detectar_estancamiento(
     paciencia: int = 10,
     tolerancia: float = 1e-4,
 ) -> bool:
-    """Indica si no hubo una mejora relevante durante ``paciencia`` pasos.
+    """Compara la mejora acumulada en una ventana de ``paciencia`` pasos.
 
     El historial debe registrar el mejor fitness global tras cada generación,
     por lo que se espera una serie monótona no decreciente cuando hay elitismo.
+    Con p = paciencia se comparan p+1 registros: max(ventana[1:]) - ventana[0].
+    Se para si esa diferencia es estrictamente menor que tolerancia. No hay
+    contador que se reinicie: la ventana avanza un registro por generación.
     """
 
     historial = np.asarray(historial_mejor_fitness, dtype=np.float64)
@@ -165,9 +168,10 @@ def detectar_estancamiento(
     if (
         isinstance(tolerancia, bool)
         or not isinstance(tolerancia, (int, float))
+        or not np.isfinite(tolerancia)
         or tolerancia < 0
     ):
-        raise ValueError("tolerancia debe ser un número >= 0.")
+        raise ValueError("tolerancia debe ser un número finito >= 0.")
     if historial.size < paciencia + 1:
         return False
 

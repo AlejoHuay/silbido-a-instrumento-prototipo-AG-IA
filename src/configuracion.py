@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
+import math
 
 
 SEMILLAS_EXPERIMENTALES = (42, 101, 2024, 7, 999)
@@ -65,9 +66,10 @@ class ConfiguracionAG:
         if (
             isinstance(self.tolerancia_mejora, bool)
             or not isinstance(self.tolerancia_mejora, (int, float))
+            or not math.isfinite(self.tolerancia_mejora)
             or self.tolerancia_mejora < 0
         ):
-            raise ValueError("tolerancia_mejora debe ser un número >= 0.")
+            raise ValueError("tolerancia_mejora debe ser un número finito >= 0.")
 
 
 def crear_plan_experimental() -> list[ConfiguracionAG]:

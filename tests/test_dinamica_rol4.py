@@ -41,6 +41,16 @@ class TestConfiguracionAG(unittest.TestCase):
         self.assertEqual(len(plan), 12)
         self.assertEqual(len(claves), 12)
 
+    def test_rechaza_tolerancias_no_finitas_y_torneo_incompatible(self):
+        for valor in (float("nan"), float("inf"), -float("inf")):
+            with self.subTest(valor=valor):
+                with self.assertRaises(ValueError):
+                    ConfiguracionAG(tolerancia_mejora=valor)
+                with self.assertRaises(ValueError):
+                    detectar_estancamiento([0.5] * 11, tolerancia=valor)
+        with self.assertRaises(ValueError):
+            ConfiguracionAG(tam_poblacion=3, tam_torneo=4)
+
 
 class TestDinamicaPoblacional(unittest.TestCase):
     def setUp(self):
@@ -89,6 +99,14 @@ class TestDinamicaPoblacional(unittest.TestCase):
                 tolerancia=1e-4,
             )
         )
+
+    def test_estancamiento_mide_mejora_acumulada_no_individual(self):
+        # Cada mejora es menor que 1e-4, pero la suma en diez pasos no lo es.
+        historial = [0.5 + i * 0.00002 for i in range(11)]
+        self.assertFalse(detectar_estancamiento(historial))
+        self.assertTrue(detectar_estancamiento(historial + [historial[-1]] * 10))
+        # Igualdad exacta con un umbral representable: no se detiene.
+        self.assertFalse(detectar_estancamiento([0.0, 0.125], 1, 0.125))
 
 
 if __name__ == "__main__":
