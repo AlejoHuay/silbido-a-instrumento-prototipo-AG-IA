@@ -49,14 +49,14 @@ Documento de entrega: [diseño conjunto](../diseno/diseno_completo_ag_dia1.md).
 
 ## 3. Análisis del Espacio de Búsqueda (Justificación de Metaheurística)
 
-- Con paso absoluto de $10^{-3}$ en las unidades físicas de cada gen, no 1000 niveles por gen normalizado:
+- Discretización de paso absoluto 0.001 en las unidades físicas de cada gen; la cantidad de niveles depende de su rango e incluye los extremos:
   - Número de genes: $D = 8$.
   - Niveles en orden del esquema: 901, 801, 501, 246, 296, 901, 296, 251.
   - Producto verificado con `calcular_tamano_espacio_busqueda()`: 1762430802969797099136.
   - Combinatoria total: $S \approx 1.76 \times 10^{21}$ estados posibles.
-  - Bits de información equivalentes: $\approx 70.6$ bits.
+  - Bits de información equivalentes: $\approx 70.58$ bits ($70.578$).
 - **Intratabilidad por fuerza bruta:**
-  - Evaluando 1,000 individuos por segundo en una CPU moderna, una búsqueda exhaustiva requeriría más de **55 mil millones de años**.
+  - Evaluando 1,000 individuos por segundo en una CPU moderna, una búsqueda exhaustiva requeriría $\approx 5.58 \times 10^{10}$ años (más de **55 mil millones de años**).
   - Esto descarta la búsqueda exhaustiva a esa resolución, pero no demuestra superioridad del AG frente a otras estrategias.
 
 ---

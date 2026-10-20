@@ -44,6 +44,12 @@ comprueba forma, finitud, límites y que ataque + decaimiento + relajación no
 supere 1 s. La síntesis acepta el cromosoma normalizado, valida sus ocho genes
 y genera ruido reproducible si se proporciona la misma semilla.
 
+Discretización de paso absoluto 0.001 en las unidades físicas de cada gen; la
+cantidad de niveles depende de su rango e incluye los extremos. Con niveles
+[901, 801, 501, 246, 296, 901, 296, 251] por gen, el espacio de búsqueda total
+es de $1.76 \times 10^{21}$ combinaciones (70.58 bits equivalentes), lo que
+requeriría más de 55 mil millones de años por fuerza bruta a 1000 evaluaciones por segundo.
+
 ## Síntesis y fitness — Rol 2
 
 `sintetizar_instrumento()` genera audio mono `float32` a 22050 Hz mediante
