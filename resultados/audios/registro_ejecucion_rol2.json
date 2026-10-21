@@ -9,7 +9,7 @@
     "ipython": "9.0.2",
     "ipykernel": "6.29.5"
   },
-  "commit": "84780ef91e74fec03d90eb172c20c25eed354643",
+  "commit": "9e04a80a7b3e893afcbd745efc3d8cb449b684ce",
   "cambios_locales": true,
   "semilla_candidatos": 42,
   "semilla_sintesis": 2026,
@@ -76,8 +76,16 @@
   ],
   "cantidad_candidatos": 6,
   "gen_barrido": "amp_arm2",
-  "cantidad_puntos_barrido": 41,
+  "cantidad_puntos_barrido": 51,
   "mejor_candidato_stft": "default",
   "referencia": "datos\\audio\\referencias\\flauta_referencia_01.wav",
-  "carpeta_resultados": "resultados\\audios"
+  "carpeta_resultados": "resultados\\audios",
+  "etapa": "Rol 2 - Día 3",
+  "modulo_sensibilidad": "src.sensibilidad",
+  "puntos_por_gen": 51,
+  "evaluaciones_sensibilidad": 408,
+  "mejor_candidato_croma": "aleatorio_2",
+  "recomendacion_metricas": "resultados\\audios\\recomendacion_metricas_dia3.md",
+  "melodia_sha256": "eed2535aaddaa1eb697848f0a30c69cdded32f51840121183b7fb4947d086565",
+  "referencia_sha256": "40c4b824601dc98234cb7d762cb69f521ed380c1b877fdd60b72e90a725c610d"
 }
