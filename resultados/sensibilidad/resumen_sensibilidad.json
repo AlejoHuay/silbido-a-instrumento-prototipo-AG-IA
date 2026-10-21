@@ -1,0 +1,113 @@
+{
+  "cantidad_genes": 8,
+  "puntos_por_gen": 51,
+  "total_evaluaciones": 408,
+  "referencia_audio": "flauta_referencia_01.wav",
+  "frecuencia_muestreo": 22050,
+  "ranking": [
+    {
+      "gen_indice": 7,
+      "gen_nombre": "ruido_soplo",
+      "delta_fitness_stft": 0.26247226014203884,
+      "std_fitness_stft": 0.08702209566986818,
+      "max_grad_stft": 0.4984798713374019,
+      "delta_error_db": 8.21925981519369,
+      "delta_fitness_croma": 0.0003793234713940219,
+      "std_fitness_croma": 0.00011644611265398228,
+      "max_grad_croma": 0.0007438311632135257,
+      "categoria_stft": "Hipersensible",
+      "ranking_stft": 1
+    },
+    {
+      "gen_indice": 5,
+      "gen_nombre": "sostenido_rel",
+      "delta_fitness_stft": 0.04000101800875866,
+      "std_fitness_stft": 0.012512159911562825,
+      "max_grad_stft": 0.061406465096519536,
+      "delta_error_db": 0.8503216683749644,
+      "delta_fitness_croma": 0.043347530637565246,
+      "std_fitness_croma": 0.012097815054537987,
+      "max_grad_croma": 0.10526110077734296,
+      "categoria_stft": "Sensibilidad Moderada",
+      "ranking_stft": 2
+    },
+    {
+      "gen_indice": 6,
+      "gen_nombre": "relajacion_s",
+      "delta_fitness_stft": 0.01847324446362697,
+      "std_fitness_stft": 0.006116999735807522,
+      "max_grad_stft": 0.08485740942514863,
+      "delta_error_db": 0.39285979421238526,
+      "delta_fitness_croma": 0.06413715624090188,
+      "std_fitness_croma": 0.016231844820816653,
+      "max_grad_croma": 0.3078025287304442,
+      "categoria_stft": "Robusto / Insensible",
+      "ranking_stft": 3
+    },
+    {
+      "gen_indice": 4,
+      "gen_nombre": "decaimiento_s",
+      "delta_fitness_stft": 0.015179232392909303,
+      "std_fitness_stft": 0.004350647505688355,
+      "max_grad_stft": 0.04608933254169334,
+      "delta_error_db": 0.33064451364311065,
+      "delta_fitness_croma": 0.0012332956727025834,
+      "std_fitness_croma": 0.00034184837030433435,
+      "max_grad_croma": 0.004775353795668735,
+      "categoria_stft": "Robusto / Insensible",
+      "ranking_stft": 4
+    },
+    {
+      "gen_indice": 3,
+      "gen_nombre": "ataque_s",
+      "delta_fitness_stft": 0.01370775908654498,
+      "std_fitness_stft": 0.0027580937005859743,
+      "max_grad_stft": 0.15802842323755506,
+      "delta_error_db": 0.29759859491520935,
+      "delta_fitness_croma": 0.05738950409936916,
+      "std_fitness_croma": 0.014622342206426305,
+      "max_grad_croma": 0.23524542410915217,
+      "categoria_stft": "Robusto / Insensible",
+      "ranking_stft": 5
+    },
+    {
+      "gen_indice": 2,
+      "gen_nombre": "amp_arm3",
+      "delta_fitness_stft": 0.009300862544943334,
+      "std_fitness_stft": 0.0022753545386412213,
+      "max_grad_stft": 0.050547082158725054,
+      "delta_error_db": 0.20169973021151133,
+      "delta_fitness_croma": 0.015539133145093142,
+      "std_fitness_croma": 0.004291192349950277,
+      "max_grad_croma": 0.06162013957670681,
+      "categoria_stft": "Robusto / Insensible",
+      "ranking_stft": 6
+    },
+    {
+      "gen_indice": 1,
+      "gen_nombre": "amp_arm2",
+      "delta_fitness_stft": 0.0065639667321131245,
+      "std_fitness_stft": 0.0015469118290538356,
+      "max_grad_stft": 0.04484126695367685,
+      "delta_error_db": 0.14174134773789326,
+      "delta_fitness_croma": 0.0006627902935111285,
+      "std_fitness_croma": 0.00021468110565517955,
+      "max_grad_croma": 0.0008594587535633025,
+      "categoria_stft": "Robusto / Insensible",
+      "ranking_stft": 7
+    },
+    {
+      "gen_indice": 0,
+      "gen_nombre": "amp_arm1",
+      "delta_fitness_stft": 0.00280223009040248,
+      "std_fitness_stft": 0.0007529273293147292,
+      "max_grad_stft": 0.008552128431787986,
+      "delta_error_db": 0.060895293187746447,
+      "delta_fitness_croma": 0.0020663464793972963,
+      "std_fitness_croma": 0.0005262150576073973,
+      "max_grad_croma": 0.009523062347333022,
+      "categoria_stft": "Robusto / Insensible",
+      "ranking_stft": 8
+    }
+  ]
+}
