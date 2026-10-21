@@ -1,0 +1,185 @@
+[
+  {
+    "protocolo_id": "ec1c37c0bd1af14f1b4f4b3c24c555c6893069973bf292d19e88f7cfccbad944",
+    "registro": {
+      "metodo": "algoritmo_genetico",
+      "metrica": "stft",
+      "semilla": 123,
+      "mejor_fitness": 0.6639343583010159,
+      "error_stft_db": null,
+      "generaciones_ejecutadas": 2,
+      "evaluaciones": 15,
+      "tiempo_s": 0.35786370000005263,
+      "motivo_parada": "max_generaciones",
+      "mejor_individuo_json": "[0.6823518632481435, 0.053821018802222675, 0.22837706396712487, 0.1843718106986697, 0.13109711171156968, 0.7593211704277464, 0.9233449980270564, 0.27657439779710624]",
+      "configuracion_json": "{\"elitismo\": 2, \"max_generaciones\": 2, \"paciencia_estancamiento\": 10, \"probabilidad_cruce\": 0.9, \"probabilidad_mutacion\": 0.05, \"semilla\": 123, \"tam_poblacion\": 5, \"tam_torneo\": 3, \"tolerancia_mejora\": 0.0}",
+      "combinacion": "A",
+      "llamadas_observadas": 15,
+      "fitness_inicial": 0.6572390460206193,
+      "mejora": 0.006695312280396548,
+      "diversidad_inicial": 0.26877462250165096,
+      "diversidad_final": 0.007746713291197043
+    },
+    "historial": [
+      {
+        "generacion": 0,
+        "fitness_maximo": 0.6572390460206193,
+        "fitness_medio": 0.5696120293855174,
+        "desviacion_fitness": 0.058520758736989156,
+        "diversidad_genetica": 0.26877462250165096,
+        "evaluaciones": 5,
+        "mejor_global": 0.6572390460206193
+      },
+      {
+        "generacion": 1,
+        "fitness_maximo": 0.6610972878995326,
+        "fitness_medio": 0.6302093483372355,
+        "desviacion_fitness": 0.03619574970143624,
+        "diversidad_genetica": 0.1566692600477678,
+        "evaluaciones": 10,
+        "mejor_global": 0.6610972878995326
+      },
+      {
+        "generacion": 2,
+        "fitness_maximo": 0.6639343583010159,
+        "fitness_medio": 0.6609998643936317,
+        "desviacion_fitness": 0.0021528007702041377,
+        "diversidad_genetica": 0.007746713291197043,
+        "evaluaciones": 15,
+        "mejor_global": 0.6639343583010159
+      }
+    ],
+    "poblacion_inicial_sha256": "94d64d5b9089f6d12f6216f22efc13e73c1908799dff2aef238a51467452e7fa",
+    "operadores": {
+      "seleccion": "torneo",
+      "cruce": "blend",
+      "mutacion": "gaussiana",
+      "alpha": 0.5,
+      "sigma": 0.08,
+      "b": 2.0
+    },
+    "terminado_utc": "2026-10-21T14:22:04.488029+00:00"
+  },
+  {
+    "protocolo_id": "ec1c37c0bd1af14f1b4f4b3c24c555c6893069973bf292d19e88f7cfccbad944",
+    "registro": {
+      "metodo": "algoritmo_genetico",
+      "metrica": "stft",
+      "semilla": 123,
+      "mejor_fitness": 0.6581550113772583,
+      "error_stft_db": null,
+      "generaciones_ejecutadas": 2,
+      "evaluaciones": 15,
+      "tiempo_s": 0.3332445999999436,
+      "motivo_parada": "max_generaciones",
+      "mejor_individuo_json": "[0.6823518632481435, 0.053821018802222675, 0.22035987277261138, 0.1843718106986697, 0.17590590108503035, 0.8120945066557737, 1.0, 0.27657439779710624]",
+      "configuracion_json": "{\"elitismo\": 2, \"max_generaciones\": 2, \"paciencia_estancamiento\": 10, \"probabilidad_cruce\": 0.9, \"probabilidad_mutacion\": 0.05, \"semilla\": 123, \"tam_poblacion\": 5, \"tam_torneo\": 3, \"tolerancia_mejora\": 0.0}",
+      "combinacion": "B",
+      "llamadas_observadas": 15,
+      "fitness_inicial": 0.6572390460206193,
+      "mejora": 0.0009159653566389592,
+      "diversidad_inicial": 0.26877462250165096,
+      "diversidad_final": 0.0060840316108636844
+    },
+    "historial": [
+      {
+        "generacion": 0,
+        "fitness_maximo": 0.6572390460206193,
+        "fitness_medio": 0.5696120293855174,
+        "desviacion_fitness": 0.058520758736989156,
+        "diversidad_genetica": 0.26877462250165096,
+        "evaluaciones": 5,
+        "mejor_global": 0.6572390460206193
+      },
+      {
+        "generacion": 1,
+        "fitness_maximo": 0.6581550113772583,
+        "fitness_medio": 0.6461133737484979,
+        "desviacion_fitness": 0.021118049080613682,
+        "diversidad_genetica": 0.14310720993690373,
+        "evaluaciones": 10,
+        "mejor_global": 0.6581550113772583
+      },
+      {
+        "generacion": 2,
+        "fitness_maximo": 0.6581550113772583,
+        "fitness_medio": 0.6575138903789892,
+        "desviacion_fitness": 0.0005495062182072365,
+        "diversidad_genetica": 0.0060840316108636844,
+        "evaluaciones": 15,
+        "mejor_global": 0.6581550113772583
+      }
+    ],
+    "poblacion_inicial_sha256": "94d64d5b9089f6d12f6216f22efc13e73c1908799dff2aef238a51467452e7fa",
+    "operadores": {
+      "seleccion": "torneo",
+      "cruce": "uniforme",
+      "mutacion": "gaussiana",
+      "alpha": 0.5,
+      "sigma": 0.08,
+      "b": 2.0
+    },
+    "terminado_utc": "2026-10-21T14:22:04.821522+00:00"
+  },
+  {
+    "protocolo_id": "ec1c37c0bd1af14f1b4f4b3c24c555c6893069973bf292d19e88f7cfccbad944",
+    "registro": {
+      "metodo": "algoritmo_genetico",
+      "metrica": "stft",
+      "semilla": 123,
+      "mejor_fitness": 0.6669773425301282,
+      "error_stft_db": null,
+      "generaciones_ejecutadas": 2,
+      "evaluaciones": 15,
+      "tiempo_s": 0.3479142999999567,
+      "motivo_parada": "max_generaciones",
+      "mejor_individuo_json": "[0.6724621321980717, 0.09679386787876326, 0.311289783380905, 0.4264664778468234, 0.20870756228551296, 0.8116332621882156, 0.5360501029302556, 0.216057947569817]",
+      "configuracion_json": "{\"elitismo\": 2, \"max_generaciones\": 2, \"paciencia_estancamiento\": 10, \"probabilidad_cruce\": 0.9, \"probabilidad_mutacion\": 0.05, \"semilla\": 123, \"tam_poblacion\": 5, \"tam_torneo\": 3, \"tolerancia_mejora\": 0.0}",
+      "combinacion": "C",
+      "llamadas_observadas": 15,
+      "fitness_inicial": 0.6572390460206193,
+      "mejora": 0.00973829650950886,
+      "diversidad_inicial": 0.26877462250165096,
+      "diversidad_final": 0.17126552214360583
+    },
+    "historial": [
+      {
+        "generacion": 0,
+        "fitness_maximo": 0.6572390460206193,
+        "fitness_medio": 0.5696120293855174,
+        "desviacion_fitness": 0.058520758736989156,
+        "diversidad_genetica": 0.26877462250165096,
+        "evaluaciones": 5,
+        "mejor_global": 0.6572390460206193
+      },
+      {
+        "generacion": 1,
+        "fitness_maximo": 0.6666300488585774,
+        "fitness_medio": 0.6242989657596392,
+        "desviacion_fitness": 0.031015802069563694,
+        "diversidad_genetica": 0.22379082208577694,
+        "evaluaciones": 10,
+        "mejor_global": 0.6666300488585774
+      },
+      {
+        "generacion": 2,
+        "fitness_maximo": 0.6669773425301282,
+        "fitness_medio": 0.6539381771745615,
+        "desviacion_fitness": 0.013423457463752227,
+        "diversidad_genetica": 0.17126552214360583,
+        "evaluaciones": 15,
+        "mejor_global": 0.6669773425301282
+      }
+    ],
+    "poblacion_inicial_sha256": "94d64d5b9089f6d12f6216f22efc13e73c1908799dff2aef238a51467452e7fa",
+    "operadores": {
+      "seleccion": "sus",
+      "cruce": "blend",
+      "mutacion": "no_uniforme",
+      "alpha": 0.5,
+      "sigma": 0.08,
+      "b": 2.0
+    },
+    "terminado_utc": "2026-10-21T14:22:05.169670+00:00"
+  }
+]

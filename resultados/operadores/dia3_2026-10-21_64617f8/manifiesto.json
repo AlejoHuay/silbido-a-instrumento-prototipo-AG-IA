@@ -1,0 +1,92 @@
+{
+  "protocolo_id": "ec1c37c0bd1af14f1b4f4b3c24c555c6893069973bf292d19e88f7cfccbad944",
+  "protocolo": {
+    "configuracion_base": {
+      "tam_poblacion": 50,
+      "max_generaciones": 50,
+      "elitismo": 2,
+      "tam_torneo": 3,
+      "probabilidad_cruce": 0.9,
+      "probabilidad_mutacion": 0.05,
+      "paciencia_estancamiento": 10,
+      "tolerancia_mejora": 0.0,
+      "semilla": 42
+    },
+    "semillas": [
+      42,
+      101,
+      2024,
+      7,
+      999
+    ],
+    "combinaciones": {
+      "A": {
+        "seleccion": "torneo",
+        "cruce": "blend",
+        "mutacion": "gaussiana"
+      },
+      "B": {
+        "seleccion": "torneo",
+        "cruce": "uniforme",
+        "mutacion": "gaussiana"
+      },
+      "C": {
+        "seleccion": "sus",
+        "cruce": "blend",
+        "mutacion": "no_uniforme"
+      }
+    },
+    "parametros": {
+      "alpha": 0.5,
+      "sigma": 0.08,
+      "b": 2.0
+    },
+    "metrica": "stft",
+    "estado_metrica": "provisional; no ratificación colectiva",
+    "politica": "50 reemplazos, tolerancia_mejora=0; reevaluación completa",
+    "desempate": "media descendente; igualdad exacta: menor DE muestral, menor tiempo medio",
+    "datos_sha256": {
+      "datos/procesados/melodia_01.csv": "eed2535aaddaa1eb697848f0a30c69cdded32f51840121183b7fb4947d086565",
+      "datos/audio/referencias/flauta_referencia_01.wav": "40c4b824601dc98234cb7d762cb69f521ed380c1b877fdd60b72e90a725c610d",
+      "datos/audio/referencias/flauta_referencia_01.json": "f310ae16b91deb82586155d7dc1970842c0179cefd5f9ba1ff01d4e4aed9f177"
+    },
+    "fitness": {
+      "n_fft": 2048,
+      "salto": 256,
+      "piso_db": -80.0,
+      "escala_error_db": 10.0,
+      "ventana": "hann",
+      "boundary": "zeros",
+      "padded": true,
+      "frecuencia_muestreo": 22050,
+      "semilla_sintesis": 2026
+    },
+    "codigo_sha256": {
+      "src/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/algoritmo_genetico.py": "2ccec1df9d26e8546e45227e8a284d03db3116a9aaf3ccee59e2a63afd8478a8",
+      "src/comparacion_operadores.py": "2d227f897cf99a3af121caf7cb53c4e641abdd34ba612fc3a4c2e2a00fcc48df",
+      "src/configuracion.py": "1e6342e52f18a38a5f1b812c156285757f0ccf404c1a4f805a2e3299c9f65be9",
+      "src/evaluacion.py": "3e87b606ec1991523db5c71b0f384f8db3194926c93ba99e3f2bd5dda5d4c0bd",
+      "src/experimentos.py": "301fc8a088067ca7017cdcb727c94d65b072d5ff70fbf33c9ffb2497938ddddf",
+      "src/extraccion.py": "e74aa9cab1684a10e410103ea40eb4466d1849adc13b9f09acfebc9021bfb1fa",
+      "src/fitness.py": "fb79b1c82f3480d294e033b67bb29d7aa3389fc5b4eaf0e8faceb11d1448bedd",
+      "src/operadores.py": "e227c99b0e737e200d978ef9a0d5cb9f552811409765742a0507af4e6d843a1b",
+      "src/representacion.py": "84d44d406b8b58dc03fc2e6a092f2f7c0c55ff2cbf630ef1b97f2194db900b26",
+      "src/sensibilidad.py": "1aca6822f3ed7c7823b0388877ad3b92d6eb1affc7ed4e92d623592a7ba33c0c",
+      "src/sintesis.py": "819185f89af39c604f03c0aa06e35928947100fa3950a3b3f655428eb43effcd"
+    },
+    "versiones": {
+      "python": "3.13.15",
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "soundfile": "0.14.0"
+    }
+  },
+  "commit_base": "64617f8aaa3dcbed3332a1bcb16291c5efd8481e",
+  "rama": "feature/rol3-comparacion-dia3",
+  "cambios_locales": "?? src/comparacion_operadores.py",
+  "creado_utc": "2026-10-21T14:22:04.118022+00:00",
+  "plataforma": "Windows-11-10.0.26200-SP0",
+  "requisitos_examen": "tres combinaciones, tabla, diversidad, exploración/explotación y recomendación",
+  "protocolo_solicitado": "N=50, G=50, cinco semillas y presupuesto igual; no atribuido al examen"
+}
