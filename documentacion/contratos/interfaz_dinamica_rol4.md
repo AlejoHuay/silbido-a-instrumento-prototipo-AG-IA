@@ -1,7 +1,8 @@
 # Interfaz de dinámica poblacional — Rol 4
 
 **Estado:** Día 1. Configuración, medición, elitismo y parada implementados;
-cruce y mutación se conectarán cuando el Rol 3 publique sus firmas del Día 2.
+los operadores del Día 2 ya tienen firmas en el contrato del Rol 3 y su
+conexión al ciclo completo sigue pendiente del Rol 4.
 **Consumidores:** Roles 3 y 5, notebook de integración.
 
 ## Configuración base implementada y propuesta para ratificación
@@ -57,10 +58,9 @@ para generación = 0, ..., G_max:
             hijos <- copias(padre_1, padre_2)
 
         para cada hijo y mientras tamaño(nueva_P) < N:
-            si rng.random() < probabilidad_mutacion:
-                hijo <- mutacion_rol3(
-                    hijo, generación, G_max, rng=rng
-                )
+            hijo <- mutacion_no_uniforme(
+                hijo, generación, G_max, p_mut=probabilidad_mutacion, rng=rng
+            )
             validar que hijo pertenece a [0, 1]^8
             añadir una copia de hijo a nueva_P
 
@@ -116,12 +116,18 @@ padre = seleccion_torneo(
 )
 ```
 
-## Acuerdo pendiente para el Día 2
+## Firmas disponibles del Día 2
 
-Antes de cerrar el ciclo deben fijarse con el Rol 3 las firmas y el número de
-hijos devuelto por cada cruce, además de los parámetros de cada mutación. El
-Rol 4 no duplica operadores temporales en `src/` porque eso produciría dos
-implementaciones incompatibles y dificultaría atribuir las contribuciones.
+El [contrato del Rol 3](interfaz_operadores_rol3.md) publica las firmas de
+BLX-alpha/uniforme (dos hijos), gaussiana/no uniforme y SUS por lote. El
+marcador `cruce_rol3` del pseudocódigo corresponde a `cruce_blend` o
+`cruce_uniforme`; no es una función ficticia implementada.
+Para SUS se obtiene una sola vez por reproducción un lote de
+`2*ceil((N-e)/2)` padres y se recorren parejas, en lugar de los dos torneos.
+No llamar repetidamente a SUS con cantidad uno. Si falta una plaza, conservar
+solo el primer hijo de la última pareja. La mutación recibe p_mut sin filtro
+previo por individuo. Para la no uniforme, t=generación evaluada y T=G_max.
+El notebook del Rol 3 demuestra un paso real; no implementa `ejecutar_ag()`.
 
 ## Definiciones precisas y presupuesto
 
@@ -150,6 +156,7 @@ Acuerdo de granularidad de probabilidades (definido por Rol 1 con Roles 3 y 4):
 - Mutación (p_mutación base 0.05, factoriales 0.02 y 0.08): se aplica por gen de
   forma independiente dentro del operador de Rol 3. Rol 4 pasa el individuo y la
   tasa sin filtro previo por hijo, evitando atenuación cuadrática (p_m x p_m).
-Las llamadas de reproducción son pseudocódigo, no firmas publicadas. No se añaden operadores ficticios.
+El ciclo sigue siendo pseudocódigo; los operadores referenciados sí están
+implementados y sus firmas están publicadas en el contrato del Rol 3.
 
 Documento de entrega: [diseño conjunto](../diseno/diseno_completo_ag_dia1.md).
