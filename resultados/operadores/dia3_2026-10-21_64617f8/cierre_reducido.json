@@ -1,0 +1,23 @@
+{
+  "estado": "detenido por instrucción del usuario",
+  "semillas_principales": [
+    42,
+    101
+  ],
+  "criterio_seleccion": "primeras dos semillas completas del orden previsto; no por su fitness",
+  "corridas_principales": 6,
+  "corridas_adicionales": 5,
+  "corridas_con_checkpoint": 11,
+  "incidencia": "El lote inició C/7 antes de detenerse. Su guardado falló por el bloqueo temporal del destino; no existe checkpoint válido y no se incluye ni se repite.",
+  "ejecucion_original": "fuente_ejecucion_original.py conserva el código cuya huella figura en manifiesto.json",
+  "verificacion": "Comprobación corta previa: 3 variantes, 15 evaluaciones cada una. Suite previa: 51 pruebas pasan, un módulo no carga por falta de pandas. No se añaden ni ejecutan más pruebas tras reducir el alcance.",
+  "notebook": "Ampliado para lectura de resultados; no ejecutado en esta etapa, ni como proceso ni en kernel Jupyter.",
+  "dependencias_ausentes": [
+    "pandas",
+    "matplotlib",
+    "IPython",
+    "nbformat",
+    "nbclient",
+    "ipykernel"
+  ]
+}

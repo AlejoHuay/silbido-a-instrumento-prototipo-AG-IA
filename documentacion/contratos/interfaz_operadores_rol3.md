@@ -1,4 +1,4 @@
-# Interfaz de operadores — Rol 3, Día 2
+# Interfaz de operadores — Rol 3, Días 2 y 3
 
 **Estado:** seis operadores disponibles. El torneo conserva su interfaz y comportamiento. El Rol 4 ya los conecta mediante `ejecutar_ag()`; este notebook conserva su demostración acotada a un paso de reproducción.
 
@@ -92,4 +92,25 @@ Se consultaron el examen y ag_ejemplo_reinas.ipynb proporcionados fuera del repo
 
 `tests/test_operadores_rol3.py` comprueba propiedades, validaciones, reproducibilidad y evaluación real de hijos. `notebooks/03_rol3_operadores.ipynb` carga el CSV con cargar_melodia_csv() y el WAV del Rol 2 con sf.read(...,dtype="float32"). Demuestra reproducción con N=5, dos élites, tres plazas y cuatro padres SUS, contando diez evaluaciones (cinco iniciales y cinco de nueva población). No escribe WAV ni sustituye referencias por resultados guardados.
 
-La documentación del cierre del Día 1 conserva su carácter histórico. Esta entrega no ratifica ni firma el diseño conjunto, ni ejecuta experimentos del Día 3.
+La documentación del cierre del Día 1 conserva su carácter histórico. Esta entrega no ratifica ni firma el diseño conjunto.
+
+## Comparación del Día 3
+
+Las firmas anteriores se conservan. El experimento se orquesta en
+`src/comparacion_operadores.py`, reutilizando `ejecutar_ag()` del Rol 4,
+sin duplicar operadores ni cambiar valores predeterminados. Compara A:
+torneo/BLX/gaussiana, B: torneo/uniforme/gaussiana y C: SUS/BLX/no uniforme.
+El protocolo usa N=50, dos élites, 50 reemplazos y STFT provisional;
+tolerancia cero desactiva estancamiento para igualar presupuesto. El usuario
+redujo la comparación principal a las semillas 42 y 101: seis corridas.
+Se conservan cinco corridas adicionales por separado. El lote está detenido.
+Las llamadas reales a fitness se cuentan independientemente y las poblaciones
+iniciales observadas se comparan por semilla.
+
+Recomendación preliminar: B (torneo + uniforme + gaussiana), con media STFT
+0.730850220 y solo dos réplicas. Resultados y límites:
+[informe del Día 3](../rol3_dia3.md).
+El notebook conserva el Día 2 y separa ejecución costosa de lectura de resultados
+guardados. No confundir la visualización con corridas nuevas. El examen pide
+tres combinaciones y análisis; N, generaciones y réplicas son el protocolo de
+esta tarea, no requisitos atribuidos al examen.
