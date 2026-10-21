@@ -68,18 +68,19 @@ La evidencia de la última corrida está en
 - **Espacio de búsqueda:** Cuantificado en $1.76 \times 10^{21}$ estados posibles ($70.6$ bits), justificando la intratabilidad de fuerza bruta.
 - **Entregables:** `src/representacion.py`, `src/extraccion.py`, `notebooks/01_rol1_representacion.ipynb`, `documentacion/contratos/contrato_cromosoma.md` y `documentacion/diseno/dia1.md`.
 
-### Rol 4 — Dinámica poblacional (Día 1)
+### Rol 4 — Dinámica poblacional (Días 1 y 2)
 - **Configuración reproducible:** parámetros validados en `ConfiguracionAG`, con una semilla y un generador compartidos por corrida.
-- **Dinámica implementada:** inicialización, evaluación ordenada, elitismo por maximización, estadísticas de convergencia y detección de estancamiento.
+- **Dinámica implementada:** ciclo generacional completo, inicialización, evaluación ordenada, elitismo por maximización, estadísticas de convergencia y detección de estancamiento.
 - **Plan experimental:** matriz factorial de 12 configuraciones preparada para el Día 3, con cinco semillas como réplicas.
-- **Integración:** conexión verificada con `seleccion_torneo()` del Rol 3; cruces y mutaciones permanecen pendientes de sus contratos del Día 2.
-- **Entregables:** `src/configuracion.py`, `src/algoritmo_genetico.py`, `notebooks/04_rol4_dinamica.ipynb` y `documentacion/contratos/interfaz_dinamica_rol4.md`.
+- **Integración Día 2:** `ejecutar_ag()` conecta torneo o SUS, BLX-alpha o cruce uniforme y mutación gaussiana o no uniforme; la primera corrida end-to-end usa síntesis y fitness reales con una población pequeña.
+- **Entregables:** `src/configuracion.py`, `src/algoritmo_genetico.py`, `notebooks/04_rol4_dinamica.ipynb`, `documentacion/rol4_dia2.md` y `documentacion/contratos/interfaz_dinamica_rol4.md`.
 
-### Rol 5 — Analista (en progreso)
-- **Día 1:** notebook reproducible con prueba inicial de representación, melodía procesada, síntesis y fitness; documentación del plan y de las discrepancias verificadas.
-- **No ejecutado:** el notebook no corre el AG ni las 12 configuraciones. El ciclo generacional completo depende de las interfaces de cruce/mutación del Rol 3 y de su integración por el Rol 4.
-- **Pendiente de ratificación:** los niveles exactos de los factores que generan las 12 configuraciones y la métrica oficial del experimento.
-- **Entregables de esta etapa:** `notebooks/00_integracion.ipynb`, `documentacion/diseno/dia1.md`, `documentacion/analisis_rol5.md` y `tests/test_rol5.py`.
+### Rol 5 — Análisis experimental (Día 2 cerrado; Día 3 pendiente)
+- **Integración end-to-end:** `notebooks/00_integracion.ipynb` ejecuta el AG con la melodía y referencia reales, verifica repetibilidad, límites, finitud, población y presupuesto de evaluaciones. Genera `resultados/audios/rol5_dia2_mejor.wav` cuando falta o comprueba que el existente coincide, sin sobrescribirlo.
+- **Evidencia de demostración:** semilla 2026, población 10, cinco generaciones, torneo, cruce BLX y mutación gaussiana; 60 evaluaciones reales y fitness STFT 0.7152406. Esta corrida valida la integración y no es parte del análisis estadístico del Día 3.
+- **Análisis disponible:** registro de corridas, resúmenes y baseline pareado en `src/evaluacion.py` y `src/experimentos.py`. No hay aún datos de sensibilidad ni corridas del factorial de 12 configuraciones.
+- **Pendiente antes del Día 3:** ratificar la métrica oficial y los niveles de los factores experimentales.
+- **Entregables:** `notebooks/00_integracion.ipynb`, `documentacion/analisis_rol5.md` y `tests/test_rol5.py`.
 
 ## Acuerdos y Diseño
 

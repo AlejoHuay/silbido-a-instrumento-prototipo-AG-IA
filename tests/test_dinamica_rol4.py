@@ -5,6 +5,7 @@ import numpy as np
 from src.algoritmo_genetico import (
     calcular_estadisticas,
     detectar_estancamiento,
+    ejecutar_ag,
     evaluar_poblacion,
     inicializar_poblacion,
     seleccionar_elites,
@@ -107,6 +108,113 @@ class TestDinamicaPoblacional(unittest.TestCase):
         self.assertTrue(detectar_estancamiento(historial + [historial[-1]] * 10))
         # Igualdad exacta con un umbral representable: no se detiene.
         self.assertFalse(detectar_estancamiento([0.0, 0.125], 1, 0.125))
+
+
+class TestCicloCompletoAG(unittest.TestCase):
+    def setUp(self):
+        self.config = ConfiguracionAG(
+            tam_poblacion=6,
+            max_generaciones=3,
+            elitismo=2,
+            paciencia_estancamiento=10,
+            tolerancia_mejora=0.0,
+            semilla=17,
+        )
+
+    def test_corrida_es_reproducible_y_cuenta_evaluaciones_reales(self):
+        llamadas = []
+
+        def aptitud(individuo):
+            llamadas.append(individuo.copy())
+            return float(np.mean(individuo))
+
+        primero = ejecutar_ag(aptitud, self.config)
+        segundo = ejecutar_ag(lambda ind: float(np.mean(ind)), self.config)
+
+        self.assertEqual(len(llamadas), 6 * 4)
+        self.assertEqual(primero["evaluaciones"], 6 * 4)
+        self.assertEqual(primero["generaciones_ejecutadas"], 3)
+        self.assertEqual(primero["motivo_parada"], "max_generaciones")
+        self.assertEqual(len(primero["historial"]), 4)
+        self.assertEqual(primero["mejor_fitness"], segundo["mejor_fitness"])
+        np.testing.assert_array_equal(
+            primero["mejor_individuo"], segundo["mejor_individuo"]
+        )
+        np.testing.assert_array_equal(
+            primero["poblacion_final"], segundo["poblacion_final"]
+        )
+        self.assertTrue(np.all(np.diff(primero["historial_mejor_fitness"]) >= 0))
+
+    def test_estancamiento_detiene_en_ventana_completa(self):
+        config = ConfiguracionAG(
+            tam_poblacion=5,
+            max_generaciones=20,
+            elitismo=1,
+            paciencia_estancamiento=2,
+            tolerancia_mejora=1e-4,
+        )
+        resultado = ejecutar_ag(lambda _: 0.5, config)
+        self.assertEqual(resultado["motivo_parada"], "estancamiento")
+        self.assertEqual(resultado["generaciones_ejecutadas"], 2)
+        self.assertEqual(resultado["evaluaciones"], 5 * 3)
+
+    def test_admite_las_ocho_combinaciones_de_operadores(self):
+        config = ConfiguracionAG(
+            tam_poblacion=5,
+            max_generaciones=1,
+            elitismo=1,
+            semilla=9,
+        )
+        for seleccion in ("torneo", "sus"):
+            for cruce in ("blend", "uniforme"):
+                for mutacion in ("gaussiana", "no_uniforme"):
+                    with self.subTest(
+                        seleccion=seleccion,
+                        cruce=cruce,
+                        mutacion=mutacion,
+                    ):
+                        resultado = ejecutar_ag(
+                            lambda ind: float(np.mean(ind)),
+                            config,
+                            seleccion=seleccion,
+                            cruce=cruce,
+                            mutacion=mutacion,
+                        )
+                        self.assertEqual(resultado["poblacion_final"].shape, (5, 8))
+                        self.assertTrue(np.all(
+                            (resultado["poblacion_final"] >= 0.0)
+                            & (resultado["poblacion_final"] <= 1.0)
+                        ))
+
+    def test_rechaza_dependencias_y_opciones_invalidas(self):
+        with self.assertRaises(ValueError):
+            ejecutar_ag(None, self.config)
+        with self.assertRaises(ValueError):
+            ejecutar_ag(lambda _: 0.0, object())
+        for argumento, valor in (
+            ("seleccion", "ruleta"),
+            ("cruce", "ox"),
+            ("mutacion", "swap"),
+        ):
+            with self.subTest(argumento=argumento):
+                with self.assertRaises(ValueError):
+                    ejecutar_ag(
+                        lambda _: 0.0,
+                        self.config,
+                        **{argumento: valor},
+                    )
+        for argumento, valor in (
+            ("alpha", -0.1),
+            ("sigma", float("nan")),
+            ("b", 0.0),
+        ):
+            with self.subTest(argumento=argumento):
+                with self.assertRaises(ValueError):
+                    ejecutar_ag(
+                        lambda _: 0.0,
+                        self.config,
+                        **{argumento: valor},
+                    )
 
 
 if __name__ == "__main__":
