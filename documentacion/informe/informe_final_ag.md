@@ -12,7 +12,7 @@
 | **Rol 1** | **El Codificador:** Representación y Extracción Acústica | **Juan Mateo Soruco** | *Completado y validado* |
 | **Rol 2** | **El Traductor:** Síntesis y Función de Fitness | *[Completar por Rol 2]* | *Pendiente* |
 | **Rol 3** | **El Motor Evolutivo:** Operadores Genéticos Continuos | *[Completar por Rol 3]* | *Pendiente* |
-| **Rol 4** | **El Estratega:** Dinámica Poblacional y Convergencia | *[Completar por Rol 4]* | *Pendiente* |
+| **Rol 4** | **El Estratega:** Dinámica Poblacional y Convergencia | *[Completar por Rol 4]* | *Día 4 completado; firma pendiente* |
 | **Rol 5** | **El Analista:** Meta-evaluación, Baseline e Integración | *[Completar por Rol 5]* | *Pendiente* |
 
 ---
@@ -140,17 +140,23 @@ La eficiencia de un AG depende directamente del principio de **fuerte causalidad
 ---
 
 ## 4. Capa 4: Dinámica Poblacional y Convergencia (Rol 4)
-*[Sección reservada para la redacción final de Rol 4]*
 
 ### 4.1 Arquitectura del Ciclo Reproductivo (`ejecutar_ag`)
-*(Resumen técnico de la implementación en `src/algoritmo_genetico.py`)*
+
+El ciclo recibe una función de aptitud escalar y una `ConfiguracionAG` validada. Inicializa una población normalizada, evalúa sus individuos en orden y, en cada reemplazo, conserva dos élites y completa la siguiente población con selección, cruce y mutación. Un único `numpy.random.Generator` explícito gobierna la aleatoriedad de la corrida; la síntesis mantiene una semilla independiente. El resultado incluye ganador, fitness, historial, generaciones, evaluaciones reales y motivo de parada.
 
 ### 4.2 Preservación de Élite y Criterios de Parada por Estancamiento
-*(Resumen de la ventana de paciencia y tolerancia en `src/algoritmo_genetico.py`)*
+
+La configuración operativa propuesta usa población 50, máximo 50 reemplazos, elitismo 2, torneo de tamaño 3, cruce uniforme con probabilidad 0.90 y mutación gaussiana por gen con probabilidad 0.05 y `sigma=0.08`. La parada compara el mejor fitness dentro de una ventana de paciencia 10 y exige una mejora mayor que `1e-4`. La métrica STFT primaria y croma complementaria siguen pendientes de ratificación colectiva.
+
+La combinación B —torneo, uniforme y gaussiana— es una recomendación preliminar: con semillas 42 y 101 alcanzó fitness medio final 0.730850220, frente a 0.726136022 de A y 0.724787225 de C. Las corridas comparativas consumieron 2550 evaluaciones cada una y usaron tolerancia cero para igualar el presupuesto; no prueban la parada operativa ni superioridad general.
 
 ### 4.3 Pregunta Teórica 4 (Rol 4)
 > **Pregunta Oficial:** *¿Qué es la convergencia prematura? ¿Cómo se detecta y cómo se evita? Da evidencia concreta.*
-*[Desarrollo a completar por Rol 4]*
+
+La convergencia prematura ocurre cuando la población pierde diversidad antes de explorar adecuadamente y se concentra alrededor de una solución subóptima. Se detecta combinando estancamiento del mejor fitness, estabilización de la media y dispersión del fitness, y una caída sostenida de diversidad; una sola señal no basta.
+
+En las seis corridas principales, la diversidad inicial media fue 0.285487. A y B terminaron en 0.009409 y 0.009313, conservando aproximadamente 3.3 %; C terminó en 0.125190 y conservó aproximadamente 43.9 %. Esto demuestra mayor concentración en A/B, pero no confirma convergencia prematura: B logró el mayor fitness medio y la parada por tolerancia se desactivó para el experimento. El riesgo puede reducirse moderando elitismo o presión selectiva, adaptando la mutación y, si persiste el estancamiento, usando inmigrantes o reinicios parciales. Estas dos últimas estrategias son propuestas no implementadas.
 
 ---
 

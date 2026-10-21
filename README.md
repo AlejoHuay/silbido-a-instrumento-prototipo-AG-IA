@@ -68,12 +68,13 @@ La evidencia de la última corrida está en
 - **Espacio de búsqueda:** Cuantificado en $1.76 \times 10^{21}$ estados posibles ($70.6$ bits), justificando la intratabilidad de fuerza bruta.
 - **Entregables:** `src/representacion.py`, `src/extraccion.py`, `notebooks/01_rol1_representacion.ipynb`, `documentacion/contratos/contrato_cromosoma.md` y `documentacion/diseno/dia1.md`.
 
-### Rol 4 — Dinámica poblacional (Días 1 y 2)
+### Rol 4 — Dinámica poblacional (Días 1, 2 y 4)
 - **Configuración reproducible:** parámetros validados en `ConfiguracionAG`, con una semilla y un generador compartidos por corrida.
 - **Dinámica implementada:** ciclo generacional completo, inicialización, evaluación ordenada, elitismo por maximización, estadísticas de convergencia y detección de estancamiento.
 - **Plan experimental:** matriz factorial de 12 configuraciones preparada para el Día 3, con cinco semillas como réplicas.
 - **Integración Día 2:** `ejecutar_ag()` conecta torneo o SUS, BLX-alpha o cruce uniforme y mutación gaussiana o no uniforme; la primera corrida end-to-end usa síntesis y fitness reales con una población pequeña.
-- **Entregables:** `src/configuracion.py`, `src/algoritmo_genetico.py`, `notebooks/04_rol4_dinamica.ipynb`, `documentacion/rol4_dia2.md` y `documentacion/contratos/interfaz_dinamica_rol4.md`.
+- **Cierre Día 4:** configuración operativa documentada, respuesta teórica sobre convergencia prematura y diapositiva de convergencia basada en las seis corridas principales del Rol 3. La recomendación B es preliminar; no se ejecutó el factorial de 12 configuraciones.
+- **Entregables:** `src/configuracion.py`, `src/algoritmo_genetico.py`, `notebooks/04_rol4_dinamica.ipynb`, `documentacion/rol4_dia2.md`, `documentacion/rol4_dia4.md`, `documentacion/contratos/interfaz_dinamica_rol4.md` y `documentacion/presentacion/rol4_convergencia.pptx`.
 
 ### Rol 5 — Análisis experimental (Día 2 cerrado; Día 3 pendiente)
 - **Integración end-to-end:** `notebooks/00_integracion.ipynb` ejecuta el AG con la melodía y referencia reales, verifica repetibilidad, límites, finitud, población y presupuesto de evaluaciones. Genera `resultados/audios/rol5_dia2_mejor.wav` cuando falta o comprueba que el existente coincide, sin sobrescribirlo.
