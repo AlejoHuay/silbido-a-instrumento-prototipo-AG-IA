@@ -12,6 +12,7 @@ env/
 # Cachés y archivos temporales
 .cache/
 .pytest_cache/
+.chart-data-*/
 tmp/
 temp/
 *.tmp
