@@ -1,6 +1,6 @@
 # Interfaz de operadores — Rol 3, Día 2
 
-**Estado:** seis operadores disponibles. El torneo conserva su interfaz y comportamiento. No existe `ejecutar_ag()` en la base revisada; el ciclo completo corresponde al Rol 4. El notebook demuestra un paso de reproducción, no una corrida del AG.
+**Estado:** seis operadores disponibles. El torneo conserva su interfaz y comportamiento. El Rol 4 ya los conecta mediante `ejecutar_ag()`; este notebook conserva su demostración acotada a un paso de reproducción.
 
 ## Firmas definitivas
 

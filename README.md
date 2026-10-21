@@ -68,16 +68,16 @@ La evidencia de la última corrida está en
 - **Espacio de búsqueda:** Cuantificado en $1.76 \times 10^{21}$ estados posibles ($70.6$ bits), justificando la intratabilidad de fuerza bruta.
 - **Entregables:** `src/representacion.py`, `src/extraccion.py`, `notebooks/01_rol1_representacion.ipynb`, `documentacion/contratos/contrato_cromosoma.md` y `documentacion/diseno/dia1.md`.
 
-### Rol 4 — Dinámica poblacional (Día 1)
+### Rol 4 — Dinámica poblacional (Días 1 y 2)
 - **Configuración reproducible:** parámetros validados en `ConfiguracionAG`, con una semilla y un generador compartidos por corrida.
-- **Dinámica implementada:** inicialización, evaluación ordenada, elitismo por maximización, estadísticas de convergencia y detección de estancamiento.
+- **Dinámica implementada:** ciclo generacional completo, inicialización, evaluación ordenada, elitismo por maximización, estadísticas de convergencia y detección de estancamiento.
 - **Plan experimental:** matriz factorial de 12 configuraciones preparada para el Día 3, con cinco semillas como réplicas.
-- **Integración:** conexión verificada con `seleccion_torneo()` del Rol 3; cruces y mutaciones permanecen pendientes de sus contratos del Día 2.
-- **Entregables:** `src/configuracion.py`, `src/algoritmo_genetico.py`, `notebooks/04_rol4_dinamica.ipynb` y `documentacion/contratos/interfaz_dinamica_rol4.md`.
+- **Integración Día 2:** `ejecutar_ag()` conecta torneo o SUS, BLX-alpha o cruce uniforme y mutación gaussiana o no uniforme; la primera corrida end-to-end usa síntesis y fitness reales con una población pequeña.
+- **Entregables:** `src/configuracion.py`, `src/algoritmo_genetico.py`, `notebooks/04_rol4_dinamica.ipynb`, `documentacion/rol4_dia2.md` y `documentacion/contratos/interfaz_dinamica_rol4.md`.
 
 ### Rol 5 — Analista (en progreso)
 - **Día 1:** notebook reproducible con prueba inicial de representación, melodía procesada, síntesis y fitness; documentación del plan y de las discrepancias verificadas.
-- **No ejecutado:** el notebook no corre el AG ni las 12 configuraciones. El ciclo generacional completo depende de las interfaces de cruce/mutación del Rol 3 y de su integración por el Rol 4.
+- **Disponible para integrar:** el runner completo del Rol 4 ya puede inyectarse en las corridas del Rol 5. El notebook integrado todavía no ejecuta las 12 configuraciones ni las réplicas del Día 3.
 - **Pendiente de ratificación:** los niveles exactos de los factores que generan las 12 configuraciones y la métrica oficial del experimento.
 - **Entregables de esta etapa:** `notebooks/00_integracion.ipynb`, `documentacion/diseno/dia1.md`, `documentacion/analisis_rol5.md` y `tests/test_rol5.py`.
 

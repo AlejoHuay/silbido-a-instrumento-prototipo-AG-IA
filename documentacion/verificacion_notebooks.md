@@ -42,14 +42,14 @@ los WAV, CSV, figuras o resultados versionados.
 
 | Notebook | Celdas de código | Tiempo | Resultado |
 |---|---:|---:|---|
-| `00_integracion.ipynb` | 4 | 17.99 s | Correcto |
-| `01_rol1_representacion.ipynb` | 8 | 25.28 s | Correcto |
-| `02_rol2_sintesis_fitness.ipynb` | 15 | 21.38 s | Correcto |
-| `03_rol3_operadores.ipynb` | 5 | 17.57 s | Correcto |
-| `04_rol4_dinamica.ipynb` | 6 | 18.37 s | Correcto |
+| `00_integracion.ipynb` | 4 | 19.29 s | Correcto |
+| `01_rol1_representacion.ipynb` | 8 | 35.05 s | Correcto |
+| `02_rol2_sintesis_fitness.ipynb` | 16 | 25.92 s | Correcto |
+| `03_rol3_operadores.ipynb` | 8 | 19.37 s | Correcto |
+| `04_rol4_dinamica.ipynb` | 7 | 23.99 s | Correcto |
 
 Todas las celdas de código recibieron contador de ejecución y no produjeron
-salidas de error. También pasaron las 18 pruebas unitarias del proyecto.
+salidas de error. También pasaron las 51 pruebas unitarias del proyecto.
 
 Los tiempos son evidencia de esta corrida y pueden variar entre equipos. Una
 advertencia de compatibilidad de `nbformat` indicó que algunas celdas antiguas
