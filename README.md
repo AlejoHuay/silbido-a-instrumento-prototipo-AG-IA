@@ -75,11 +75,12 @@ La evidencia de la última corrida está en
 - **Integración Día 2:** `ejecutar_ag()` conecta torneo o SUS, BLX-alpha o cruce uniforme y mutación gaussiana o no uniforme; la primera corrida end-to-end usa síntesis y fitness reales con una población pequeña.
 - **Entregables:** `src/configuracion.py`, `src/algoritmo_genetico.py`, `notebooks/04_rol4_dinamica.ipynb`, `documentacion/rol4_dia2.md` y `documentacion/contratos/interfaz_dinamica_rol4.md`.
 
-### Rol 5 — Analista (en progreso)
-- **Día 1:** notebook reproducible con prueba inicial de representación, melodía procesada, síntesis y fitness; documentación del plan y de las discrepancias verificadas.
-- **Disponible para integrar:** el runner completo del Rol 4 ya puede inyectarse en las corridas del Rol 5. El notebook integrado todavía no ejecuta las 12 configuraciones ni las réplicas del Día 3.
-- **Pendiente de ratificación:** los niveles exactos de los factores que generan las 12 configuraciones y la métrica oficial del experimento.
-- **Entregables de esta etapa:** `notebooks/00_integracion.ipynb`, `documentacion/diseno/dia1.md`, `documentacion/analisis_rol5.md` y `tests/test_rol5.py`.
+### Rol 5 — Análisis experimental (Día 2 cerrado; Día 3 pendiente)
+- **Integración end-to-end:** `notebooks/00_integracion.ipynb` ejecuta el AG con la melodía y referencia reales, verifica repetibilidad, límites, finitud, población y presupuesto de evaluaciones. Genera `resultados/audios/rol5_dia2_mejor.wav` cuando falta o comprueba que el existente coincide, sin sobrescribirlo.
+- **Evidencia de demostración:** semilla 2026, población 10, cinco generaciones, torneo, cruce BLX y mutación gaussiana; 60 evaluaciones reales y fitness STFT 0.7152406. Esta corrida valida la integración y no es parte del análisis estadístico del Día 3.
+- **Análisis disponible:** registro de corridas, resúmenes y baseline pareado en `src/evaluacion.py` y `src/experimentos.py`. No hay aún datos de sensibilidad ni corridas del factorial de 12 configuraciones.
+- **Pendiente antes del Día 3:** ratificar la métrica oficial y los niveles de los factores experimentales.
+- **Entregables:** `notebooks/00_integracion.ipynb`, `documentacion/analisis_rol5.md` y `tests/test_rol5.py`.
 
 ## Acuerdos y Diseño
 
