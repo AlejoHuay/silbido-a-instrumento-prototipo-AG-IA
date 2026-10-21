@@ -1,8 +1,7 @@
 """Baselines y planificación reproducible de experimentos del Rol 5.
 
-Este módulo no implementa el ciclo reproductivo del algoritmo genético.
-Para ejecutar corridas AG se inyecta un callable cuando Rol 3/4 publiquen
-una interfaz completa.
+El ciclo vive en ``src.algoritmo_genetico.ejecutar_ag`` y se inyecta como
+callable para mantener desacoplados la dinámica y el registro experimental.
 """
 
 from __future__ import annotations

@@ -1,8 +1,8 @@
 # Interfaz de dinámica poblacional — Rol 4
 
-**Estado:** Día 1. Configuración, medición, elitismo y parada implementados;
-los operadores del Día 2 ya tienen firmas en el contrato del Rol 3 y su
-conexión al ciclo completo sigue pendiente del Rol 4.
+**Estado:** Día 2. Ciclo completo implementado y verificado con los operadores
+del Rol 3, la síntesis y el fitness reales. Las 12 configuraciones y sus
+réplicas corresponden al Día 3.
 **Consumidores:** Roles 3 y 5, notebook de integración.
 
 ## Configuración base implementada y propuesta para ratificación
@@ -76,10 +76,11 @@ evaluar. El elitismo se copia antes de producir descendientes, lo que garantiza
 que el mejor fitness no disminuya entre generaciones si la aptitud es determinista.
 El ruido de síntesis usa su propia semilla fija (2026), independiente del Generator del AG.
 
-## Funciones disponibles desde el Día 1
+## Interfaz ejecutable
 
 ```python
 from src.algoritmo_genetico import (
+    ejecutar_ag,
     inicializar_poblacion,
     evaluar_poblacion,
     seleccionar_elites,
@@ -88,6 +89,24 @@ from src.algoritmo_genetico import (
 )
 from src.configuracion import ConfiguracionAG
 ```
+
+La corrida completa se invoca así:
+
+```python
+resultado = ejecutar_ag(
+    funcion_aptitud,
+    ConfiguracionAG(tam_poblacion=5, max_generaciones=3, elitismo=1),
+    seleccion="torneo",       # o "sus"
+    cruce="blend",            # o "uniforme"
+    mutacion="gaussiana",     # o "no_uniforme"
+)
+```
+
+El resultado incluye `mejor_individuo`, `mejor_fitness`, `historial`,
+`historial_mejor_fitness`, `generaciones_ejecutadas`, `evaluaciones`,
+`motivo_parada`, copias de la población y fitness finales, configuración,
+semilla y operadores elegidos. Es compatible con el runner inyectable de
+`ejecutar_corridas_ag()` del Rol 5.
 
 `evaluar_poblacion()` pasa una copia de cada cromosoma a la función de aptitud,
 evitando que una evaluación modifique accidentalmente la población. El vector
@@ -127,7 +146,8 @@ Para SUS se obtiene una sola vez por reproducción un lote de
 No llamar repetidamente a SUS con cantidad uno. Si falta una plaza, conservar
 solo el primer hijo de la última pareja. La mutación recibe p_mut sin filtro
 previo por individuo. Para la no uniforme, t=generación evaluada y T=G_max.
-El notebook del Rol 3 demuestra un paso real; no implementa `ejecutar_ag()`.
+El notebook del Rol 3 demuestra un paso real. El ciclo que repite ese esquema,
+controla la parada y registra la corrida está implementado en `ejecutar_ag()`.
 
 ## Definiciones precisas y presupuesto
 
@@ -144,11 +164,11 @@ Se conserva esta semántica del código, sin reemplazarla por otra regla.
 
 El pseudocódigo evalúa toda P en generación 0 y tras cada reemplazo, también
 las élites. Sin evaluaciones extra: E=N*(g+1), donde g son reemplazos ejecutados.
-El futuro runner debe contar llamadas reales y devolver E incluso con parada
+El runner cuenta llamadas reales y devuelve E incluso con parada
 anticipada. Si cambia a reutilizar aptitudes, cambia E: no usar N*G como atajo.
 El baseline se ejecutará con el E observado, misma métrica, datos y semilla de
-cada corrida. El runner todavía no existe: el conteo del AG no está verificado
-experimentalmente. Consultar el plan detallado del Rol 5.
+cada corrida. El conteo se verifica con pruebas de máximo de generaciones y de
+parada anticipada. Consultar el plan detallado del Rol 5.
 
 Acuerdo de granularidad de probabilidades (definido por Rol 1 con Roles 3 y 4):
 - Cruce (p_cruce = 0.90): se aplica por pareja de padres seleccionados. En cruce
@@ -156,7 +176,7 @@ Acuerdo de granularidad de probabilidades (definido por Rol 1 con Roles 3 y 4):
 - Mutación (p_mutación base 0.05, factoriales 0.02 y 0.08): se aplica por gen de
   forma independiente dentro del operador de Rol 3. Rol 4 pasa el individuo y la
   tasa sin filtro previo por hijo, evitando atenuación cuadrática (p_m x p_m).
-El ciclo sigue siendo pseudocódigo; los operadores referenciados sí están
-implementados y sus firmas están publicadas en el contrato del Rol 3.
+El ciclo implementado sigue este pseudocódigo y usa directamente las firmas
+publicadas en el contrato del Rol 3.
 
 Documento de entrega: [diseño conjunto](../diseno/diseno_completo_ag_dia1.md).

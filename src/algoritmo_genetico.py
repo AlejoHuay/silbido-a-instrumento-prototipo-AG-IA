@@ -1,18 +1,22 @@
-"""Rol 4: dinámica poblacional, elitismo y criterios de parada.
-
-El ciclo reproductivo completo se conectará cuando el Rol 3 publique las
-firmas de cruce y mutación del Día 2. Este módulo ya concentra las partes de
-la dinámica que no dependen de esas firmas y evita duplicarlas en notebooks.
-"""
+"""Rol 4: ciclo completo, dinámica poblacional y criterios de parada."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
+from numbers import Real
 from typing import Callable
 
 import numpy as np
 
 from .configuracion import ConfiguracionAG
+from .operadores import (
+    cruce_blend,
+    cruce_uniforme,
+    mutacion_gaussiana,
+    mutacion_no_uniforme,
+    seleccion_sus,
+    seleccion_torneo,
+)
 from .representacion import (
     generar_poblacion_inicial,
     num_genes,
@@ -178,3 +182,216 @@ def detectar_estancamiento(
     ventana = historial[-(paciencia + 1):]
     mejora = float(np.max(ventana[1:]) - ventana[0])
     return mejora < tolerancia
+
+
+def _validar_opcion(nombre: str, valor: str, permitidas: tuple[str, ...]) -> str:
+    if valor not in permitidas:
+        opciones = ", ".join(repr(opcion) for opcion in permitidas)
+        raise ValueError(f"{nombre} debe ser una de: {opciones}.")
+    return valor
+
+
+def _validar_parametro_operador(
+    nombre: str,
+    valor: float,
+    *,
+    positivo: bool = False,
+) -> None:
+    if (
+        isinstance(valor, (bool, np.bool_))
+        or not isinstance(valor, Real)
+        or not np.isfinite(valor)
+    ):
+        comparacion = "> 0" if positivo else ">= 0"
+        raise ValueError(f"{nombre} debe ser un número finito {comparacion}.")
+    limite_invalido = valor <= 0 if positivo else valor < 0
+    if limite_invalido:
+        comparacion = "> 0" if positivo else ">= 0"
+        raise ValueError(f"{nombre} debe ser un número finito {comparacion}.")
+
+
+def _seleccionar_padres(
+    poblacion: np.ndarray,
+    fitness: np.ndarray,
+    cantidad: int,
+    seleccion: str,
+    configuracion: ConfiguracionAG,
+    rng: np.random.Generator,
+) -> np.ndarray:
+    """Obtiene un lote par de padres sin compartir memoria con la población."""
+
+    if seleccion == "sus":
+        return seleccion_sus(
+            poblacion,
+            fitness,
+            cantidad=cantidad,
+            rng=rng,
+        )
+
+    return np.stack([
+        seleccion_torneo(
+            poblacion,
+            fitness,
+            k=configuracion.tam_torneo,
+            rng=rng,
+        )
+        for _ in range(cantidad)
+    ])
+
+
+def ejecutar_ag(
+    funcion_aptitud: Callable[[np.ndarray], float],
+    configuracion: ConfiguracionAG | None = None,
+    *,
+    seleccion: str = "torneo",
+    cruce: str = "blend",
+    mutacion: str = "gaussiana",
+    alpha: float = 0.5,
+    sigma: float = 0.08,
+    b: float = 2.0,
+) -> dict:
+    """Ejecuta el algoritmo genético completo y maximiza ``funcion_aptitud``.
+
+    La población inicial es la generación 0. Cada reemplazo crea la generación
+    siguiente y vuelve a evaluar todos sus individuos, incluidas las élites.
+    El generador de la corrida se comparte con todos los operadores; la función
+    de aptitud debe ser determinista si se quiere garantizar monotonía por
+    elitismo. Los parámetros ``alpha``, ``sigma`` y ``b`` se validan antes de
+    iniciar la corrida y vuelven a respetar los contratos del Rol 3 al usarse.
+
+    Retorna un diccionario compatible con ``ejecutar_corridas_ag`` del Rol 5,
+    además del historial y de copias de la población y el fitness finales.
+    """
+
+    if not callable(funcion_aptitud):
+        raise ValueError("funcion_aptitud debe ser invocable.")
+    if configuracion is None:
+        configuracion = ConfiguracionAG()
+    if not isinstance(configuracion, ConfiguracionAG):
+        raise ValueError("configuracion debe ser una instancia de ConfiguracionAG.")
+
+    seleccion = _validar_opcion(
+        "seleccion", seleccion, ("torneo", "sus")
+    )
+    cruce = _validar_opcion("cruce", cruce, ("blend", "uniforme"))
+    mutacion = _validar_opcion(
+        "mutacion", mutacion, ("gaussiana", "no_uniforme")
+    )
+    _validar_parametro_operador("alpha", alpha)
+    _validar_parametro_operador("sigma", sigma)
+    _validar_parametro_operador("b", b, positivo=True)
+
+    rng = np.random.default_rng(configuracion.semilla)
+    poblacion = inicializar_poblacion(configuracion, rng=rng)
+    historial: list[EstadisticasGeneracion] = []
+    historial_mejor: list[float] = []
+    mejor_individuo: np.ndarray | None = None
+    mejor_fitness = -np.inf
+    evaluaciones = 0
+    motivo_parada = "max_generaciones"
+
+    for generacion in range(configuracion.max_generaciones + 1):
+        fitness = evaluar_poblacion(poblacion, funcion_aptitud)
+        evaluaciones += len(poblacion)
+        historial.append(
+            calcular_estadisticas(poblacion, fitness, generacion)
+        )
+
+        indice_mejor = int(np.argmax(fitness))
+        if fitness[indice_mejor] > mejor_fitness:
+            mejor_fitness = float(fitness[indice_mejor])
+            mejor_individuo = poblacion[indice_mejor].copy()
+        historial_mejor.append(float(mejor_fitness))
+
+        if generacion == configuracion.max_generaciones:
+            motivo_parada = "max_generaciones"
+            break
+        if detectar_estancamiento(
+            historial_mejor,
+            paciencia=configuracion.paciencia_estancamiento,
+            tolerancia=configuracion.tolerancia_mejora,
+        ):
+            motivo_parada = "estancamiento"
+            break
+
+        elites = seleccionar_elites(
+            poblacion,
+            fitness,
+            configuracion.elitismo,
+        )
+        plazas_descendencia = configuracion.tam_poblacion - len(elites)
+        cantidad_padres = 2 * ((plazas_descendencia + 1) // 2)
+        padres = _seleccionar_padres(
+            poblacion,
+            fitness,
+            cantidad_padres,
+            seleccion,
+            configuracion,
+            rng,
+        )
+
+        nueva_poblacion = [elite.copy() for elite in elites]
+        for indice in range(0, cantidad_padres, 2):
+            padre_1, padre_2 = padres[indice], padres[indice + 1]
+            if rng.random() < configuracion.probabilidad_cruce:
+                if cruce == "blend":
+                    hijos = cruce_blend(
+                        padre_1,
+                        padre_2,
+                        alpha=alpha,
+                        rng=rng,
+                    )
+                else:
+                    hijos = cruce_uniforme(padre_1, padre_2, rng=rng)
+            else:
+                hijos = (padre_1.copy(), padre_2.copy())
+
+            for hijo in hijos:
+                if mutacion == "gaussiana":
+                    hijo_mutado = mutacion_gaussiana(
+                        hijo,
+                        p_mut=configuracion.probabilidad_mutacion,
+                        sigma=sigma,
+                        rng=rng,
+                    )
+                else:
+                    hijo_mutado = mutacion_no_uniforme(
+                        hijo,
+                        generacion=generacion,
+                        max_generaciones=configuracion.max_generaciones,
+                        p_mut=configuracion.probabilidad_mutacion,
+                        b=b,
+                        rng=rng,
+                    )
+                nueva_poblacion.append(hijo_mutado.copy())
+                if len(nueva_poblacion) == configuracion.tam_poblacion:
+                    break
+            if len(nueva_poblacion) == configuracion.tam_poblacion:
+                break
+
+        poblacion = _validar_poblacion(np.stack(nueva_poblacion))
+
+    if mejor_individuo is None:  # pragma: no cover - defensa interna
+        raise RuntimeError("La corrida terminó sin evaluar individuos.")
+
+    return {
+        "mejor_individuo": mejor_individuo.copy(),
+        "mejor_fitness": float(mejor_fitness),
+        "historial": tuple(historial),
+        "historial_mejor_fitness": tuple(historial_mejor),
+        "configuracion": configuracion,
+        "semilla": configuracion.semilla,
+        "motivo_parada": motivo_parada,
+        "generaciones_ejecutadas": generacion,
+        "evaluaciones": evaluaciones,
+        "poblacion_final": poblacion.copy(),
+        "fitness_final": fitness.copy(),
+        "operadores": {
+            "seleccion": seleccion,
+            "cruce": cruce,
+            "mutacion": mutacion,
+            "alpha": alpha,
+            "sigma": sigma,
+            "b": b,
+        },
+    }
