@@ -1,0 +1,196 @@
+{
+  "estado": "completado",
+  "creado_utc": "2026-10-21T18:47:58.355272+00:00",
+  "commit_base": "c5dc431612bbc3ef3dec85d31bf8ce2ad3488c71",
+  "rama_esperada": "feature/rol5-experimentos-dia3",
+  "python": "3.14.5 (tags/v3.14.5:5607950, May 10 2026, 10:43:50) [MSC v.1944 64 bit (AMD64)]",
+  "plataforma": "Windows-11-10.0.26200-SP0",
+  "paquetes": {
+    "numpy": "2.5.2",
+    "scipy": "1.18.1",
+    "soundfile": "0.14.0"
+  },
+  "configuraciones": [
+    {
+      "tam_poblacion": 20,
+      "max_generaciones": 50,
+      "elitismo": 1,
+      "tam_torneo": 3,
+      "probabilidad_cruce": 0.9,
+      "probabilidad_mutacion": 0.02,
+      "paciencia_estancamiento": 10,
+      "tolerancia_mejora": 0.0001,
+      "semilla": 42
+    },
+    {
+      "tam_poblacion": 20,
+      "max_generaciones": 50,
+      "elitismo": 1,
+      "tam_torneo": 3,
+      "probabilidad_cruce": 0.9,
+      "probabilidad_mutacion": 0.08,
+      "paciencia_estancamiento": 10,
+      "tolerancia_mejora": 0.0001,
+      "semilla": 42
+    },
+    {
+      "tam_poblacion": 20,
+      "max_generaciones": 50,
+      "elitismo": 2,
+      "tam_torneo": 3,
+      "probabilidad_cruce": 0.9,
+      "probabilidad_mutacion": 0.02,
+      "paciencia_estancamiento": 10,
+      "tolerancia_mejora": 0.0001,
+      "semilla": 42
+    },
+    {
+      "tam_poblacion": 20,
+      "max_generaciones": 50,
+      "elitismo": 2,
+      "tam_torneo": 3,
+      "probabilidad_cruce": 0.9,
+      "probabilidad_mutacion": 0.08,
+      "paciencia_estancamiento": 10,
+      "tolerancia_mejora": 0.0001,
+      "semilla": 42
+    },
+    {
+      "tam_poblacion": 50,
+      "max_generaciones": 50,
+      "elitismo": 1,
+      "tam_torneo": 3,
+      "probabilidad_cruce": 0.9,
+      "probabilidad_mutacion": 0.02,
+      "paciencia_estancamiento": 10,
+      "tolerancia_mejora": 0.0001,
+      "semilla": 42
+    },
+    {
+      "tam_poblacion": 50,
+      "max_generaciones": 50,
+      "elitismo": 1,
+      "tam_torneo": 3,
+      "probabilidad_cruce": 0.9,
+      "probabilidad_mutacion": 0.08,
+      "paciencia_estancamiento": 10,
+      "tolerancia_mejora": 0.0001,
+      "semilla": 42
+    },
+    {
+      "tam_poblacion": 50,
+      "max_generaciones": 50,
+      "elitismo": 2,
+      "tam_torneo": 3,
+      "probabilidad_cruce": 0.9,
+      "probabilidad_mutacion": 0.02,
+      "paciencia_estancamiento": 10,
+      "tolerancia_mejora": 0.0001,
+      "semilla": 42
+    },
+    {
+      "tam_poblacion": 50,
+      "max_generaciones": 50,
+      "elitismo": 2,
+      "tam_torneo": 3,
+      "probabilidad_cruce": 0.9,
+      "probabilidad_mutacion": 0.08,
+      "paciencia_estancamiento": 10,
+      "tolerancia_mejora": 0.0001,
+      "semilla": 42
+    },
+    {
+      "tam_poblacion": 100,
+      "max_generaciones": 50,
+      "elitismo": 1,
+      "tam_torneo": 3,
+      "probabilidad_cruce": 0.9,
+      "probabilidad_mutacion": 0.02,
+      "paciencia_estancamiento": 10,
+      "tolerancia_mejora": 0.0001,
+      "semilla": 42
+    },
+    {
+      "tam_poblacion": 100,
+      "max_generaciones": 50,
+      "elitismo": 1,
+      "tam_torneo": 3,
+      "probabilidad_cruce": 0.9,
+      "probabilidad_mutacion": 0.08,
+      "paciencia_estancamiento": 10,
+      "tolerancia_mejora": 0.0001,
+      "semilla": 42
+    },
+    {
+      "tam_poblacion": 100,
+      "max_generaciones": 50,
+      "elitismo": 2,
+      "tam_torneo": 3,
+      "probabilidad_cruce": 0.9,
+      "probabilidad_mutacion": 0.02,
+      "paciencia_estancamiento": 10,
+      "tolerancia_mejora": 0.0001,
+      "semilla": 42
+    },
+    {
+      "tam_poblacion": 100,
+      "max_generaciones": 50,
+      "elitismo": 2,
+      "tam_torneo": 3,
+      "probabilidad_cruce": 0.9,
+      "probabilidad_mutacion": 0.08,
+      "paciencia_estancamiento": 10,
+      "tolerancia_mejora": 0.0001,
+      "semilla": 42
+    }
+  ],
+  "semillas": [
+    42,
+    101,
+    2024,
+    7,
+    999
+  ],
+  "operadores_provisionales_no_ratificados": {
+    "seleccion": "torneo",
+    "cruce": "uniforme",
+    "mutacion": "gaussiana",
+    "alpha": 0.5,
+    "sigma": 0.08,
+    "b": 2.0
+  },
+  "metricas": [
+    "stft",
+    "croma"
+  ],
+  "metricas_separadas": true,
+  "stft_ratificacion_colectiva_pendiente": true,
+  "datos": {
+    "datos/procesados/melodia_01.csv": "eed2535aaddaa1eb697848f0a30c69cdded32f51840121183b7fb4947d086565",
+    "datos/audio/referencias/flauta_referencia_01.wav": "40c4b824601dc98234cb7d762cb69f521ed380c1b877fdd60b72e90a725c610d",
+    "sample_rate": "22050",
+    "channels": "1",
+    "frames": "59645",
+    "subtype": "PCM_16"
+  },
+  "sha256_codigo": {
+    "scripts/ejecutar_rol5_factorial.py": "f66cb6317061ce15c6428b3db1d8e93e081e69ca9a5c5aa76c100ff9bf8c0e94",
+    "src/algoritmo_genetico.py": "2ccec1df9d26e8546e45227e8a284d03db3116a9aaf3ccee59e2a63afd8478a8",
+    "src/configuracion.py": "1e6342e52f18a38a5f1b812c156285757f0ccf404c1a4f805a2e3299c9f65be9",
+    "src/evaluacion.py": "3e87b606ec1991523db5c71b0f384f8db3194926c93ba99e3f2bd5dda5d4c0bd",
+    "src/experimentos.py": "301fc8a088067ca7017cdcb727c94d65b072d5ff70fbf33c9ffb2497938ddddf",
+    "src/extraccion.py": "e74aa9cab1684a10e410103ea40eb4466d1849adc13b9f09acfebc9021bfb1fa",
+    "src/fitness.py": "fb79b1c82f3480d294e033b67bb29d7aa3389fc5b4eaf0e8faceb11d1448bedd",
+    "src/representacion.py": "84d44d406b8b58dc03fc2e6a092f2f7c0c55ff2cbf630ef1b97f2194db900b26",
+    "src/sintesis.py": "819185f89af39c604f03c0aa06e35928947100fa3950a3b3f655428eb43effcd"
+  },
+  "fitness": {
+    "n_fft": 2048,
+    "salto": 256,
+    "piso_db": -80.0,
+    "escala_error_db": 10.0,
+    "frecuencia_muestreo": 22050
+  },
+  "parada": "ConfiguracionAG existente; parada por max_generaciones o estancamiento.",
+  "completado_utc": "2026-10-22T00:06:59.016616+00:00"
+}

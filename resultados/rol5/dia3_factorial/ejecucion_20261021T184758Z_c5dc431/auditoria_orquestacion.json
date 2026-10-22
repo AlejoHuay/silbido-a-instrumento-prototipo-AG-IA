@@ -1,0 +1,17 @@
+{
+  "creado_utc": "2026-10-22T00:10:00.812912+00:00",
+  "script_sha256_en_manifiesto_inicial": "f66cb6317061ce15c6428b3db1d8e93e081e69ca9a5c5aa76c100ff9bf8c0e94",
+  "script_sha256_actual_despues_de_documentacion_y_validacion": "6ffe4ba0fee9ec2ee5a6880c64126252590a5a01b10a7ee3222ec1c228d3b5fe",
+  "sha256_de_modulos_core_coinciden_con_manifiesto": {
+    "src/algoritmo_genetico.py": true,
+    "src/configuracion.py": true,
+    "src/evaluacion.py": true,
+    "src/experimentos.py": true,
+    "src/extraccion.py": true,
+    "src/fitness.py": true,
+    "src/representacion.py": true,
+    "src/sintesis.py": true
+  },
+  "secuencia": "Primera invocación produjo los 60 checkpoints AG STFT y falló en una clave de postvalidación que retenía semilla base 42. Se corrigió la identidad de semilla y se reanudó desde esos checkpoints; no se repitieron. Luego se ejecutaron los 60 baselines STFT y los 60 AG/baselines chroma con el runner de reanudación. Los módulos de algoritmo, configuración, fitness, operadores, registro, extracción y síntesis permanecieron iguales según sus SHA-256.",
+  "nota": "El hash inicial identifica el runner usado al comenzar STFT; el hash actual incluye además utilidades añadidas después para resúmenes y validación en disco. No se conserva un hash intermedio del runner corregido usado durante la continuación."
+}

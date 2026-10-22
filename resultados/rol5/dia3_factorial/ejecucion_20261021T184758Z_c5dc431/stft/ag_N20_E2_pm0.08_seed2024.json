@@ -1,0 +1,861 @@
+{
+  "metodo": "algoritmo_genetico",
+  "metrica": "stft",
+  "semilla": 2024,
+  "configuracion": {
+    "tam_poblacion": 20,
+    "max_generaciones": 50,
+    "elitismo": 2,
+    "tam_torneo": 3,
+    "probabilidad_cruce": 0.9,
+    "probabilidad_mutacion": 0.08,
+    "paciencia_estancamiento": 10,
+    "tolerancia_mejora": 0.0001,
+    "semilla": 2024
+  },
+  "operadores": {
+    "seleccion": "torneo",
+    "cruce": "uniforme",
+    "mutacion": "gaussiana",
+    "alpha": 0.5,
+    "sigma": 0.08,
+    "b": 2.0
+  },
+  "tiempo_runner_s": 13.012841000017943,
+  "resultado_completo": {
+    "mejor_individuo": [
+      1.0,
+      0.004439814366545896,
+      0.0020025940803823986,
+      1.0,
+      0.0,
+      0.04447856992411478,
+      0.0,
+      0.041880616775259186
+    ],
+    "mejor_fitness": 0.7287028486262348,
+    "historial": [
+      {
+        "generacion": 0,
+        "fitness_maximo": 0.7067617894540987,
+        "fitness_medio": 0.621335786271311,
+        "desviacion_fitness": 0.07260875406198934,
+        "diversidad_genetica": 0.2725904586210682
+      },
+      {
+        "generacion": 1,
+        "fitness_maximo": 0.7119703539999124,
+        "fitness_medio": 0.6829293442930396,
+        "desviacion_fitness": 0.029891160227374432,
+        "diversidad_genetica": 0.26632228077090914
+      },
+      {
+        "generacion": 2,
+        "fitness_maximo": 0.7119703539999124,
+        "fitness_medio": 0.7057448787679048,
+        "desviacion_fitness": 0.006717963826095652,
+        "diversidad_genetica": 0.2450670484778814
+      },
+      {
+        "generacion": 3,
+        "fitness_maximo": 0.7152399037470506,
+        "fitness_medio": 0.7109204966470548,
+        "desviacion_fitness": 0.0015926306014261398,
+        "diversidad_genetica": 0.1549178080920515
+      },
+      {
+        "generacion": 4,
+        "fitness_maximo": 0.7183988324176332,
+        "fitness_medio": 0.7133853790693949,
+        "desviacion_fitness": 0.0020403775610331474,
+        "diversidad_genetica": 0.09105635705947465
+      },
+      {
+        "generacion": 5,
+        "fitness_maximo": 0.7185473769364188,
+        "fitness_medio": 0.7153200968291491,
+        "desviacion_fitness": 0.0015369600378232946,
+        "diversidad_genetica": 0.0632514751795765
+      },
+      {
+        "generacion": 6,
+        "fitness_maximo": 0.7195973997759596,
+        "fitness_medio": 0.716524088740603,
+        "desviacion_fitness": 0.0035406661814775886,
+        "diversidad_genetica": 0.06124549580836549
+      },
+      {
+        "generacion": 7,
+        "fitness_maximo": 0.7206480200209643,
+        "fitness_medio": 0.7188802903849014,
+        "desviacion_fitness": 0.0007756798531616011,
+        "diversidad_genetica": 0.04903978673142373
+      },
+      {
+        "generacion": 8,
+        "fitness_maximo": 0.7210013249995767,
+        "fitness_medio": 0.7193953829620259,
+        "desviacion_fitness": 0.0008299433048677344,
+        "diversidad_genetica": 0.05425154469353742
+      },
+      {
+        "generacion": 9,
+        "fitness_maximo": 0.7213675949169704,
+        "fitness_medio": 0.719866570496212,
+        "desviacion_fitness": 0.0012500282901451883,
+        "diversidad_genetica": 0.04320198231482855
+      },
+      {
+        "generacion": 10,
+        "fitness_maximo": 0.7228886730530968,
+        "fitness_medio": 0.7210259991477457,
+        "desviacion_fitness": 0.0009789765645032737,
+        "diversidad_genetica": 0.043449060544062855
+      },
+      {
+        "generacion": 11,
+        "fitness_maximo": 0.7228886730530968,
+        "fitness_medio": 0.7213583451876933,
+        "desviacion_fitness": 0.0014991493749084103,
+        "diversidad_genetica": 0.03509793344199007
+      },
+      {
+        "generacion": 12,
+        "fitness_maximo": 0.7245163779263943,
+        "fitness_medio": 0.7222267731875391,
+        "desviacion_fitness": 0.0012125027419253051,
+        "diversidad_genetica": 0.023212129652372068
+      },
+      {
+        "generacion": 13,
+        "fitness_maximo": 0.7245163779263943,
+        "fitness_medio": 0.7225344959337957,
+        "desviacion_fitness": 0.0017294837487373256,
+        "diversidad_genetica": 0.028265694823865407
+      },
+      {
+        "generacion": 14,
+        "fitness_maximo": 0.7255671221159066,
+        "fitness_medio": 0.7231370197471007,
+        "desviacion_fitness": 0.0033088369863251564,
+        "diversidad_genetica": 0.029207024183869244
+      },
+      {
+        "generacion": 15,
+        "fitness_maximo": 0.7257150725236057,
+        "fitness_medio": 0.7242772533914014,
+        "desviacion_fitness": 0.0013180411215263303,
+        "diversidad_genetica": 0.0298531611255334
+      },
+      {
+        "generacion": 16,
+        "fitness_maximo": 0.7259293670077464,
+        "fitness_medio": 0.7251840421421973,
+        "desviacion_fitness": 0.0006347890267837351,
+        "diversidad_genetica": 0.025293259567630125
+      },
+      {
+        "generacion": 17,
+        "fitness_maximo": 0.7264666053838973,
+        "fitness_medio": 0.7255076097912031,
+        "desviacion_fitness": 0.0009492596099636537,
+        "diversidad_genetica": 0.019372370160615666
+      },
+      {
+        "generacion": 18,
+        "fitness_maximo": 0.7264920977324101,
+        "fitness_medio": 0.7259180436895447,
+        "desviacion_fitness": 0.0006356234050206439,
+        "diversidad_genetica": 0.02094663394706791
+      },
+      {
+        "generacion": 19,
+        "fitness_maximo": 0.7273764953974392,
+        "fitness_medio": 0.7262120641939118,
+        "desviacion_fitness": 0.0009880464305587985,
+        "diversidad_genetica": 0.015800093970779173
+      },
+      {
+        "generacion": 20,
+        "fitness_maximo": 0.72785490243295,
+        "fitness_medio": 0.7261092632342567,
+        "desviacion_fitness": 0.00165687851162421,
+        "diversidad_genetica": 0.02432624855009685
+      },
+      {
+        "generacion": 21,
+        "fitness_maximo": 0.7280088435233333,
+        "fitness_medio": 0.726886026399187,
+        "desviacion_fitness": 0.0008204145036475702,
+        "diversidad_genetica": 0.023672496421812027
+      },
+      {
+        "generacion": 22,
+        "fitness_maximo": 0.7282536931215875,
+        "fitness_medio": 0.7275159910259266,
+        "desviacion_fitness": 0.0005501273222598414,
+        "diversidad_genetica": 0.018437875676289822
+      },
+      {
+        "generacion": 23,
+        "fitness_maximo": 0.7282536931215875,
+        "fitness_medio": 0.7274929509169775,
+        "desviacion_fitness": 0.0012929703584510176,
+        "diversidad_genetica": 0.017343745099146775
+      },
+      {
+        "generacion": 24,
+        "fitness_maximo": 0.7285468244011756,
+        "fitness_medio": 0.7279744244171047,
+        "desviacion_fitness": 0.0005675698178334088,
+        "diversidad_genetica": 0.01358332169779684
+      },
+      {
+        "generacion": 25,
+        "fitness_maximo": 0.7285468244011756,
+        "fitness_medio": 0.7276603282919805,
+        "desviacion_fitness": 0.0015175878263864848,
+        "diversidad_genetica": 0.017497365342897787
+      },
+      {
+        "generacion": 26,
+        "fitness_maximo": 0.7285468244011756,
+        "fitness_medio": 0.7282157062277501,
+        "desviacion_fitness": 0.0006264933127462672,
+        "diversidad_genetica": 0.01027584959933837
+      },
+      {
+        "generacion": 27,
+        "fitness_maximo": 0.7286158324097467,
+        "fitness_medio": 0.7284746802088897,
+        "desviacion_fitness": 0.00016046824932298303,
+        "diversidad_genetica": 0.008352467158005328
+      },
+      {
+        "generacion": 28,
+        "fitness_maximo": 0.7286158324097467,
+        "fitness_medio": 0.7278668935575725,
+        "desviacion_fitness": 0.0018157014135649862,
+        "diversidad_genetica": 0.012740528582087025
+      },
+      {
+        "generacion": 29,
+        "fitness_maximo": 0.7286335788271511,
+        "fitness_medio": 0.7277306028577305,
+        "desviacion_fitness": 0.00359473975595851,
+        "diversidad_genetica": 0.005370797458659406
+      },
+      {
+        "generacion": 30,
+        "fitness_maximo": 0.7286533579342128,
+        "fitness_medio": 0.7280278122794226,
+        "desviacion_fitness": 0.0013537096800643421,
+        "diversidad_genetica": 0.02215231186937487
+      },
+      {
+        "generacion": 31,
+        "fitness_maximo": 0.7286533579342128,
+        "fitness_medio": 0.7277131700343136,
+        "desviacion_fitness": 0.0016755267955906328,
+        "diversidad_genetica": 0.01717041201611668
+      },
+      {
+        "generacion": 32,
+        "fitness_maximo": 0.7286533579342128,
+        "fitness_medio": 0.727443384545175,
+        "desviacion_fitness": 0.0037494318945956316,
+        "diversidad_genetica": 0.013748686515868063
+      },
+      {
+        "generacion": 33,
+        "fitness_maximo": 0.7286816100395319,
+        "fitness_medio": 0.7279798290833052,
+        "desviacion_fitness": 0.0015107141235982588,
+        "diversidad_genetica": 0.015477212400695809
+      },
+      {
+        "generacion": 34,
+        "fitness_maximo": 0.7286816100395319,
+        "fitness_medio": 0.7283488139085692,
+        "desviacion_fitness": 0.0007973536881356197,
+        "diversidad_genetica": 0.0103173796969969
+      },
+      {
+        "generacion": 35,
+        "fitness_maximo": 0.7286877088618986,
+        "fitness_medio": 0.7283193282667045,
+        "desviacion_fitness": 0.001041440497939918,
+        "diversidad_genetica": 0.009311444542780139
+      },
+      {
+        "generacion": 36,
+        "fitness_maximo": 0.728700434608792,
+        "fitness_medio": 0.728191585349985,
+        "desviacion_fitness": 0.0011462587427027997,
+        "diversidad_genetica": 0.008822301055024313
+      },
+      {
+        "generacion": 37,
+        "fitness_maximo": 0.7287028486262348,
+        "fitness_medio": 0.7281885824232559,
+        "desviacion_fitness": 0.001322988744943232,
+        "diversidad_genetica": 0.01270273521058509
+      }
+    ],
+    "historial_mejor_fitness": [
+      0.7067617894540987,
+      0.7119703539999124,
+      0.7119703539999124,
+      0.7152399037470506,
+      0.7183988324176332,
+      0.7185473769364188,
+      0.7195973997759596,
+      0.7206480200209643,
+      0.7210013249995767,
+      0.7213675949169704,
+      0.7228886730530968,
+      0.7228886730530968,
+      0.7245163779263943,
+      0.7245163779263943,
+      0.7255671221159066,
+      0.7257150725236057,
+      0.7259293670077464,
+      0.7264666053838973,
+      0.7264920977324101,
+      0.7273764953974392,
+      0.72785490243295,
+      0.7280088435233333,
+      0.7282536931215875,
+      0.7282536931215875,
+      0.7285468244011756,
+      0.7285468244011756,
+      0.7285468244011756,
+      0.7286158324097467,
+      0.7286158324097467,
+      0.7286335788271511,
+      0.7286533579342128,
+      0.7286533579342128,
+      0.7286533579342128,
+      0.7286816100395319,
+      0.7286816100395319,
+      0.7286877088618986,
+      0.728700434608792,
+      0.7287028486262348
+    ],
+    "configuracion": {
+      "tam_poblacion": 20,
+      "max_generaciones": 50,
+      "elitismo": 2,
+      "tam_torneo": 3,
+      "probabilidad_cruce": 0.9,
+      "probabilidad_mutacion": 0.08,
+      "paciencia_estancamiento": 10,
+      "tolerancia_mejora": 0.0001,
+      "semilla": 2024
+    },
+    "semilla": 2024,
+    "motivo_parada": "estancamiento",
+    "generaciones_ejecutadas": 37,
+    "evaluaciones": 760,
+    "poblacion_final": [
+      [
+        1.0,
+        0.004439814366545896,
+        0.0020025940803823986,
+        1.0,
+        0.0,
+        0.062486362507783354,
+        0.0,
+        0.041880616775259186
+      ],
+      [
+        1.0,
+        0.004439814366545896,
+        0.0020025940803823986,
+        1.0,
+        0.0,
+        0.08840919133485182,
+        0.0,
+        0.041880616775259186
+      ],
+      [
+        1.0,
+        0.004439814366545896,
+        0.0020025940803823986,
+        1.0,
+        0.0,
+        0.09622707735729244,
+        0.0,
+        0.041880616775259186
+      ],
+      [
+        1.0,
+        0.09465471080480863,
+        0.0020025940803823986,
+        1.0,
+        0.0,
+        0.062486362507783354,
+        0.0,
+        0.041880616775259186
+      ],
+      [
+        1.0,
+        0.004439814366545896,
+        0.0020025940803823986,
+        1.0,
+        0.0,
+        0.09622707735729244,
+        0.0,
+        0.041880616775259186
+      ],
+      [
+        1.0,
+        0.004439814366545896,
+        0.0,
+        1.0,
+        0.0,
+        0.08840919133485182,
+        0.0,
+        0.041880616775259186
+      ],
+      [
+        1.0,
+        0.004439814366545896,
+        0.0020025940803823986,
+        1.0,
+        0.0,
+        0.08840919133485182,
+        0.0,
+        0.041880616775259186
+      ],
+      [
+        1.0,
+        0.004439814366545896,
+        0.0020025940803823986,
+        1.0,
+        0.0,
+        0.09622707735729244,
+        0.0,
+        0.041880616775259186
+      ],
+      [
+        1.0,
+        0.004439814366545896,
+        0.0020025940803823986,
+        1.0,
+        0.0,
+        0.09622707735729244,
+        0.0,
+        0.041880616775259186
+      ],
+      [
+        1.0,
+        0.004439814366545896,
+        0.0020025940803823986,
+        1.0,
+        0.0,
+        0.08840919133485182,
+        0.0,
+        0.0
+      ],
+      [
+        1.0,
+        0.004439814366545896,
+        0.0020025940803823986,
+        0.970467577224185,
+        0.0,
+        0.062486362507783354,
+        0.13680406175389861,
+        0.041880616775259186
+      ],
+      [
+        1.0,
+        0.004439814366545896,
+        0.0020025940803823986,
+        1.0,
+        0.0,
+        0.062486362507783354,
+        0.0,
+        0.0
+      ],
+      [
+        1.0,
+        0.004439814366545896,
+        0.0020025940803823986,
+        1.0,
+        0.0,
+        0.04447856992411478,
+        0.0,
+        0.041880616775259186
+      ],
+      [
+        1.0,
+        0.004439814366545896,
+        0.0020025940803823986,
+        1.0,
+        0.0,
+        0.08840919133485182,
+        0.0,
+        0.041880616775259186
+      ],
+      [
+        1.0,
+        0.004439814366545896,
+        0.07921029186930378,
+        1.0,
+        0.0,
+        0.08840919133485182,
+        0.04536715560111401,
+        0.041880616775259186
+      ],
+      [
+        1.0,
+        0.004439814366545896,
+        0.0020025940803823986,
+        1.0,
+        0.0,
+        0.08840919133485182,
+        0.0,
+        0.041880616775259186
+      ],
+      [
+        1.0,
+        0.004439814366545896,
+        0.0020025940803823986,
+        1.0,
+        0.0,
+        0.08840919133485182,
+        0.0,
+        0.041880616775259186
+      ],
+      [
+        1.0,
+        0.004439814366545896,
+        0.0020025940803823986,
+        1.0,
+        0.0,
+        0.09622707735729244,
+        0.0,
+        0.041880616775259186
+      ],
+      [
+        1.0,
+        0.004439814366545896,
+        0.0020025940803823986,
+        1.0,
+        0.0,
+        0.09622707735729244,
+        0.0,
+        0.041880616775259186
+      ],
+      [
+        1.0,
+        0.004439814366545896,
+        0.0020025940803823986,
+        1.0,
+        0.0,
+        0.09622707735729244,
+        0.0,
+        0.041880616775259186
+      ]
+    ],
+    "fitness_final": [
+      0.728700434608792,
+      0.7286877088618986,
+      0.7286816100395319,
+      0.7278033685027537,
+      0.7286816100395319,
+      0.7286776559267282,
+      0.7286877088618986,
+      0.7286816100395319,
+      0.7286816100395319,
+      0.7285533620769017,
+      0.7238738558424553,
+      0.7285624491831351,
+      0.7287028486262348,
+      0.7286877088618986,
+      0.7246878591119018,
+      0.7286877088618986,
+      0.7286877088618986,
+      0.7286816100395319,
+      0.7286816100395319,
+      0.7286816100395319
+    ],
+    "operadores": {
+      "seleccion": "torneo",
+      "cruce": "uniforme",
+      "mutacion": "gaussiana",
+      "alpha": 0.5,
+      "sigma": 0.08,
+      "b": 2.0
+    }
+  },
+  "historial": [
+    {
+      "generacion": 0,
+      "fitness_maximo": 0.7067617894540987,
+      "fitness_medio": 0.621335786271311,
+      "desviacion_fitness": 0.07260875406198934,
+      "diversidad_genetica": 0.2725904586210682
+    },
+    {
+      "generacion": 1,
+      "fitness_maximo": 0.7119703539999124,
+      "fitness_medio": 0.6829293442930396,
+      "desviacion_fitness": 0.029891160227374432,
+      "diversidad_genetica": 0.26632228077090914
+    },
+    {
+      "generacion": 2,
+      "fitness_maximo": 0.7119703539999124,
+      "fitness_medio": 0.7057448787679048,
+      "desviacion_fitness": 0.006717963826095652,
+      "diversidad_genetica": 0.2450670484778814
+    },
+    {
+      "generacion": 3,
+      "fitness_maximo": 0.7152399037470506,
+      "fitness_medio": 0.7109204966470548,
+      "desviacion_fitness": 0.0015926306014261398,
+      "diversidad_genetica": 0.1549178080920515
+    },
+    {
+      "generacion": 4,
+      "fitness_maximo": 0.7183988324176332,
+      "fitness_medio": 0.7133853790693949,
+      "desviacion_fitness": 0.0020403775610331474,
+      "diversidad_genetica": 0.09105635705947465
+    },
+    {
+      "generacion": 5,
+      "fitness_maximo": 0.7185473769364188,
+      "fitness_medio": 0.7153200968291491,
+      "desviacion_fitness": 0.0015369600378232946,
+      "diversidad_genetica": 0.0632514751795765
+    },
+    {
+      "generacion": 6,
+      "fitness_maximo": 0.7195973997759596,
+      "fitness_medio": 0.716524088740603,
+      "desviacion_fitness": 0.0035406661814775886,
+      "diversidad_genetica": 0.06124549580836549
+    },
+    {
+      "generacion": 7,
+      "fitness_maximo": 0.7206480200209643,
+      "fitness_medio": 0.7188802903849014,
+      "desviacion_fitness": 0.0007756798531616011,
+      "diversidad_genetica": 0.04903978673142373
+    },
+    {
+      "generacion": 8,
+      "fitness_maximo": 0.7210013249995767,
+      "fitness_medio": 0.7193953829620259,
+      "desviacion_fitness": 0.0008299433048677344,
+      "diversidad_genetica": 0.05425154469353742
+    },
+    {
+      "generacion": 9,
+      "fitness_maximo": 0.7213675949169704,
+      "fitness_medio": 0.719866570496212,
+      "desviacion_fitness": 0.0012500282901451883,
+      "diversidad_genetica": 0.04320198231482855
+    },
+    {
+      "generacion": 10,
+      "fitness_maximo": 0.7228886730530968,
+      "fitness_medio": 0.7210259991477457,
+      "desviacion_fitness": 0.0009789765645032737,
+      "diversidad_genetica": 0.043449060544062855
+    },
+    {
+      "generacion": 11,
+      "fitness_maximo": 0.7228886730530968,
+      "fitness_medio": 0.7213583451876933,
+      "desviacion_fitness": 0.0014991493749084103,
+      "diversidad_genetica": 0.03509793344199007
+    },
+    {
+      "generacion": 12,
+      "fitness_maximo": 0.7245163779263943,
+      "fitness_medio": 0.7222267731875391,
+      "desviacion_fitness": 0.0012125027419253051,
+      "diversidad_genetica": 0.023212129652372068
+    },
+    {
+      "generacion": 13,
+      "fitness_maximo": 0.7245163779263943,
+      "fitness_medio": 0.7225344959337957,
+      "desviacion_fitness": 0.0017294837487373256,
+      "diversidad_genetica": 0.028265694823865407
+    },
+    {
+      "generacion": 14,
+      "fitness_maximo": 0.7255671221159066,
+      "fitness_medio": 0.7231370197471007,
+      "desviacion_fitness": 0.0033088369863251564,
+      "diversidad_genetica": 0.029207024183869244
+    },
+    {
+      "generacion": 15,
+      "fitness_maximo": 0.7257150725236057,
+      "fitness_medio": 0.7242772533914014,
+      "desviacion_fitness": 0.0013180411215263303,
+      "diversidad_genetica": 0.0298531611255334
+    },
+    {
+      "generacion": 16,
+      "fitness_maximo": 0.7259293670077464,
+      "fitness_medio": 0.7251840421421973,
+      "desviacion_fitness": 0.0006347890267837351,
+      "diversidad_genetica": 0.025293259567630125
+    },
+    {
+      "generacion": 17,
+      "fitness_maximo": 0.7264666053838973,
+      "fitness_medio": 0.7255076097912031,
+      "desviacion_fitness": 0.0009492596099636537,
+      "diversidad_genetica": 0.019372370160615666
+    },
+    {
+      "generacion": 18,
+      "fitness_maximo": 0.7264920977324101,
+      "fitness_medio": 0.7259180436895447,
+      "desviacion_fitness": 0.0006356234050206439,
+      "diversidad_genetica": 0.02094663394706791
+    },
+    {
+      "generacion": 19,
+      "fitness_maximo": 0.7273764953974392,
+      "fitness_medio": 0.7262120641939118,
+      "desviacion_fitness": 0.0009880464305587985,
+      "diversidad_genetica": 0.015800093970779173
+    },
+    {
+      "generacion": 20,
+      "fitness_maximo": 0.72785490243295,
+      "fitness_medio": 0.7261092632342567,
+      "desviacion_fitness": 0.00165687851162421,
+      "diversidad_genetica": 0.02432624855009685
+    },
+    {
+      "generacion": 21,
+      "fitness_maximo": 0.7280088435233333,
+      "fitness_medio": 0.726886026399187,
+      "desviacion_fitness": 0.0008204145036475702,
+      "diversidad_genetica": 0.023672496421812027
+    },
+    {
+      "generacion": 22,
+      "fitness_maximo": 0.7282536931215875,
+      "fitness_medio": 0.7275159910259266,
+      "desviacion_fitness": 0.0005501273222598414,
+      "diversidad_genetica": 0.018437875676289822
+    },
+    {
+      "generacion": 23,
+      "fitness_maximo": 0.7282536931215875,
+      "fitness_medio": 0.7274929509169775,
+      "desviacion_fitness": 0.0012929703584510176,
+      "diversidad_genetica": 0.017343745099146775
+    },
+    {
+      "generacion": 24,
+      "fitness_maximo": 0.7285468244011756,
+      "fitness_medio": 0.7279744244171047,
+      "desviacion_fitness": 0.0005675698178334088,
+      "diversidad_genetica": 0.01358332169779684
+    },
+    {
+      "generacion": 25,
+      "fitness_maximo": 0.7285468244011756,
+      "fitness_medio": 0.7276603282919805,
+      "desviacion_fitness": 0.0015175878263864848,
+      "diversidad_genetica": 0.017497365342897787
+    },
+    {
+      "generacion": 26,
+      "fitness_maximo": 0.7285468244011756,
+      "fitness_medio": 0.7282157062277501,
+      "desviacion_fitness": 0.0006264933127462672,
+      "diversidad_genetica": 0.01027584959933837
+    },
+    {
+      "generacion": 27,
+      "fitness_maximo": 0.7286158324097467,
+      "fitness_medio": 0.7284746802088897,
+      "desviacion_fitness": 0.00016046824932298303,
+      "diversidad_genetica": 0.008352467158005328
+    },
+    {
+      "generacion": 28,
+      "fitness_maximo": 0.7286158324097467,
+      "fitness_medio": 0.7278668935575725,
+      "desviacion_fitness": 0.0018157014135649862,
+      "diversidad_genetica": 0.012740528582087025
+    },
+    {
+      "generacion": 29,
+      "fitness_maximo": 0.7286335788271511,
+      "fitness_medio": 0.7277306028577305,
+      "desviacion_fitness": 0.00359473975595851,
+      "diversidad_genetica": 0.005370797458659406
+    },
+    {
+      "generacion": 30,
+      "fitness_maximo": 0.7286533579342128,
+      "fitness_medio": 0.7280278122794226,
+      "desviacion_fitness": 0.0013537096800643421,
+      "diversidad_genetica": 0.02215231186937487
+    },
+    {
+      "generacion": 31,
+      "fitness_maximo": 0.7286533579342128,
+      "fitness_medio": 0.7277131700343136,
+      "desviacion_fitness": 0.0016755267955906328,
+      "diversidad_genetica": 0.01717041201611668
+    },
+    {
+      "generacion": 32,
+      "fitness_maximo": 0.7286533579342128,
+      "fitness_medio": 0.727443384545175,
+      "desviacion_fitness": 0.0037494318945956316,
+      "diversidad_genetica": 0.013748686515868063
+    },
+    {
+      "generacion": 33,
+      "fitness_maximo": 0.7286816100395319,
+      "fitness_medio": 0.7279798290833052,
+      "desviacion_fitness": 0.0015107141235982588,
+      "diversidad_genetica": 0.015477212400695809
+    },
+    {
+      "generacion": 34,
+      "fitness_maximo": 0.7286816100395319,
+      "fitness_medio": 0.7283488139085692,
+      "desviacion_fitness": 0.0007973536881356197,
+      "diversidad_genetica": 0.0103173796969969
+    },
+    {
+      "generacion": 35,
+      "fitness_maximo": 0.7286877088618986,
+      "fitness_medio": 0.7283193282667045,
+      "desviacion_fitness": 0.001041440497939918,
+      "diversidad_genetica": 0.009311444542780139
+    },
+    {
+      "generacion": 36,
+      "fitness_maximo": 0.728700434608792,
+      "fitness_medio": 0.728191585349985,
+      "desviacion_fitness": 0.0011462587427027997,
+      "diversidad_genetica": 0.008822301055024313
+    },
+    {
+      "generacion": 37,
+      "fitness_maximo": 0.7287028486262348,
+      "fitness_medio": 0.7281885824232559,
+      "desviacion_fitness": 0.001322988744943232,
+      "diversidad_genetica": 0.01270273521058509
+    }
+  ]
+}

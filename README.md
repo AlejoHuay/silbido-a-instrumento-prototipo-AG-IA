@@ -76,12 +76,13 @@ La evidencia de la última corrida está en
 - **Cierre Día 4:** configuración operativa documentada, respuesta teórica sobre convergencia prematura y diapositiva de convergencia basada en las seis corridas principales del Rol 3. La recomendación B es preliminar; no se ejecutó el factorial de 12 configuraciones.
 - **Entregables:** `src/configuracion.py`, `src/algoritmo_genetico.py`, `notebooks/04_rol4_dinamica.ipynb`, `documentacion/rol4_dia2.md`, `documentacion/rol4_dia4.md`, `documentacion/contratos/interfaz_dinamica_rol4.md` y `documentacion/presentacion/rol4_convergencia.pptx`.
 
-### Rol 5 — Análisis experimental (Día 2 cerrado; Día 3 pendiente)
+### Rol 5 — Análisis experimental (Día 2 cerrado; Día 3 ejecutado)
 - **Integración end-to-end:** `notebooks/00_integracion.ipynb` ejecuta el AG con la melodía y referencia reales, verifica repetibilidad, límites, finitud, población y presupuesto de evaluaciones. Genera `resultados/audios/rol5_dia2_mejor.wav` cuando falta o comprueba que el existente coincide, sin sobrescribirlo.
 - **Evidencia de demostración:** semilla 2026, población 10, cinco generaciones, torneo, cruce BLX y mutación gaussiana; 60 evaluaciones reales y fitness STFT 0.7152406. Esta corrida valida la integración y no es parte del análisis estadístico del Día 3.
-- **Análisis disponible:** registro de corridas, resúmenes y baseline pareado en `src/evaluacion.py` y `src/experimentos.py`. No hay aún datos de sensibilidad ni corridas del factorial de 12 configuraciones.
-- **Pendiente antes del Día 3:** ratificar la métrica oficial y los niveles de los factores experimentales.
-- **Entregables:** `notebooks/00_integracion.ipynb`, `documentacion/analisis_rol5.md` y `tests/test_rol5.py`.
+- **Día 3:** factorial de 12 configuraciones y cinco semillas ejecutado para STFT y chroma, con 60 corridas AG y 60 baselines pareados por métrica. Los resultados y checkpoints están en `resultados/rol5/dia3_factorial/`; el protocolo y los resultados descriptivos están en `documentacion/rol5_dia3.md`.
+- **Decisiones provisionales:** STFT se usó como métrica inicial y B (torneo + cruce uniforme + mutación gaussiana, sigma 0.08) como operadores del factorial. Ambas decisiones siguen pendientes de ratificación del equipo; STFT y chroma tienen resultados separados.
+- **Limitaciones:** comparaciones descriptivas para una melodía/referencia y cinco semillas por configuración; no se afirma significación ni superioridad general. La suite completa requiere pandas para importar la prueba de sensibilidad de Rol 1.
+- **Entregables:** `notebooks/00_integracion.ipynb`, `scripts/ejecutar_rol5_factorial.py`, `documentacion/analisis_rol5.md`, `documentacion/rol5_dia3.md` y `tests/test_rol5.py`.
 
 ## Acuerdos y Diseño
 

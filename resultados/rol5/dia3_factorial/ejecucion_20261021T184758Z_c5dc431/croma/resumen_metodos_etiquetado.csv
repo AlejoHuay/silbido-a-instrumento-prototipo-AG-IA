@@ -1,0 +1,3 @@
+metodo,metrica,n,media,desviacion_estandar,metrica_evaluacion,estadistico
+algoritmo_genetico,mejor_fitness,60,0.9586813212427003,0.001453639008328384,croma,mejor_fitness
+busqueda_aleatoria,mejor_fitness,60,0.9545818564394879,0.0009782554860544297,croma,mejor_fitness

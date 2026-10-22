@@ -1,0 +1,16 @@
+{
+  "registro": {
+    "metodo": "busqueda_aleatoria",
+    "metrica": "croma",
+    "semilla": 42,
+    "mejor_fitness": 0.9538954304075875,
+    "error_stft_db": null,
+    "generaciones_ejecutadas": null,
+    "evaluaciones": 680,
+    "tiempo_s": 13.7588011000189,
+    "motivo_parada": "presupuesto_de_evaluaciones",
+    "mejor_individuo_json": "[0.937565258772947, 0.9023032049180275, 0.020442983142750837, 0.7918472897910739, 0.4511457440111546, 0.7895582040006557, 0.006715784163385141, 0.28819930120056425]",
+    "configuracion_json": "{\"elitismo\": 1, \"max_generaciones\": 50, \"operadores\": {\"alpha\": 0.5, \"b\": 2.0, \"cruce\": \"uniforme\", \"mutacion\": \"gaussiana\", \"seleccion\": \"torneo\", \"sigma\": 0.08}, \"paciencia_estancamiento\": 10, \"probabilidad_cruce\": 0.9, \"probabilidad_mutacion\": 0.08, \"semilla\": 42, \"tam_poblacion\": 20, \"tam_torneo\": 3, \"tolerancia_mejora\": 0.0001}",
+    "combinacion_operadores": "B"
+  }
+}

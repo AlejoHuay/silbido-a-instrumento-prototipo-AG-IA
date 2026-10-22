@@ -1,0 +1,7 @@
+{
+  "estado": "válido",
+  "n_corridas_ag": 60,
+  "n_corridas_baseline": 60,
+  "tiempo_bloque_ag_s": 7013.476870199986,
+  "metricas_separadas": true
+}
