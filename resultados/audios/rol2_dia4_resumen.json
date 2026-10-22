@@ -1,0 +1,39 @@
+{
+  "etapa": "Rol 2 - Día 4",
+  "origen": "Resultados disponibles al ejecutar las celdas del notebook",
+  "tipo_ejecucion": "kernel_jupyter",
+  "kernel_limpio_certificado": false,
+  "cantidad_genes": 8,
+  "cantidad_candidatos": 6,
+  "puntos_por_gen": 51,
+  "evaluaciones_sensibilidad": 408,
+  "semilla_candidatos": 42,
+  "semilla_sintesis": 2026,
+  "ganador_stft": "default",
+  "fitness_stft_ganador": 0.6796059261730838,
+  "error_stft_db_ganador": 4.714409652533217,
+  "ganador_croma": "aleatorio_2",
+  "fitness_croma_ganador": 0.9202074445001147,
+  "cortes": [
+    {
+      "gen": "ruido_soplo",
+      "puntos": 51,
+      "fitness_stft_min": 0.448902643085542,
+      "fitness_stft_max": 0.7113749032275808,
+      "rango_fitness_stft": 0.2624722601420388
+    },
+    {
+      "gen": "amp_arm2",
+      "puntos": 51,
+      "fitness_stft_min": 0.6772365500535353,
+      "fitness_stft_max": 0.6838005167856485,
+      "rango_fitness_stft": 0.0065639667321131245
+    }
+  ],
+  "figura": "resultados/audios/rol2_dia4_superficie_fitness.png",
+  "melodia_sha256": "eed2535aaddaa1eb697848f0a30c69cdded32f51840121183b7fb4947d086565",
+  "referencia_sha256": "40c4b824601dc98234cb7d762cb69f521ed380c1b877fdd60b72e90a725c610d",
+  "ag_ejecutado_en_esta_comparacion": false,
+  "recomendacion": "STFT principal y croma complementario",
+  "ratificacion_equipo": "pendiente"
+}
