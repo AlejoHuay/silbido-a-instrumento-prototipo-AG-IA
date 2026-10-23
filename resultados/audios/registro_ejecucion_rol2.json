@@ -9,8 +9,8 @@
     "ipython": "9.0.2",
     "ipykernel": "6.29.5"
   },
-  "commit": "ebb344d87fb5500feeaef8b01a6a6de5f7fe9dbb",
-  "cambios_locales": true,
+  "commit": "85df550208cb67566c33192b09923b5558c5e34e",
+  "cambios_locales": false,
   "semilla_candidatos": 42,
   "semilla_sintesis": 2026,
   "frecuencia_muestreo": 22050,
