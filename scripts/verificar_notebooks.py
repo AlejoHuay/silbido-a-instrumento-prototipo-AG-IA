@@ -8,6 +8,7 @@ que generan WAV, CSV, figuras o metadatos modifiquen el árbol de trabajo real.
 from __future__ import annotations
 
 import argparse
+import asyncio
 import os
 import shutil
 import sys
@@ -19,6 +20,12 @@ from pathlib import Path
 import nbformat
 from nbclient import NotebookClient
 from nbclient.exceptions import CellExecutionError
+
+
+if sys.platform == "win32":
+    # pyzmq requiere add_reader/add_writer; el bucle Proactor puede ejecutar
+    # todas las celdas y fallar después al cerrar el kernel en Windows.
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 
 NOTEBOOKS = (

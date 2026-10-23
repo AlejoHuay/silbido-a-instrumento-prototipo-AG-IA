@@ -1,6 +1,6 @@
 # Verificación de notebooks en kernels Jupyter limpios
 
-**Fecha:** 20 de octubre de 2026
+**Fecha de última verificación:** 22 de octubre de 2026
 **Estado:** 5 de 5 notebooks ejecutados correctamente.
 
 ## Entorno local reproducible
@@ -42,16 +42,22 @@ los WAV, CSV, figuras o resultados versionados.
 
 | Notebook | Celdas de código | Tiempo | Resultado |
 |---|---:|---:|---|
-| `00_integracion.ipynb` | 4 | 19.29 s | Correcto |
-| `01_rol1_representacion.ipynb` | 8 | 35.05 s | Correcto |
-| `02_rol2_sintesis_fitness.ipynb` | 16 | 25.92 s | Correcto |
-| `03_rol3_operadores.ipynb` | 8 | 19.37 s | Correcto |
-| `04_rol4_dinamica.ipynb` | 7 | 23.99 s | Correcto |
+| `00_integracion.ipynb` | 5 | 26.58 s | Correcto |
+| `01_rol1_representacion.ipynb` | 8 | 35.74 s | Correcto |
+| `02_rol2_sintesis_fitness.ipynb` | 18 | 39.94 s | Correcto |
+| `03_rol3_operadores.ipynb` | 10 | 22.97 s | Correcto |
+| `04_rol4_dinamica.ipynb` | 9 | 27.29 s | Correcto |
 
 Todas las celdas de código recibieron contador de ejecución y no produjeron
-salidas de error. También pasaron las 51 pruebas unitarias del proyecto.
+salidas de error. También pasaron las 55 pruebas unitarias del proyecto.
 
 Los tiempos son evidencia de esta corrida y pueden variar entre equipos. Una
 advertencia de compatibilidad de `nbformat` indicó que algunas celdas antiguas
 no tienen identificador; Jupyter las normalizó en memoria y la advertencia no
 afectó ningún resultado.
+
+En Windows, el verificador configura `WindowsSelectorEventLoopPolicy` antes de
+iniciar los kernels. Esto evita que pyzmq falle durante el cierre del proceso
+después de haber ejecutado correctamente las celdas. La advertencia de que los
+kernels locales usan TCP sin cifrado corresponde al transporte interno de esta
+verificación y no alteró los resultados.

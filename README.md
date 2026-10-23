@@ -73,7 +73,7 @@ La evidencia de la última corrida está en
 - **Dinámica implementada:** ciclo generacional completo, inicialización, evaluación ordenada, elitismo por maximización, estadísticas de convergencia y detección de estancamiento.
 - **Plan experimental:** matriz factorial de 12 configuraciones preparada para el Día 3, con cinco semillas como réplicas.
 - **Integración Día 2:** `ejecutar_ag()` conecta torneo o SUS, BLX-alpha o cruce uniforme y mutación gaussiana o no uniforme; la primera corrida end-to-end usa síntesis y fitness reales con una población pequeña.
-- **Cierre Día 4:** configuración operativa documentada, respuesta teórica sobre convergencia prematura y diapositiva de convergencia basada en las seis corridas principales del Rol 3. La recomendación B es preliminar; no se ejecutó el factorial de 12 configuraciones.
+- **Cierre Día 4:** configuración operativa documentada, respuesta teórica sobre convergencia prematura y diapositiva basada en las seis corridas principales del Rol 3. Tras integrar el factorial del Rol 5, la propuesta STFT quedó en N=100, elitismo=2 y mutación=0.08, manteniendo B como combinación provisional.
 - **Entregables:** `src/configuracion.py`, `src/algoritmo_genetico.py`, `notebooks/04_rol4_dinamica.ipynb`, `documentacion/rol4_dia2.md`, `documentacion/rol4_dia4.md`, `documentacion/contratos/interfaz_dinamica_rol4.md` y `documentacion/presentacion/rol4_convergencia.pptx`.
 
 ### Rol 5 — Análisis experimental (Día 2 cerrado; Día 3 ejecutado)

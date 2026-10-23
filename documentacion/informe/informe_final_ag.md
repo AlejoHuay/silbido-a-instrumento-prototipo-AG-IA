@@ -158,9 +158,11 @@ El ciclo recibe una función de aptitud escalar y una `ConfiguracionAG` validada
 
 ### 4.2 Preservación de Élite y Criterios de Parada por Estancamiento
 
-La configuración operativa propuesta usa población 50, máximo 50 reemplazos, elitismo 2, torneo de tamaño 3, cruce uniforme con probabilidad 0.90 y mutación gaussiana por gen con probabilidad 0.05 y `sigma=0.08`. La parada compara el mejor fitness dentro de una ventana de paciencia 10 y exige una mejora mayor que `1e-4`. La métrica STFT primaria y croma complementaria siguen pendientes de ratificación colectiva.
+La configuración final propuesta para la demostración STFT usa población 100, máximo 50 reemplazos, elitismo 2, torneo de tamaño 3, cruce uniforme con probabilidad 0.90 y mutación gaussiana por gen con probabilidad 0.08 y `sigma=0.08`. La parada compara el mejor fitness dentro de una ventana de paciencia 10 y exige una mejora mayor que `1e-4`. La métrica STFT primaria y croma complementaria siguen pendientes de ratificación colectiva.
 
 La combinación B —torneo, uniforme y gaussiana— es una recomendación preliminar: con semillas 42 y 101 alcanzó fitness medio final 0.730850220, frente a 0.726136022 de A y 0.724787225 de C. Las corridas comparativas consumieron 2550 evaluaciones cada una y usaron tolerancia cero para igualar el presupuesto; no prueban la parada operativa ni superioridad general.
+
+El factorial integrado del Rol 5 mantuvo B y sí usó la parada operativa en 12 configuraciones × cinco semillas por métrica. Para STFT, N=100, elitismo=2 y mutación=0.08 obtuvo la mayor media, 0.731952986. Para croma, N=100, elitismo=1 y mutación=0.08 obtuvo 0.959702027. Se adopta provisionalmente la primera por el criterio STFT primario; la discrepancia de elitismo y la falta de validación perceptual impiden presentarla como óptimo universal.
 
 ### 4.3 Pregunta Teórica 4 (Rol 4)
 > **Pregunta Oficial:** *¿Qué es la convergencia prematura? ¿Cómo se detecta y cómo se evita? Da evidencia concreta.*
