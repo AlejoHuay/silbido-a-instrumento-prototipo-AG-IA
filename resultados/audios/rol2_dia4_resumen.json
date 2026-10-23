@@ -35,5 +35,35 @@
   "referencia_sha256": "40c4b824601dc98234cb7d762cb69f521ed380c1b877fdd60b72e90a725c610d",
   "ag_ejecutado_en_esta_comparacion": false,
   "recomendacion": "STFT principal y croma complementario",
-  "ratificacion_equipo": "pendiente"
+  "ratificacion_equipo": "pendiente",
+  "diagnostico_metricas": [
+    {
+      "gen_nombre": "ruido_soplo",
+      "delta_fitness_stft": 0.2624722601420388,
+      "delta_fitness_croma": 0.0003793234713940219,
+      "delta_error_db": 8.219259815193686,
+      "max_grad_stft": 0.49847987133739835,
+      "max_grad_croma": 0.0007438311632135257
+    },
+    {
+      "gen_nombre": "ataque_s",
+      "delta_fitness_stft": 0.01370775908654498,
+      "delta_fitness_croma": 0.05738950409936916,
+      "delta_error_db": 0.29759859491520846,
+      "max_grad_stft": 0.15802842323755506,
+      "max_grad_croma": 0.23524542410915217
+    },
+    {
+      "gen_nombre": "relajacion_s",
+      "delta_fitness_stft": 0.01847324446362697,
+      "delta_fitness_croma": 0.06413715624090188,
+      "delta_error_db": 0.3928597942123844,
+      "max_grad_stft": 0.08485740942515418,
+      "max_grad_croma": 0.3078025287304442
+    }
+  ],
+  "tabla_diagnostico": "resultados/audios/rol2_dia4_diagnostico_metricas.csv",
+  "figura_complementariedad": "resultados/audios/rol2_dia4_complementariedad.png",
+  "advertencia_soplo": "Investigar si la respuesta espectral favorece niveles bajos de soplo; no demuestra convergencia prematura.",
+  "fitness_combinado_implementado": false
 }
