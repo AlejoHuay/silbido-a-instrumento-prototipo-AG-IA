@@ -1,5 +1,12 @@
 # Rol 5: cierre del Día 2
 
+> **Vigencia:** este documento conserva la auditoría y el plan tal como estaban
+> al cierre del Día 2. El factorial ejecutado del Día 3 está documentado en
+> `rol5_dia3.md`; el análisis posterior y el estado de Día 4 están en
+> `notebooks/05_rol5_metaevaluacion.ipynb` y en la sección 5 del informe final.
+> Las propuestas pendientes que siguen abajo son antecedentes históricos, no
+> el estado experimental actual.
+
 ## Estado de esta copia
 
 `src/experimentos.py` ofrece el baseline de búsqueda aleatoria y el emparejamiento

@@ -174,20 +174,29 @@ En las seis corridas principales, la diversidad inicial media fue 0.285487. A y 
 ---
 
 ## 5. Capa 5: Meta-evaluación y Validación Experimental (Rol 5)
-*[Sección reservada para la redacción final de Rol 5]*
 
 ### 5.1 Plan Experimental Factorial (12 Configuraciones x 5 Réplicas)
-*(Resumen del análisis estadístico y de varianza en `notebooks/00_integracion.ipynb`)*
+
+Se reutilizaron los resultados guardados en `resultados/rol5/dia3_factorial/ejecucion_20261021T184758Z_c5dc431/`; no se repitieron las corridas. El diseño fue población `{20, 50, 100}` × elitismo `{1, 2}` × probabilidad de mutación `{0.02, 0.08}`, con cinco semillas por celda (`42, 101, 2024, 7, 999`). Se mantuvieron los parámetros restantes y la parada por estancamiento de `ConfiguracionAG`. El operador B (torneo + uniforme + gaussiana, `sigma=0.08`) se fijó durante el factorial como elección provisional, no ratificada colectivamente. STFT fue la métrica inicial por defecto; su ratificación como métrica primaria sigue pendiente. Chroma se analizó por separado.
+
+El nuevo notebook `notebooks/05_rol5_metaevaluacion.ipynb` y `scripts/analizar_rol5_dia4.py` validan la matriz y calculan un ANOVA factorial completo, con todas las interacciones, semilla como bloque y corrección Holm conjunta para los 14 contrastes de los dos bloques métricos. Es un análisis exploratorio condicionado a una melodía, una referencia y cinco semillas por configuración; no se comprobaron los supuestos de normalidad y homogeneidad de residuos. Tras Holm, población (`p_ajustada=1.87×10⁻⁸`) y probabilidad de mutación (`0.00587`) muestran efectos en chroma; ningún término de STFT conserva `p_ajustada<0.05`. El ANOVA evalúa los hiperparámetros, no prueba que el AG supere al baseline. Esto no resuelve la ratificación colectiva de STFT ni constituye una recomendación universal. Las diferencias marginales y el gráfico de sensibilidad describen los niveles examinados; no son sensibilidad de genes.
+
+La lámina de Rol 5 para la presentación está en `documentacion/presentacion/rol5_metaanalisis.svg`, con fuente y notas en `documentacion/presentacion/rol5_metaanalisis.md`. Es una contribución SVG lista para insertar; su integración en la presentación grupal y la demo se coordinan con el equipo.
 
 ### 5.2 Comparativa Estadística: AG vs. Búsqueda Aleatoria (Baseline)
-*(Tablas comparativas, boxplots y pruebas pareadas)*
+
+Cada corrida AG se emparejó con una búsqueda aleatoria por configuración, semilla y métrica, usando el número real de evaluaciones de esa corrida. En STFT, la media de fitness fue `0.729882` (DE muestral `0.003367`) para AG y `0.717397` (`0.001472`) para baseline; la diferencia media pareada fue `0.012485` (DE `0.003424`), mediana `0.013607`, con AG mayor en 60/60 pares. En chroma, las medias fueron `0.958681` (`0.001454`) y `0.954582` (`0.000978`); diferencia pareada `0.004099` (`0.001224`), mediana `0.004168`, AG mayor en 60/60.
+
+Estos son descriptivos. No se realizó una prueba inferencial AG–baseline ni se demuestra superioridad general. Los resultados provienen de una melodía y referencia y cinco semillas por configuración; no incluyen validación perceptual. El script de análisis comprueba registros y pares sin llamar al fitness.
 
 ### 5.3 Encuesta Subjetiva de Calidad Acústica
-*(Resumen de la evaluación auditiva ciega)*
+
+No hay respuestas ni evidencia de una encuesta auditiva ciega de 5–10 personas en esta copia. Por tanto, no se reporta una preferencia subjetiva ni se equipara fitness espectral con calidad percibida. La encuesta queda pendiente de organizar y documentar por el equipo.
 
 ### 5.4 Pregunta Teórica 5 (Rol 5)
 > **Pregunta Oficial:** *¿Cómo demuestras que tu AG es mejor que una búsqueda aleatoria? ¿Qué métricas usarías y qué resultados obtuviste?*
-*[Desarrollo a completar por Rol 5]*
+
+La comparación adecuada debe usar la misma función de aptitud, entradas, métrica, semilla y presupuesto real de evaluaciones, con varias réplicas pareadas; conviene reportar diferencias pareadas y su incertidumbre, además de medidas perceptuales si se afirma calidad sonora. En los registros disponibles, el AG alcanzó fitness mayor que la búsqueda aleatoria en los 60 pares STFT y en los 60 pares chroma, con las diferencias descritas arriba. Esto es evidencia descriptiva favorable para estas condiciones, no una demostración de superioridad general: hay una sola melodía/referencia, cinco semillas por configuración, no se hizo contraste inferencial AG–baseline ni encuesta auditiva. STFT como métrica primaria y la configuración B siguen pendientes de ratificación colectiva.
 
 ---
 
