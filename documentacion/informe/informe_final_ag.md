@@ -122,20 +122,31 @@ La eficiencia de un AG depende directamente del principio de **fuerte causalidad
 ---
 
 ## 3. Capa 3: Operadores Genéticos Continuos (Rol 3)
-*[Sección reservada para la redacción final de Rol 3]*
 
-### 3.1 Mecanismos de Selección (Torneo vs. SUS)
-*(Resumen técnico de la implementación en `src/operadores.py`)*
+### 3.1 Operadores implementados
 
-### 3.2 Variantes de Cruce Continuo (BLX-$\alpha$ y Uniforme)
-*(Resumen técnico de la implementación en `src/operadores.py`)*
+En `src/operadores.py`, **torneo k=3** sortea participantes sin reemplazo y elige mayor aptitud; empata por orden sorteado. **SUS** selecciona un lote con un inicio aleatorio y punteros equidistantes proporcionales al fitness no negativo; puede repetir individuos y usa pesos iguales si todos son cero. Ambos maximizan.
 
-### 3.3 Variantes de Mutación (Gaussiana y No Uniforme)
-*(Resumen técnico de la implementación en `src/operadores.py`)*
+**BLX-alpha**, con alpha=0.5, muestrea cada hijo por gen en `[mínimo-alpha*d, máximo+alpha*d]`, donde d es la distancia parental. **Uniforme** intercambia genes con máscara 0.50 y herencia complementaria. La **gaussiana** suma ruido normal de media cero y sigma=0.08 a los genes seleccionados; la **no uniforme** usa `delta=y*(1-r**((1-t/T)**b))`, con b=2, distancia y al límite elegido y desplazamiento cero en t=T.
+
+El ciclo aplica cruce 0.90 **por pareja**; cada mutación aplica 0.05 **por gen**, sin filtro adicional por individuo. Los hijos se recortan a `[0,1]` con `restringir_limites()` y se validan; las entradas inválidas se rechazan. Se devuelven copias independientes, sin alterar padres ni discretizar genes, compartiendo el Generator de la corrida.
 
 ### 3.4 Pregunta Teórica 3 (Rol 3)
 > **Pregunta Oficial:** *Explica el balance exploración vs. explotación. ¿Qué operador empuja más hacia la exploración y cuál hacia la explotación? Respalda con datos.*
-*[Desarrollo a completar por Rol 3]*
+
+**Explorar** introduce o visita valores diferentes; **explotar** concentra la búsqueda en soluciones prometedoras. BLX-alpha ofrece más exploración de valores nuevos que uniforme porque puede salir del intervalo parental; uniforme recombina valores existentes. El torneo favorece explotación al elegir al mejor participante. La gaussiana introduce perturbaciones; la no uniforme reduce sus desplazamientos con el tiempo, favoreciendo ajustes finales. Son tendencias de implementación, no garantías universales.
+
+La comparación principal guardada usa únicamente semillas **42 y 101**, N=50, dos élites y 50 reemplazos: **2550 evaluaciones reales por corrida**, con tolerancia cero para igualar presupuesto. STFT se maximiza y sigue **provisional**, sin ratificación colectiva. Este bloque no se mezcla con el factorial del Rol 5.
+
+| Combinación | Mejor STFT medio ± DE muestral | Diversidad final media |
+|---|---:|---:|
+| A: torneo / BLX / gaussiana | 0.726136 ± 0.008259 | 0.009409 |
+| B: torneo / uniforme / gaussiana | **0.730850 ± 0.001608** | 0.009313 |
+| C: SUS / BLX / no uniforme | 0.724787 ± 0.006706 | 0.125190 |
+
+La diversidad —media de las desviaciones por gen normalizado— partió de 0.285487 en promedio. A/B concentraron más la población; C mantuvo mayor dispersión sin mejorar el fitness medio. Esto vincula explotación con concentración observada, pero **más diversidad no implica mejor rendimiento**. C cambia selección y mutación simultáneamente: no aísla el efecto de SUS ni de la mutación. A–B examina el cambio de cruce; A ganó con semilla 42 y B con 101. **B se recomienda preliminarmente por mayor media**, con solo dos réplicas, sin afirmar significación estadística, superioridad general ni óptimo universal.
+
+Fuentes: [tabla principal](../../resultados/operadores/dia3_2026-10-21_64617f8/resumen.csv), [diversidad por generación](../../resultados/operadores/dia3_2026-10-21_64617f8/diversidad.svg) e [informe del experimento](../rol3_dia3.md).
 
 ---
 
