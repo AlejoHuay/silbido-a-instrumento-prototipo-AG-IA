@@ -265,6 +265,72 @@ def graficar_efectos(datos: dict[str, dict]):
     return fig
 
 
+def graficar_boxplot(datos: dict[str, dict], metrica: str):
+    """Compara AG y baseline en una métrica, con las 60 observaciones guardadas."""
+    if metrica not in METRICAS:
+        raise ValueError(f"Métrica no reconocida: {metrica}")
+    filas_ag = datos[metrica]["ag"]
+    filas_baseline = datos[metrica]["baseline"]
+    valores = [
+        [_numero(fila, "mejor_fitness") for fila in filas_ag],
+        [_numero(fila, "mejor_fitness") for fila in filas_baseline],
+    ]
+    figura, eje = plt.subplots(figsize=(7.4, 5.2))
+    cajas = eje.boxplot(valores, patch_artist=True, widths=0.55)
+    for caja, color in zip(cajas["boxes"], ("#3569a8", "#b56542")):
+        caja.set_facecolor(color)
+        caja.set_alpha(0.72)
+    eje.set_xticks((1, 2), ("Algoritmo genético", "Búsqueda aleatoria"))
+    eje.set_ylabel("Mejor fitness (mayor es mejor)")
+    eje.set_title(f"{metrica.upper()}: distribución de 60 corridas por método")
+    eje.grid(axis="y", alpha=0.24)
+    figura.text(
+        0.5, 0.015,
+        "Datos agrupados de 12 configuraciones × 5 semillas; no representa una sola configuración.",
+        ha="center", fontsize=8.5, color="#4b5563",
+    )
+    figura.tight_layout(rect=(0, 0.055, 1, 1))
+    return figura
+
+
+def graficar_tornado_hiperparametros(datos: dict[str, dict]):
+    """Muestra efectos marginales alto−bajo de hiperparámetros, separados por métrica."""
+    figura, ejes = plt.subplots(1, 2, figsize=(11.5, 5.2))
+    colores = {"stft": "#3569a8", "croma": "#b56542"}
+    for eje, metrica in zip(ejes, METRICAS):
+        efectos = efectos_marginales(datos[metrica]["ag"])
+        ordenados = sorted(efectos.items(), key=lambda par: abs(par[1]))
+        nombres = [par[0] for par in ordenados]
+        valores = [par[1] for par in ordenados]
+        eje.barh(nombres, valores, color=colores[metrica], alpha=0.82)
+        maximo = max((abs(valor) for valor in valores), default=0.0)
+        limite = maximo * 1.18 if maximo else 1.0
+        eje.set_xlim(-limite, limite)
+        eje.axvline(0, color="#333333", linewidth=0.9)
+        eje.set_title(metrica.upper())
+        eje.set_xlabel("Cambio medio de fitness (nivel alto − bajo)")
+        eje.grid(axis="x", alpha=0.22)
+        eje.set_axisbelow(True)
+    figura.suptitle("Tornado de sensibilidad de hiperparámetros — datos del factorial guardado")
+    figura.text(
+        0.5, 0.015,
+        "Población (100−20), elitismo (2−1) y mutación (0.08−0.02); no son genes del Rol 1.",
+        ha="center", fontsize=8.5, color="#4b5563",
+    )
+    figura.tight_layout(rect=(0, 0.06, 1, 0.94))
+    return figura
+
+
+def guardar_svg_exclusivo(figura, ruta: Path) -> None:
+    """Guarda un SVG nuevo y cierra la figura, sin reemplazar evidencia previa."""
+    ruta.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        with ruta.open("x", encoding="utf-8") as archivo:
+            figura.savefig(archivo, format="svg", bbox_inches="tight")
+    finally:
+        plt.close(figura)
+
+
 def graficar_lamina(datos: dict[str, dict]):
     """Crea una lámina SVG 16:9 lista para insertar en la presentación grupal."""
     figura = plt.figure(figsize=(13.333, 7.5), facecolor="#f7f8fa")
@@ -324,6 +390,12 @@ def main() -> int:
                         help="Ruta nueva para guardar el gráfico, sin sobrescritura.")
     parser.add_argument("--guardar-lamina", type=Path,
                         help="Ruta nueva para exportar la lámina SVG 16:9, sin sobrescritura.")
+    parser.add_argument("--guardar-boxplot-stft", type=Path,
+                        help="Ruta nueva para el boxplot STFT, sin sobrescritura.")
+    parser.add_argument("--guardar-boxplot-croma", type=Path,
+                        help="Ruta nueva para el boxplot chroma, sin sobrescritura.")
+    parser.add_argument("--guardar-tornado-hiperparametros", type=Path,
+                        help="Ruta nueva para el tornado de hiperparámetros, sin sobrescritura.")
     args = parser.parse_args()
 
     datos = cargar_y_validar()
@@ -349,11 +421,27 @@ def main() -> int:
         print(f"Gráfico nuevo guardado en: {args.guardar_svg}")
     if args.guardar_lamina:
         figura = graficar_lamina(datos)
-        args.guardar_lamina.parent.mkdir(parents=True, exist_ok=True)
-        with args.guardar_lamina.open("x", encoding="utf-8") as archivo:
-            figura.savefig(archivo, format="svg", bbox_inches="tight")
-        plt.close(figura)
+        guardar_svg_exclusivo(figura, args.guardar_lamina)
         print(f"Lámina nueva guardada en: {args.guardar_lamina}")
+    if args.guardar_boxplot_stft:
+        guardar_svg_exclusivo(
+            graficar_boxplot(datos, "stft"), args.guardar_boxplot_stft
+        )
+        print(f"Boxplot STFT nuevo guardado en: {args.guardar_boxplot_stft}")
+    if args.guardar_boxplot_croma:
+        guardar_svg_exclusivo(
+            graficar_boxplot(datos, "croma"), args.guardar_boxplot_croma
+        )
+        print(f"Boxplot chroma nuevo guardado en: {args.guardar_boxplot_croma}")
+    if args.guardar_tornado_hiperparametros:
+        guardar_svg_exclusivo(
+            graficar_tornado_hiperparametros(datos),
+            args.guardar_tornado_hiperparametros,
+        )
+        print(
+            "Tornado de hiperparámetros nuevo guardado en: "
+            f"{args.guardar_tornado_hiperparametros}"
+        )
     return 0
 
 

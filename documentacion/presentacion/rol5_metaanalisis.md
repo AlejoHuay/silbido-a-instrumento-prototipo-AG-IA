@@ -15,3 +15,9 @@ Datos: una melodía/referencia; 12 configuraciones × 5 semillas, por métrica. 
 **Pendiente de equipo:** ratificar STFT como métrica primaria y B como operadores. La encuesta auditiva ciega no está realizada; los datos cubren una melodía/referencia y cinco semillas por configuración.
 
 **Demo:** notebook `notebooks/05_rol5_metaevaluacion.ipynb`; no ejecuta nuevas corridas. La lámina se entrega en SVG editable/importable; este entorno no dispone de un creador de PPTX y no se instaló ninguno.
+
+## Figuras complementarias y entrega grupal
+
+- Boxplot de resultados guardados por método: [STFT](../../resultados/rol5/dia4_metaevaluacion/boxplot_corridas_stft.svg) y [chroma](../../resultados/rol5/dia4_metaevaluacion/boxplot_corridas_croma.svg). Cada gráfico agrupa 60 observaciones de 12 configuraciones × cinco semillas.
+- [Tornado de sensibilidad de hiperparámetros](../../resultados/rol5/dia4_metaevaluacion/tornado_hiperparametros.svg): población, elitismo y probabilidad de mutación; se distingue de la sensibilidad de genes del Rol 1.
+- No se localizó una presentación grupal editable. `rol4_convergencia.pptx` corresponde a Rol 4; se requiere que el equipo proporcione el deck grupal para integrar esta lámina. Este archivo SVG y sus figuras son entregables individuales del Rol 5.

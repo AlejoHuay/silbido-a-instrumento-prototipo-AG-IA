@@ -61,3 +61,19 @@ iniciar los kernels. Esto evita que pyzmq falle durante el cierre del proceso
 después de haber ejecutado correctamente las celdas. La advertencia de que los
 kernels locales usan TCP sin cifrado corresponde al transporte interno de esta
 verificación y no alteró los resultados.
+
+## Verificación posterior del notebook de Rol 5
+
+**Fecha:** 25 de octubre de 2026. Se ejecutó `notebooks/05_rol5_metaevaluacion.ipynb`
+con `nbclient` en un kernel Jupyter `python3` nuevo. Las cuatro celdas de código
+terminaron sin errores. Se inspeccionaron sus fuentes y la ejecución usa la
+carga/validación de CSV existentes, estadísticas descriptivas, ANOVA y gráficos;
+no llama al AG, al baseline ni a funciones de fitness. No se ejecutaron corridas
+experimentales ni se reescribió el notebook o los CSV; las salidas de esta
+verificación quedaron en memoria.
+
+Entorno del proceso verificador: Python 3.14.5, `nbclient` 0.11.0,
+`nbformat` 5.11.1, NumPy 2.5.2, Matplotlib 3.11.1 y SciPy 1.18.1. El kernel
+terminó correctamente con advertencias informativas de Windows Proactor/zmq
+(se creó un hilo selector auxiliar) y de transporte TCP local sin cifrado.
+Estas advertencias no interrumpieron las celdas ni modificaron los resultados.

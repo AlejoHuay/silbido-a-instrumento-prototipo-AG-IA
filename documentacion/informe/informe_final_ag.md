@@ -10,10 +10,10 @@
 | Rol | Responsabilidad Técnica | Integrante | Firma / Estado |
 | :---: | :---| :---| :---: |
 | **Rol 1** | **El Codificador:** Representación y Extracción Acústica | **Juan Mateo Soruco** | *Completado y validado* |
-| **Rol 2** | **El Traductor:** Síntesis y Función de Fitness | *[Completar por Rol 2]* | *Pendiente* |
-| **Rol 3** | **El Motor Evolutivo:** Operadores Genéticos Continuos | *[Completar por Rol 3]* | *Pendiente* |
-| **Rol 4** | **El Estratega:** Dinámica Poblacional y Convergencia | *[Completar por Rol 4]* | *Día 4 completado; firma pendiente* |
-| **Rol 5** | **El Analista:** Meta-evaluación, Baseline e Integración | *[Completar por Rol 5]* | *Pendiente* |
+| **Rol 2** | **El Traductor:** Síntesis y Función de Fitness | *[Nombre por confirmar]* | *Contribución documentada; firma pendiente* |
+| **Rol 3** | **El Motor Evolutivo:** Operadores Genéticos Continuos | *[Nombre por confirmar]* | *Contribución documentada; firma pendiente* |
+| **Rol 4** | **El Estratega:** Dinámica Poblacional y Convergencia | *[Nombre por confirmar]* | *Día 4 documentado; firma pendiente* |
+| **Rol 5** | **El Analista:** Meta-evaluación, Baseline e Integración | *[Nombre por confirmar]* | *Contribución documentada; ratificaciones y firma pendientes* |
 
 ---
 
@@ -189,9 +189,15 @@ Cada corrida AG se emparejó con una búsqueda aleatoria por configuración, sem
 
 Estos son descriptivos. No se realizó una prueba inferencial AG–baseline ni se demuestra superioridad general. Los resultados provienen de una melodía y referencia y cinco semillas por configuración; no incluyen validación perceptual. El script de análisis comprueba registros y pares sin llamar al fitness.
 
+La varianza muestral `s²` (`ddof=1`) calculada directamente sobre los 60 valores de `mejor_fitness` de cada CSV es: STFT, AG `1.1334941×10⁻⁵` y baseline `2.1682236×10⁻⁶`; chroma, AG `2.1130664×10⁻⁶` y baseline `9.5698380×10⁻⁷`. Cada cifra agrupa las 12 configuraciones y sus cinco semillas de esa métrica; describe la dispersión total entre configuraciones y semillas, no la varianza dentro de una configuración. Los CSV originales se conservaron.
+
+Los boxplots de método se exportaron por separado desde esos mismos CSV: [STFT](../../resultados/rol5/dia4_metaevaluacion/boxplot_corridas_stft.svg) y [chroma](../../resultados/rol5/dia4_metaevaluacion/boxplot_corridas_croma.svg). Cada uno muestra 60 observaciones por método y señala que están agrupadas entre las configuraciones. El [tornado de hiperparámetros](../../resultados/rol5/dia4_metaevaluacion/tornado_hiperparametros.svg) representa los contrastes marginales alto−bajo de población, elitismo y tasa de mutación, separados por métrica; no es el tornado de sensibilidad de genes del Rol 1.
+
 ### 5.3 Encuesta Subjetiva de Calidad Acústica
 
-No hay respuestas ni evidencia de una encuesta auditiva ciega de 5–10 personas en esta copia. Por tanto, no se reporta una preferencia subjetiva ni se equipara fitness espectral con calidad percibida. La encuesta queda pendiente de organizar y documentar por el equipo.
+No hay respuestas ni evidencia de una encuesta auditiva ciega de 5–10 personas en esta copia. Por tanto, no se reporta una preferencia subjetiva ni se equipara fitness espectral con calidad percibida. Se preparó el [instrumento y la plantilla vacía](../encuesta_auditiva_rol5.md); falta organizar la escucha, recopilar 5–10 respuestas y completar la tabla y conclusión con datos reales. El instrumento compara percepción del audio existente con la referencia, no AG contra baseline, porque no hay audios pareados de baseline guardados.
+
+En la revisión del repositorio no se encontró un audio identificado como generación 0. `resultados/audios/rol5_dia2_mejor.wav` es la salida de la demostración del Día 2 y no se presenta como generación 0. Tampoco se encontró una presentación grupal editable: `documentacion/presentacion/rol4_convergencia.pptx` es una diapositiva de Rol 4 y la contribución del Rol 5 está en SVG. El equipo debe proporcionar el deck grupal para integrar esa lámina sin crear una presentación paralela.
 
 ### 5.4 Pregunta Teórica 5 (Rol 5)
 > **Pregunta Oficial:** *¿Cómo demuestras que tu AG es mejor que una búsqueda aleatoria? ¿Qué métricas usarías y qué resultados obtuviste?*
@@ -201,7 +207,12 @@ La comparación adecuada debe usar la misma función de aptitud, entradas, métr
 ---
 
 ## 6. Conclusiones Generales del Proyecto
-*[Sección consolidada de cierre grupal]*
+
+El prototipo integra extracción de la melodía silbada, representación continua de ocho parámetros, síntesis aditiva, funciones de aptitud espectral y cromática, operadores genéticos y un ciclo poblacional con registro de evaluaciones y parada. El notebook `notebooks/00_integracion.ipynb` documenta la demostración end-to-end del Día 2; las corridas factoriales y sus baselines se conservan por separado como evidencia experimental.
+
+En las condiciones examinadas, el AG obtuvo fitness mayor que la búsqueda aleatoria en los 60 pares de STFT y los 60 de chroma, con presupuestos reales igualados por corrida. El factorial mostró diferencias descriptivas entre niveles y efectos ajustados para población y mutación en chroma; no se detectaron términos ajustados significativos en STFT. Estos resultados se limitan a una melodía y referencia, cinco semillas por configuración y los factores/operatoria registrados. No establecen superioridad general, causalidad fuera del diseño ni calidad sonora percibida.
+
+STFT como métrica primaria y la combinación B permanecen provisionales hasta la ratificación colectiva. La validación auditiva está pendiente; también falta localizar/producir legítimamente el audio de generación 0, integrar las diapositivas en el deck grupal editable, coordinar una demo en vivo y completar nombres y firmas con el equipo. No se atribuyen aquí resultados de encuesta ni artefactos ausentes.
 
 ---
 
