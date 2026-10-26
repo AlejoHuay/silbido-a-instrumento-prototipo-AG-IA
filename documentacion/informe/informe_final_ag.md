@@ -107,17 +107,146 @@ La eficiencia de un AG depende directamente del principio de **fuerte causalidad
 ---
 
 ## 2. Capa 2: Síntesis Acústica y Función de Aptitud (Rol 2)
-*[Sección reservada para la redacción final de Rol 2]*
 
 ### 2.1 Síntesis Aditiva y Envolventes Instrumentales
-*(Resumen técnico de la implementación en `src/sintesis.py`)*
+
+El módulo `src/sintesis.py` implementa
+`sintetizar_instrumento(notas, duraciones, gen)`, que transforma
+un cromosoma en audio. Reutiliza la validación y decodificación
+del Rol 1 para interpretar ocho genes: amplitudes de tres
+armónicos, ataque, decaimiento, sostenido, relajación y ruido
+de soplo.
+
+Cada nota se construye sumando tres componentes sinusoidales:
+la frecuencia fundamental, el segundo armónico y el tercero.
+Se añade ruido uniforme para representar de manera simplificada
+el soplo de la flauta. Una envolvente ADSR controla cómo comienza,
+se mantiene y termina la amplitud de cada nota.
+
+Las etapas de la envolvente permanecen dentro de la duración
+del evento. Si ataque, decaimiento y relajación no caben,
+sus tiempos se reducen proporcionalmente. Los silencios,
+representados por `-1`, generan muestras de valor cero.
+
+La melodía permanece fija: el AG modifica el timbre, no las
+notas ni sus duraciones. La síntesis devuelve audio mono
+`float32` a 22050 Hz y permite exportarlo como WAV PCM de
+16 bits. Se omiten los armónicos que alcancen o superen
+la frecuencia de Nyquist.
+
+Se utiliza una ganancia común para todos los individuos
+y una semilla de síntesis predeterminada de 2026.
+Esto permite comparar cromosomas con un ruido reproducible,
+independiente del generador aleatorio del AG.
 
 ### 2.2 Métricas de Aptitud: STFT en dB vs. Croma Armónico
-*(Resumen técnico de la implementación en `src/fitness.py`)*
+
+El módulo `src/fitness.py` compara el audio sintetizado con
+una referencia independiente construida a partir de muestras
+reales de flauta, siguiendo las notas, duraciones y silencios
+del CSV del Rol 1.
+
+**STFT en decibelios.** Se calculan espectrogramas de magnitud
+con ventana Hann, FFT de 2048 muestras y salto de 256 muestras.
+Las magnitudes se expresan en dB con referencia fija de
+amplitud 1 y piso de −80 dB. El error es la diferencia absoluta
+media entre ambos espectrogramas:
+
+$$
+E_{\mathrm{dB}} =
+\frac{1}{FT}
+\sum_{f,t}
+\left|D_{\mathrm{sintesis}}(f,t)
+-
+D_{\mathrm{referencia}}(f,t)\right|
+$$
+
+Aquí, F y T representan las cantidades de bins de frecuencia
+y cuadros temporales. El error se transforma en aptitud:
+
+$$
+A_{\mathrm{STFT}} =
+\frac{1}{1 + E_{\mathrm{dB}}/10}
+$$
+
+El AG maximiza esta aptitud, cuyo rango es `(0, 1]`.
+Una coincidencia exacta obtiene 1. El factor 10 establece
+la escala de transformación; no representa un umbral
+perceptual ni un porcentaje de calidad musical.
+
+Se evita el MSE sobre la onda cruda porque pequeñas diferencias
+de fase pueden producir errores elevados entre sonidos
+similares. Comparar magnitudes espectrales reduce esa
+sensibilidad directa, aunque la alineación temporal
+continúa siendo necesaria.
+
+**Croma.** Como alternativa, se agrupa la energía de los bins
+entre 50 y 5000 Hz en doce clases de altura musical.
+Se calcula la similitud coseno por cuadro y se promedian
+los resultados. La aptitud está en `[0, 1]` y se maximiza.
+Dos cuadros silenciosos se consideran coincidentes.
+El croma conserva menos información directa sobre el timbre
+y la octava que el espectrograma completo.
+
+En la comparación guardada de seis candidatos —el cromosoma
+por defecto y cinco aleatorios con semilla 42—, STFT seleccionó
+`default` con aptitud 0.679606, mientras que croma seleccionó
+`aleatorio_2` con 0.920207. Estos valores pertenecen a métricas
+distintas y no se comparan directamente entre sí.
+La comparación no constituye una corrida evolutiva.
+
+Se propone STFT como aptitud principal y croma como evaluación
+complementaria, pendientes de ratificación colectiva y
+evaluación auditiva. Las señales deben ser mono, finitas,
+estar a 22050 Hz, alineadas y tener igual longitud.
+El evaluador no las alinea ni remuestrea automáticamente.
 
 ### 2.3 Pregunta Teórica 2 (Rol 2)
-> **Pregunta Oficial:** *¿Qué es una superficie de fitness? ¿Por qué es importante que sea suave para un AG? Ilustra con un gráfico del proyecto.*
-*[Desarrollo a completar por Rol 2]*
+
+> **Pregunta oficial:** ¿Qué es una superficie de fitness?
+> ¿Por qué es importante que sea suave para un AG?
+> Ilustra con un gráfico del proyecto.
+
+Una superficie de fitness relaciona cada combinación de genes
+con su aptitud. En este proyecto, cada punto del espacio
+`[0, 1]^8` representa una configuración del instrumento,
+y su aptitud expresa el parecido con la referencia según
+la métrica elegida.
+
+Una respuesta relativamente suave permite que pequeñas
+modificaciones del cromosoma produzcan cambios graduales
+de aptitud. Esto facilita los ajustes locales mediante
+mutación. Sin embargo, el AG no necesita derivadas ni exige
+suavidad matemática; una superficie suave también puede
+contener óptimos locales y no garantiza alcanzar el global.
+
+Para estudiar esta relación se reutilizó `src/sensibilidad.py`
+del Rol 1. Se evaluaron 51 valores por cada uno de los ocho
+genes, sumando 408 evaluaciones. En cada barrido se modificó
+un gen y se mantuvieron los otros siete en el cromosoma
+por defecto, con la misma melodía, referencia y semilla.
+
+![Cortes individuales de la superficie de fitness STFT](../../resultados/audios/rol2_dia4_superficie_fitness.png)
+
+**Interpretación del gráfico.** El eje horizontal representa
+el valor normalizado del gen y el vertical su aptitud STFT.
+Los cortes de `ruido_soplo` y `amp_arm2` muestran respuestas
+de distinta magnitud. Las escalas verticales son diferentes
+y deben considerarse al interpretar las curvas.
+
+En los barridos guardados del Rol 2, el soplo produjo un rango
+STFT de 0.262472 y un rango croma de 0.000379. En cambio,
+la relajación produjo un rango croma de 0.064137.
+Esto muestra respuestas diferentes de las métricas ante
+los parámetros, sin demostrar superioridad perceptual.
+
+Los cortes no describen todas las interacciones entre genes
+ni prueban suavidad global o convergencia prematura.
+La codificación lineal conserva proximidad entre parámetros
+físicos, pero la envolvente por tramos, el ajuste de sus tiempos
+y el piso de dB pueden introducir cambios de pendiente.
+Por ello, las curvas deben interpretarse junto con las
+limitaciones del modelo y la escucha de los resultados.
 
 ---
 
