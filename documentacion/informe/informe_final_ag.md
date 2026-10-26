@@ -9,11 +9,11 @@
 
 | Rol | Responsabilidad Técnica | Integrante | Firma / Estado |
 | :---: | :---| :---| :---: |
-| **Rol 1** | **El Codificador:** Representación y Extracción Acústica | **Juan Mateo Soruco** | *Completado y validado* |
-| **Rol 2** | **El Traductor:** Síntesis y Función de Fitness | *[Nombre por confirmar]* | *Contribución documentada; firma pendiente* |
-| **Rol 3** | **El Motor Evolutivo:** Operadores Genéticos Continuos | *[Nombre por confirmar]* | *Contribución documentada; firma pendiente* |
-| **Rol 4** | **El Estratega:** Dinámica Poblacional y Convergencia | *[Nombre por confirmar]* | *Día 4 documentado; firma pendiente* |
-| **Rol 5** | **El Analista:** Meta-evaluación, Baseline e Integración | *[Nombre por confirmar]* | *Contribución documentada; ratificaciones y firma pendientes* |
+| **Rol 1** | **El Codificador:** Representación y Extracción Acústica | *Juan Mateo Soruco* | *Completado y validado* |
+| **Rol 2** | **El Traductor:** Síntesis y Función de Fitness | *Marcelo David Navia Rocabado* | *Completado y validado* |
+| **Rol 3** | **El Motor Evolutivo:** Operadores Genéticos Continuos | *Alejandro Alvarez Huayhua* | *Completado y validado* |
+| **Rol 4** | **El Estratega:** Dinámica Poblacional y Convergencia | *César Cádiz Rivero* | *Completado y validado* |
+| **Rol 5** | **El Analista:** Meta-evaluación, Baseline e Integración | *Tairin Andrea Muñoz Claros* | *Completado y validado* |
 
 ---
 
