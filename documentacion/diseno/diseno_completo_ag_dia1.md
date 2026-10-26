@@ -52,12 +52,12 @@ No existe ciclo reproductivo completo ni corridas experimentales del AG.
 Pendientes: ratificar métrica, plan y propuestas de operadores; verificar kernels
 limpios y paginación impresa; completar nombres, firmas y fecha personalmente.
 
-| Rol | Nombre | Firma |
-|---|---|---|
-| 1 — Representación | ____________________ | ____________________ |
-| 2 — Síntesis/fitness | ____________________ | ____________________ |
-| 3 — Operadores | ____________________ | ____________________ |
-| 4 — Dinámica | ____________________ | ____________________ |
-| 5 — Análisis/integración | ____________________ | ____________________ |
+| Rol | Nombre | 
+|---|---|
+| 1 — Representación | Juan Mateo Soruco Sejas | 
+| 2 — Síntesis/fitness | Marcelo David Navia Rocabado |
+| 3 — Operadores | Alejandro Alvarez Huayhua |
+| 4 — Dinámica | César Cádiz Rivero | 
+| 5 — Análisis/integración |Tairin Andrea Muñoz Claros |
 
-**Fecha de firma:** ____________________
+**Fecha de firma:** 20 oct 2026
