@@ -1,6 +1,6 @@
 # Auditoría de cumplimiento — Rol 4
 
-**Referencia inspeccionada:** `origin/main`, commit `8dff652`.
+**Referencia base inspeccionada:** `origin/main`, commit `b122610`.
 
 La contribución del Rol 4 ya aparece integrada en `main` mediante los commits
 `e198f17` y `6e81ef1`. Esta auditoría distingue entregables existentes,
@@ -23,7 +23,7 @@ como nuevas corridas experimentales.
 | 3 | Ejecución del factorial | Existe | `resultados/rol5/dia3_factorial/ejecucion_20261021T184758Z_c5dc431/`: cinco semillas por configuración para STFT y croma, con baselines pareados. |
 | 3 | Tabla experimental | Existe | `stft/resumen_por_configuracion.csv` y `croma/resumen_por_configuracion.csv`: parámetros, cinco réplicas, media y desviación. |
 | 3 | Curvas de convergencia A/B/C | Existe | `resultados/operadores/dia3_2026-10-21_64617f8/fitness.svg` y `diversidad.svg`. |
-| 3 | Curvas guardadas para las 12 configuraciones | No encontrado | Existen historiales en checkpoints, pero no una figura final que compare las 12 configuraciones. |
+| 3 | Curvas guardadas para las 12 configuraciones | Existe | `resultados/rol4/convergencia_factorial/`: láminas STFT y croma, cada una con 12 paneles y cinco semillas; se generan desde checkpoints mediante `scripts/graficar_convergencia_factorial.py` sin repetir experimentos. |
 | 3 | Efecto de hiperparámetros | Parcial | El meta-análisis identifica efectos de población y mutación en croma. Ningún término STFT conservó significación después de Holm. Falta una respuesta del Rol 4 formulada expresamente como “el hiperparámetro que más importa”. |
 | 3 | Convergencia prematura | Existe | `documentacion/rol4_dia4.md`, `documentacion/informe/informe_final_ag.md` y el notebook definen, detectan y proponen medidas preventivas. |
 | 3 | Deriva genética | Parcial | Se analiza pérdida de diversidad y concentración poblacional, pero no existe una sección específica denominada “deriva genética”. |
@@ -101,6 +101,8 @@ implementadas.
 - `documentacion/rol4_dia4.md`
 - `documentacion/informe/informe_final_ag.md`
 - `documentacion/presentacion/rol4_convergencia.pptx`
+- `scripts/graficar_convergencia_factorial.py`
+- `resultados/rol4/convergencia_factorial/`
 - `scripts/verificar_notebooks.py`
 - `requirements-notebooks.txt`
 - `documentacion/verificacion_notebooks.md`
@@ -120,7 +122,6 @@ contribuciones. La unión y maquetación final permanecen pendientes.
 
 ## Pendientes
 
-- Crear curvas guardadas de convergencia para las 12 configuraciones.
 - Formular explícitamente cuál hiperparámetro importa más para cada métrica.
 - Agregar una sección específica sobre deriva genética.
 - Crear una entrega identificada como “Rol 4 para Rol 5”.
@@ -132,10 +133,10 @@ contribuciones. La unión y maquetación final permanecen pendientes.
 ## Conclusión
 
 El Rol 4 cumple los requisitos principales de los Días 1, 2 y 4. El Día 3
-está mayormente cubierto por el factorial y los resultados compartidos con el
-Rol 5. Permanecen parciales las curvas por configuración, la respuesta sobre el
-hiperparámetro más importante, la sección de deriva genética y la entrega
-formal al Rol 5.
+incluye el factorial, los resultados compartidos con el Rol 5 y las curvas de
+las 12 configuraciones para ambas métricas. Permanecen parciales la respuesta
+sobre el hiperparámetro más importante, la sección de deriva genética y la
+entrega formal al Rol 5.
 
 La dependencia local de pandas está resuelta. Los cinco notebooks se ejecutaron
 en kernels limpios y pasaron las 55 pruebas unitarias. La diapositiva de

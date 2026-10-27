@@ -24,6 +24,23 @@ Las corridas comparativas del Rol 3 usaron `tolerancia_mejora=0` para consumir e
 
 Después del cierre inicial se integró el factorial del Rol 5: 12 configuraciones × cinco semillas, por separado para STFT y croma, todas con la combinación B y con paciencia 10/tolerancia `1e-4`. La mayor media STFT fue **0.731952986** para N=100, elitismo=2 y mutación=0.08; la mayor media croma fue **0.959702027** para N=100, elitismo=1 y mutación=0.08. Como STFT continúa como métrica primaria provisional, se propone N=100, elitismo=2 y mutación=0.08 para la demostración final. La diferencia de elitismo entre métricas debe conservarse como sensibilidad pendiente de ratificación, no como contradicción ni superioridad universal.
 
+### Curvas de convergencia del factorial
+
+Las curvas se generaron por posprocesamiento de los 120 historiales AG ya
+guardados; no se repitieron experimentos, síntesis ni evaluaciones de fitness.
+Cada lámina contiene las 12 configuraciones y sus cinco semillas. Las líneas
+individuales terminan en la generación de parada real y la media gruesa se
+limita al tramo común presente en las cinco réplicas, evitando inventar
+generaciones posteriores:
+
+- `resultados/rol4/convergencia_factorial/convergencia_stft_12_configuraciones.svg`
+- `resultados/rol4/convergencia_factorial/convergencia_croma_12_configuraciones.svg`
+
+Se regeneran desde la raíz con
+`python scripts/graficar_convergencia_factorial.py --sobrescribir`. El script
+valida la matriz 12 × 5, las semillas, la secuencia de generaciones, la finitud
+de las estadísticas y que el mejor fitness no disminuya.
+
 ## Pregunta teórica: convergencia prematura
 
 La **convergencia prematura** ocurre cuando la población pierde diversidad demasiado pronto y se concentra alrededor de una solución subóptima. El algoritmo deja de explorar regiones prometedoras aunque todavía pueda mostrar pequeñas mejoras locales.
@@ -108,6 +125,7 @@ El factorial y el baseline sí están ahora integrados: 60 corridas AG y 60 base
 - La verificación conjunta ejecutó 5/5 notebooks, cada uno en un kernel nuevo y una copia independiente del repositorio.
 - `validar_resultados()` comprobó las seis corridas principales sin llamar al fitness; `resumir_resultados()` mantuvo el orden B, A, C.
 - `--validar-guardado` comprobó los factoriales STFT y croma, incluidos los checkpoints AG y baseline, sin nuevas evaluaciones.
+- `graficar_convergencia_factorial.py` validó y representó 120 historiales existentes en dos SVG; no ejecutó el AG ni el fitness.
 - `pip check` no reportó dependencias rotas y `git diff --check` no reportó errores de formato.
 - La diapositiva fue validada estructuralmente, importada nuevamente y renderizada para revisión visual. Sus dos gráficos permanecen editables.
 
