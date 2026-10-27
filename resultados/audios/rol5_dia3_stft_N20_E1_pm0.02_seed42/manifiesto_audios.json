@@ -1,0 +1,88 @@
+{
+  "proposito": "Exportar audio sin repetir AG ni evaluar fitness.",
+  "corrida": {
+    "id": "ejecucion_20261021T184758Z_c5dc431",
+    "checkpoint": "resultados/rol5/dia3_factorial/ejecucion_20261021T184758Z_c5dc431/stft/ag_N20_E1_pm0.02_seed42.json",
+    "metrica": "stft",
+    "semilla_ag": 42,
+    "configuracion": {
+      "tam_poblacion": 20,
+      "max_generaciones": 50,
+      "elitismo": 1,
+      "tam_torneo": 3,
+      "probabilidad_cruce": 0.9,
+      "probabilidad_mutacion": 0.02,
+      "paciencia_estancamiento": 10,
+      "tolerancia_mejora": 0.0001,
+      "semilla": 42
+    },
+    "operadores": {
+      "seleccion": "torneo",
+      "cruce": "uniforme",
+      "mutacion": "gaussiana",
+      "alpha": 0.5,
+      "sigma": 0.08,
+      "b": 2.0
+    },
+    "fitness_mejor_final_guardado": 0.7189019726971513
+  },
+  "generacion_0": {
+    "poblacion_reconstruida_deterministicamente": true,
+    "fuente_inicializacion": "src/algoritmo_genetico.inicializar_poblacion + src/representacion.generar_poblacion_inicial",
+    "indice_individuo": 0,
+    "cromosoma": [
+      0.7739560485559633,
+      0.4388784397520523,
+      0.8585979199113825,
+      0.6973680290593639,
+      0.09417734788764953,
+      0.9756223516367559,
+      0.761139701990353,
+      0.7860643052769538
+    ],
+    "diversidad_guardada": 0.2621451586403401,
+    "diversidad_reconstruida": 0.2621451586403401
+  },
+  "mejor_evolucionado": {
+    "cromosoma": [
+      1.0,
+      0.14161043189167621,
+      0.0,
+      1.0,
+      0.0,
+      0.43310964935648283,
+      0.36289692228392156,
+      0.022803871029697498
+    ],
+    "origen": "resultado_completo.mejor_individuo del checkpoint"
+  },
+  "sintesis": {
+    "funcion": "src.sintesis.sintetizar_instrumento",
+    "melodia": "datos/procesados/melodia_01.csv",
+    "melodia_sha256": "eed2535aaddaa1eb697848f0a30c69cdded32f51840121183b7fb4947d086565",
+    "referencia_sha256": "40c4b824601dc98234cb7d762cb69f521ed380c1b877fdd60b72e90a725c610d",
+    "semilla_ruido_sintesis": 2026
+  },
+  "salidas": {
+    "generacion_0": {
+      "ruta": "resultados/audios/rol5_dia3_stft_N20_E1_pm0.02_seed42/generacion_0_individuo_0.wav",
+      "sha256": "2636c9d281e6d86721fa821fa60a720154998d560a2ca3a19655ce370777032a",
+      "formato": "WAV",
+      "subtipo": "PCM_16",
+      "canales": 1,
+      "frecuencia_muestreo": 22050,
+      "muestras": 59645,
+      "duracion_s": 2.704988662131519
+    },
+    "mejor_evolucionado": {
+      "ruta": "resultados/audios/rol5_dia3_stft_N20_E1_pm0.02_seed42/mejor_evolucionado_misma_corrida.wav",
+      "sha256": "8647850d1e9d617710948ea5504479bc68b184c0acdc134f41f8a8fdcc909e93",
+      "formato": "WAV",
+      "subtipo": "PCM_16",
+      "canales": 1,
+      "frecuencia_muestreo": 22050,
+      "muestras": 59645,
+      "duracion_s": 2.704988662131519
+    }
+  }
+}

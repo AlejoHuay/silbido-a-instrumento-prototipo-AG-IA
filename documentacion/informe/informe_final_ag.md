@@ -1,353 +1,85 @@
-# Del Silbido al Instrumento: Un Prototipo de Síntesis Mediante Algoritmos Genéticos Continuos (RCGA)
-### Examen Práctico Grupal — Inteligencia Artificial
-**Universidad Católica Boliviana "San Pablo"**  
-**Fecha:** Octubre de 2026  
-
----
-
-## Carátula y Equipo de Trabajo
-
-| Rol | Responsabilidad Técnica | Integrante | Firma / Estado |
-| :---: | :---| :---| :---: |
-| **Rol 1** | **El Codificador:** Representación y Extracción Acústica | *Juan Mateo Soruco* | *Completado y validado* |
-| **Rol 2** | **El Traductor:** Síntesis y Función de Fitness | *Marcelo David Navia Rocabado* | *Completado y validado* |
-| **Rol 3** | **El Motor Evolutivo:** Operadores Genéticos Continuos | *Alejandro Alvarez Huayhua* | *Completado y validado* |
-| **Rol 4** | **El Estratega:** Dinámica Poblacional y Convergencia | *César Cádiz Rivero* | *Completado y validado* |
-| **Rol 5** | **El Analista:** Meta-evaluación, Baseline e Integración | *Tairin Andrea Muñoz Claros* | *Completado y validado* |
-
----
-
-## Resumen Ejecutivo
-
-El presente proyecto aborda la transducción bio-acústica de un silbido humano real en una melodía sintetizada con timbre de flauta traversa mediante un Algoritmo Genético de Codificación Real (RCGA) desarrollado desde cero (*from scratch*) sin bibliotecas externas de optimización ni modelos de aprendizaje profundo. El sistema procesa la señal de audio capturada, segmenta la trayectoria de tono fundamental ($f_0$) en eventos melódicos temperados y optimiza un vector continuo de 8 parámetros acústicos (armónicos, envolvente temporal ADSR y turbulencia de aire) guiado por funciones de aptitud espectrales en decibelios (STFT) y cromáticas. A continuación, se presenta el informe técnico formal que consolida la arquitectura del sistema, el marco experimental y las respuestas a las cinco preguntas teóricas del examen.
-
----
-
-## 1. Capa 1: Representación del Cromosoma y Extracción Acústica (Rol 1 — Juan Mateo Soruco)
-
-### 1.1 Captura y Acondicionamiento Acústico de la Señal
-La señal de entrada corresponde a una grabación real de silbido humano (`sample.wav`) capturada originalmente a 48.0 kHz en estéreo con cuantización de 8 bits. Para cumplir las restricciones de procesamiento digital de señales del proyecto:
-1. **Normalización de formato:** Se convirtió la señal a estándar WAV mono, $f_s = 22,050\text{ Hz}$, PCM de 16 bits (`silbido_01.wav`), optimizando el compromiso entre ancho de banda acústico (límite de Nyquist en $11,025\text{ Hz}$) y costo computacional.
-2. **Seguimiento de tono fundamental ($f_0$):** Se aplicó el algoritmo probabilístico pYIN (*probabilistic YIN*) acotado al registro de silbido humano ($500 - 3000\text{ Hz}$), seguido de un filtro de mediana temporal (ventana de 5 cuadros) para suprimir fluctuaciones y *octave errors*.
-3. **Segmentación y Detección de Silencios:** Se detectaron regiones de silencio con umbral de energía RMS en $-40\text{ dB}$, codificándolas con la convención estándar `-1`. La señal fue segmentada por codificación por longitud de racha (RLE), cuantizando las frecuencias a notas de la escala temperada occidental ($A_4 = 440\text{ Hz}$) y persistiendo la secuencia en `datos/procesados/melodia_01.csv`.
-   * *Diagnóstico acústico:* La señal posee una relación señal-ruido ($\text{SNR}$) de $40.8\text{ dB}$ con $0.0\%$ de saturación digital (*clipping*). La melodía contiene 16 eventos (11 notas activas entre $E_6$ y $C_7$, MIDI 88 a 96, y 5 pausas) con una duración total de $2.705\text{ s}$ ($59,645\text{ muestras}$).
-
-### 1.2 Esquema Canónico del Cromosoma y Biyección Genotipo-Fenotipo
-Se optó por una **representación cromosómica en espacio continuo real** sobre el hipercubo unitario $[0.0, 1.0]^8$. Cada individuo se define como un vector $\vec{g} = [g_0, g_1, \dots, g_7] \in [0.0, 1.0]^8$, mapeado linealmente a parámetros físicos de síntesis mediante transformaciones afines invertibles:
-
-$$x_i = \min_i + g_i \cdot (\max_i - \min_i) \quad \Longleftrightarrow \quad g_i = \frac{x_i - \min_i}{\max_i - \min_i}$$
-
-#### Tabla Canónica de Genes
-| Índice | Gen | Tipo | Unidad | Mínimo | Máximo | Flauta Default | Justificación Física / Acústica |
-| :---: | :---| :---: | :---: | :---: | :---: | :---: | :---|
-| `0` | `amp_arm1` | `float` | amp. rel. | $0.10$ | $1.00$ | $0.90$ | Amplitud del tono fundamental ($f_0$). Dominante en el timbre cuasi-senoidal de la flauta. |
-| `1` | `amp_arm2` | `float` | amp. rel. | $0.00$ | $0.80$ | $0.25$ | Segundo armónico ($2f_0$). Proporciona cuerpo tímbrico y presencia espectral. |
-| `2` | `amp_arm3` | `float` | amp. rel. | $0.00$ | $0.50$ | $0.08$ | Tercer armónico ($3f_0$). Brillo sutil de orden superior. |
-| `3` | `ataque_s` | `float` | segundos | $0.005$ | $0.250$ | $0.050$ | Tiempo de ataque ADSR. Transitorio suave de la columna de aire en la embocadura. |
-| `4` | `decaimiento_s` | `float` | segundos | $0.005$ | $0.300$ | $0.080$ | Tiempo de caída ADSR hasta alcanzar el régimen estacionario. |
-| `5` | `sostenido_rel` | `float` | amp. rel. | $0.10$ | $1.00$ | $0.80$ | Nivel de sostenido mientras la columna de aire se mantiene activa. |
-| `6` | `relajacion_s` | `float` | segundos | $0.005$ | $0.300$ | $0.060$ | Tiempo de extinción ADSR tras cortar la insuflación. |
-| `7` | `ruido_soplo` | `float` | amp. rel. | $0.00$ | $0.25$ | $0.04$ | Ruido de turbulencia aerodinámica (*breath noise*) generado en el bisel. |
-
-* **Invertibilidad Garantizada:** El mapeo genotipo-fenotipo es biunívoco y estrictamente invertible. La suite de pruebas unitarias (`tests/test_representacion_rol1.py`) certifica que $|\text{decodificar}(\text{codificar}(x)) - x| < 10^{-12}$ sobre un muestreo masivo de $1,000$ individuos aleatorios en el hipercubo.
-* **Mecanismo Defensivo:** Se implementó `restringir_limites()` mediante *clipping* rígido ($\text{clip}(g, 0.0, 1.0)$), blindando la evaluación acústica frente a operadores genéticos desbordantes como el cruce BLX-$\alpha$.
-
-### 1.3 Formalización del Espacio de Búsqueda
-Bajo una discretización física de paso absoluto $\Delta = 0.001$ en las unidades reales de cada gen (con extremos incluidos, $N_i = \lfloor(\max_i - \min_i)/\Delta\rfloor + 1$):
-* **Niveles por gen:** $N = [901, 801, 501, 246, 296, 901, 296, 251]$.
-* **Tamaño del espacio combinatorio:**
-  $$S = \prod_{i=0}^{7} N_i = 1,762,430,802,969,797,099,136 \approx \mathbf{1.76 \times 10^{21}} \text{ combinaciones}$$
-* **Entropía de información:** $\log_2(S) \approx \mathbf{70.58\text{ bits}}$ equivalentes.
-* **Justificación de la Metaheurística:** Evaluando $1,000$ candidatos por segundo en una CPU moderna, una búsqueda exhaustiva por fuerza bruta requeriría $\approx \mathbf{5.58 \times 10^{10}\text{ años}}$ (más de 4 veces la edad estimada del universo). Por consiguiente, la exploración determinista es intratable y se justifica plenamente el uso de un Algoritmo Genético con búsqueda dirigida.
-
-### 1.4 Análisis de Sensibilidad Unidimensional (1D)
-Se implementó un arnés de sensibilidad (`src/sensibilidad.py`) barriendo 51 valores en $[0.0, 1.0]$ para cada gen (408 evaluaciones totales) manteniendo constantes los restantes en el fenotipo de flauta por defecto, contrastando la síntesis contra `flauta_referencia_01.wav`.
-
-| Ranking | Gen | $\Delta \text{Fitness}_{\text{STFT}}$ | $\sigma_{\text{STFT}}$ | $\max |\nabla_{\text{STFT}}|$ | $\Delta \text{Fitness}_{\text{Croma}}$ | Clasificación de Impacto |
-| :---: | :--- | :---: | :---: | :---: | :---: | :--- |
-| **1** | `ruido_soplo` | **0.2625** | 0.0870 | 0.5015 | 0.0004 | **Hipersensible** (Impacto crítico en STFT) |
-| **2** | `sostenido_rel` | **0.0400** | 0.0125 | 0.0812 | 0.0433 | **Sensibilidad Moderada** |
-| **3** | `relajacion_s` | **0.0185** | 0.0061 | 0.0421 | 0.0641 | Robusto en STFT / Sensible en Croma |
-| **4** | `decaimiento_s`| **0.0152** | 0.0044 | 0.0380 | 0.0012 | Robusto / Insensible |
-| **5** | `ataque_s` | **0.0137** | 0.0028 | 0.0450 | 0.0574 | Robusto en STFT / Sensible en Croma |
-| **6** | `amp_arm3` | **0.0093** | 0.0023 | 0.0189 | 0.0155 | Robusto / Insensible |
-| **7** | `amp_arm2` | **0.0066** | 0.0015 | 0.0135 | 0.0007 | Robusto / Insensible |
-| **8** | `amp_arm1` | **0.0028** | 0.0008 | 0.0062 | 0.0021 | Robusto / Insensible |
-
-* **Hallazgo Acústico 1 (Asimetría del Ruido):** `ruido_soplo` genera una variación de error de $8.04\text{ dB}$ en STFT debido a que el ruido blanco eleva el piso espectral en todas las frecuencias; sin embargo, en Croma es plano ($\Delta = 0.0004$) porque las componentes no periódicas se disipan al proyectar la energía en los 12 bins de notas musicales.
-* **Hallazgo Acústico 2 (Complementariedad STFT + Croma):** Las colas temporales del ADSR (`relajacion_s` y `ataque_s`) son detectadas con mayor severidad por Croma ($\Delta \approx 0.06$) al contaminar notas adyacentes, validando empíricamente la necesidad de combinar ambas métricas para una evaluación holística.
-
----
-
-### 1.5 Pregunta Teórica 1 (Rol 1 — Juan Mateo Soruco)
-
-> **Pregunta Oficial:** *¿Cómo influye la representación del cromosoma en la eficiencia del AG? Da un ejemplo de codificación mala y una buena para este problema.*
-
-#### A. Fundamento Teórico: Preservación de la Topología y Localidad
-En los Algoritmos Genéticos, la **representación del cromosoma** define el mapa topológico que vincula el espacio genotípico ($\mathcal{G}$) con el espacio fenotípico ($\mathcal{F}$) y, en última instancia, con la superficie de aptitud ($\mathcal{S}: \mathcal{F} \to \mathbb{R}$). 
-
-La eficiencia de un AG depende directamente del principio de **fuerte causalidad o localidad**: perturbaciones pequeñas en el genotipo inducidas por los operadores genéticos (cruce y mutación) deben traducirse en variaciones proporcionalmente pequeñas y suaves en el fenotipo acústico. Si la codificación fragmenta este mapa, los operadores genéticos se comportan como saltos estocásticos desconectados, transformando la optimización evolutiva en una búsqueda ciega y errática.
-
-#### B. Ejemplo de Mala Codificación para este Problema
-* **Diseño:** Codificación en **cadena binaria estándar** cuantizando cada parámetro a $B = 8\text{ bits}$ (cromosoma de $64\text{ bits}$ concatenados).
-* **Falla Crítica 1 — Acantilados de Hamming (Hamming Cliffs):**
-  Considérese el tiempo de ataque $A$ con rango $[5, 250]\text{ ms}$. Dos fenotipos físicamente casi indistinguibles como $127$ y $128$ se representan en binario como:
-  $$127_{10} = \mathbf{01111111}_2 \quad \longleftrightarrow \quad 128_{10} = \mathbf{10000000}_2$$
-  La distancia de Hamming entre ambos estados adyacentes es de **8 bits** (la máxima posible). Para que el AG transite entre dos puntos contiguos en el espacio fenotípico, la mutación puntual tendría que invertir simultáneamente los 8 bits en una sola generación, un evento de probabilidad ínfima ($p_m^8 \approx 0.05^8 \approx 3.9 \times 10^{-11}$). Esto genera barreras artificiales y cañones de discontinuidad en la superficie de fitness, provocando el estancamiento prematuro de la población.
-* **Falla Crítica 2 — Redundancia y Regiones Inválidas:**
-  Si los límites físicos no coinciden con potencias exactas de 2 ($2^B$), la codificación binaria produce genotipos que decodifican fuera de rango, requiriendo operadores de reparación costosos o funciones de penalización que distorsionan el gradiente evolutivo.
-
-#### C. Ejemplo de Buena Codificación (La Implementada en el Proyecto)
-* **Diseño:** **Representación en Vector Real Continuo (RCGA)** acotado en el hipercubo normalizado $[0.0, 1.0]^8$ con decodificación lineal afín y operadores continuos especializados (cruce BLX-$\alpha$ y mutación gaussiana o no uniforme).
-* **Ventajas que Maximizan la Eficiencia:**
-  1. **Preservación Estricta de la Localidad:** La distancia euclídea en el genotipo $\|\vec{g}_A - \vec{g}_B\|_2$ es directamente proporcional a la diferencia en parámetros físicos, garantizando una superficie de fitness suave y continua.
-  2. **Exploración y Explotación Ajustables:** Permite al cruce BLX-$\alpha$ recombinar intervalos de confianza alrededor de los progenitores y a la mutación gaussiana realizar ajustes finos mediante perturbaciones de paso continuo ($\sigma$), acelerando la sintonía acústica de los armónicos.
-  3. **Desacoplamiento y Ausencia de Epistasis Artificial:** Normalizar cada gen de manera independiente previene que parámetros con órdenes de magnitud dispares (e.g. tiempos en milisegundos vs. amplitudes relativas adimensionales) dominen asimétricamente el operador de cruce.
-
----
-
-## 2. Capa 2: Síntesis Acústica y Función de Aptitud (Rol 2)
-
-### 2.1 Síntesis Aditiva y Envolventes Instrumentales
-
-El módulo `src/sintesis.py` implementa
-`sintetizar_instrumento(notas, duraciones, gen)`, que transforma
-un cromosoma en audio. Reutiliza la validación y decodificación
-del Rol 1 para interpretar ocho genes: amplitudes de tres
-armónicos, ataque, decaimiento, sostenido, relajación y ruido
-de soplo.
-
-Cada nota se construye sumando tres componentes sinusoidales:
-la frecuencia fundamental, el segundo armónico y el tercero.
-Se añade ruido uniforme para representar de manera simplificada
-el soplo de la flauta. Una envolvente ADSR controla cómo comienza,
-se mantiene y termina la amplitud de cada nota.
-
-Las etapas de la envolvente permanecen dentro de la duración
-del evento. Si ataque, decaimiento y relajación no caben,
-sus tiempos se reducen proporcionalmente. Los silencios,
-representados por `-1`, generan muestras de valor cero.
-
-La melodía permanece fija: el AG modifica el timbre, no las
-notas ni sus duraciones. La síntesis devuelve audio mono
-`float32` a 22050 Hz y permite exportarlo como WAV PCM de
-16 bits. Se omiten los armónicos que alcancen o superen
-la frecuencia de Nyquist.
-
-Se utiliza una ganancia común para todos los individuos
-y una semilla de síntesis predeterminada de 2026.
-Esto permite comparar cromosomas con un ruido reproducible,
-independiente del generador aleatorio del AG.
-
-### 2.2 Métricas de Aptitud: STFT en dB vs. Croma Armónico
-
-El módulo `src/fitness.py` compara el audio sintetizado con
-una referencia independiente construida a partir de muestras
-reales de flauta, siguiendo las notas, duraciones y silencios
-del CSV del Rol 1.
-
-**STFT en decibelios.** Se calculan espectrogramas de magnitud
-con ventana Hann, FFT de 2048 muestras y salto de 256 muestras.
-Las magnitudes se expresan en dB con referencia fija de
-amplitud 1 y piso de −80 dB. El error es la diferencia absoluta
-media entre ambos espectrogramas:
-
-$$
-E_{\mathrm{dB}} =
-\frac{1}{FT}
-\sum_{f,t}
-\left|D_{\mathrm{sintesis}}(f,t)
--
-D_{\mathrm{referencia}}(f,t)\right|
-$$
-
-Aquí, F y T representan las cantidades de bins de frecuencia
-y cuadros temporales. El error se transforma en aptitud:
-
-$$
-A_{\mathrm{STFT}} =
-\frac{1}{1 + E_{\mathrm{dB}}/10}
-$$
-
-El AG maximiza esta aptitud, cuyo rango es `(0, 1]`.
-Una coincidencia exacta obtiene 1. El factor 10 establece
-la escala de transformación; no representa un umbral
-perceptual ni un porcentaje de calidad musical.
-
-Se evita el MSE sobre la onda cruda porque pequeñas diferencias
-de fase pueden producir errores elevados entre sonidos
-similares. Comparar magnitudes espectrales reduce esa
-sensibilidad directa, aunque la alineación temporal
-continúa siendo necesaria.
-
-**Croma.** Como alternativa, se agrupa la energía de los bins
-entre 50 y 5000 Hz en doce clases de altura musical.
-Se calcula la similitud coseno por cuadro y se promedian
-los resultados. La aptitud está en `[0, 1]` y se maximiza.
-Dos cuadros silenciosos se consideran coincidentes.
-El croma conserva menos información directa sobre el timbre
-y la octava que el espectrograma completo.
-
-En la comparación guardada de seis candidatos —el cromosoma
-por defecto y cinco aleatorios con semilla 42—, STFT seleccionó
-`default` con aptitud 0.679606, mientras que croma seleccionó
-`aleatorio_2` con 0.920207. Estos valores pertenecen a métricas
-distintas y no se comparan directamente entre sí.
-La comparación no constituye una corrida evolutiva.
+# Del silbido al instrumento: prototipo de síntesis mediante un algoritmo genético continuo
 
-Se propone STFT como aptitud principal y croma como evaluación
-complementaria, pendientes de ratificación colectiva y
-evaluación auditiva. Las señales deben ser mono, finitas,
-estar a 22050 Hz, alineadas y tener igual longitud.
-El evaluador no las alinea ni remuestrea automáticamente.
+**Examen práctico grupal — Inteligencia Artificial, Universidad Católica Boliviana “San Pablo”**
+**Octubre de 2026**
 
-### 2.3 Pregunta Teórica 2 (Rol 2)
+> **Estado editorial:** versión compacta para revisión del equipo. El README del proyecto indica una entrega de 3–4 páginas, pero no se encontró la guía oficial ni un formato paginado institucional. No se afirma que esta versión cumpla esa extensión al exportarse.
 
-> **Pregunta oficial:** ¿Qué es una superficie de fitness?
-> ¿Por qué es importante que sea suave para un AG?
-> Ilustra con un gráfico del proyecto.
+| Rol | Integrante | Aporte documentado |
+|---|---|---|
+| 1 — Representación y extracción | Juan Mateo Soruco | Codificación, extracción melódica y análisis 1D de genes. |
+| 2 — Síntesis y fitness | Marcelo David Navia Rocabado | Síntesis aditiva, métricas espectrales y sensibilidad. |
+| 3 — Operadores genéticos | Alejandro Alvarez Huayhua | Selección, cruce y mutación; comparación exploratoria. |
+| 4 — Dinámica poblacional | César Cádiz Rivero | Ciclo AG, élites, criterios de parada y convergencia. |
+| 5 — Meta-evaluación | Tairin Andrea Muñoz Claros | Factorial, baseline pareado, análisis y reproducibilidad. |
 
-Una superficie de fitness relaciona cada combinación de genes
-con su aptitud. En este proyecto, cada punto del espacio
-`[0, 1]^8` representa una configuración del instrumento,
-y su aptitud expresa el parecido con la referencia según
-la métrica elegida.
+Los nombres reflejan la tabla del proyecto. La revisión de firmas y ratificación colectiva permanece pendiente.
 
-Una respuesta relativamente suave permite que pequeñas
-modificaciones del cromosoma produzcan cambios graduales
-de aptitud. Esto facilita los ajustes locales mediante
-mutación. Sin embargo, el AG no necesita derivadas ni exige
-suavidad matemática; una superficie suave también puede
-contener óptimos locales y no garantiza alcanzar el global.
+## Sistema y resultados técnicos
 
-Para estudiar esta relación se reutilizó `src/sensibilidad.py`
-del Rol 1. Se evaluaron 51 valores por cada uno de los ocho
-genes, sumando 408 evaluaciones. En cada barrido se modificó
-un gen y se mantuvieron los otros siete en el cromosoma
-por defecto, con la misma melodía, referencia y semilla.
+El prototipo convierte una melodía extraída de un silbido en una síntesis aditiva de flauta. Rol 1 entrega notas, duraciones y una representación de ocho genes normalizados en [0,1]^8: amplitudes de tres armónicos, ataque, decaimiento, sostenido, relajación y ruido de soplo. La transformación lineal a parámetros físicos facilita aplicar operadores continuos; el recorte mantiene los genes dentro de sus límites. Detalles: [diseño técnico](../diseno/dia1.md) y [contrato del cromosoma](../contratos/contrato_cromosoma.md).
 
-![Cortes individuales de la superficie de fitness STFT](../../resultados/audios/rol2_dia4_superficie_fitness.png)
+Rol 2 implementa síntesis aditiva con envolvente ADSR y una semilla de síntesis reproducible. La función de fitness compara audios mono, finitos, alineados, a 22050 Hz y de igual longitud. STFT usa Hann, FFT de 2048, salto 256, piso −80 dB y amplitud de referencia 1; transforma el error absoluto medio en dB mediante 1/(1+E_dB/10), que se maximiza. Croma agrupa energía en 12 clases y usa similitud coseno media por cuadro, también maximizada. Ninguna mide directamente calidad perceptual. Véase [src/fitness.py](../../src/fitness.py).
 
-**Interpretación del gráfico.** El eje horizontal representa
-el valor normalizado del gen y el vertical su aptitud STFT.
-Los cortes de `ruido_soplo` y `amp_arm2` muestran respuestas
-de distinta magnitud. Las escalas verticales son diferentes
-y deben considerarse al interpretar las curvas.
+### Pregunta teórica 1 — Rol 1: representación
 
-En los barridos guardados del Rol 2, el soplo produjo un rango
-STFT de 0.262472 y un rango croma de 0.000379. En cambio,
-la relajación produjo un rango croma de 0.064137.
-Esto muestra respuestas diferentes de las métricas ante
-los parámetros, sin demostrar superioridad perceptual.
+Una representación adecuada mantiene una relación interpretable entre cambios del genotipo y cambios de los parámetros. Una cadena binaria puede producir “acantilados de Hamming”: dos valores físicos contiguos, como 127 y 128 en una cuantización de 8 bits, difieren en todos sus bits y una mutación puntual no los conecta fácilmente. El proyecto usa números reales normalizados y decodificación lineal, evitando esa discontinuidad artificial y permitiendo mutación continua. Esto preserva localidad en el mapeo de parámetros, pero no demuestra que toda la función de fitness sea suave; la síntesis, la envolvente y el piso espectral pueden cambiar pendientes.
 
-Los cortes no describen todas las interacciones entre genes
-ni prueban suavidad global o convergencia prematura.
-La codificación lineal conserva proximidad entre parámetros
-físicos, pero la envolvente por tramos, el ajuste de sus tiempos
-y el piso de dB pueden introducir cambios de pendiente.
-Por ello, las curvas deben interpretarse junto con las
-limitaciones del modelo y la escucha de los resultados.
+### Pregunta teórica 2 — Rol 2: superficie de fitness
 
----
+La superficie asigna aptitud a cada combinación de genes; aquí es una función de ocho dimensiones. Cortes unidimensionales, que cambian un gen mientras fijan los otros siete, ayudan a observar sensibilidad local, pero no muestran interacciones ni prueban suavidad global. La implementación de sensibilidad reutilizada por Rol 2 evalúa 51 puntos por cada uno de los ocho genes (408 evaluaciones). El gráfico [superficie STFT](../../resultados/audios/rol2_dia4_superficie_fitness.png) presenta cortes; sus escalas verticales difieren. El soplo tuvo rango STFT 0.262472 y croma 0.000379; la relajación tuvo rango croma 0.064137. Esto muestra respuestas distintas según gen y métrica, no calidad auditiva ni convergencia garantizada. La interpretación debe ser validada por Rol 2.
 
-## 3. Capa 3: Operadores Genéticos Continuos (Rol 3)
+### Pregunta teórica 3 — Rol 3: exploración y explotación
 
-### 3.1 Operadores implementados
+Exploración visita regiones nuevas; explotación concentra la búsqueda en soluciones prometedoras. BLX-alpha (alpha=0.5) puede producir valores fuera del intervalo parental antes del recorte y favorece exploración respecto del cruce uniforme, que intercambia genes parentales. Torneo k=3 aumenta la presión de selección; la mutación gaussiana usa sigma=0.08 y la no uniforme reduce desplazamientos al acercarse al límite temporal. Son mecanismos, no garantías universales.
 
-En `src/operadores.py`, **torneo k=3** sortea participantes sin reemplazo y elige mayor aptitud; empata por orden sorteado. **SUS** selecciona un lote con un inicio aleatorio y punteros equidistantes proporcionales al fitness no negativo; puede repetir individuos y usa pesos iguales si todos son cero. Ambos maximizan.
+En seis corridas comparativas (N=50, 50 reemplazos, dos semillas y 2550 evaluaciones reales por corrida), las medias STFT fueron A=torneo/BLX/gaussiana 0.726136 (DE 0.008259), B=torneo/uniforme/gaussiana 0.730850 (DE 0.001608) y C=SUS/BLX/no uniforme 0.724787 (DE 0.006706). A ganó con semilla 42 y B con 101. C conservó más diversidad final (0.125190 frente a 0.009409 y 0.009313), pero no obtuvo mayor fitness. B es recomendación preliminar basada en dos réplicas, no resultado concluyente. Más detalles: [comparación de Rol 3](../rol3_dia3.md).
 
-**BLX-alpha**, con alpha=0.5, muestrea cada hijo por gen en `[mínimo-alpha*d, máximo+alpha*d]`, donde d es la distancia parental. **Uniforme** intercambia genes con máscara 0.50 y herencia complementaria. La **gaussiana** suma ruido normal de media cero y sigma=0.08 a los genes seleccionados; la **no uniforme** usa `delta=y*(1-r**((1-t/T)**b))`, con b=2, distancia y al límite elegido y desplazamiento cero en t=T.
+### Pregunta teórica 4 — Rol 4: convergencia prematura
 
-El ciclo aplica cruce 0.90 **por pareja**; cada mutación aplica 0.05 **por gen**, sin filtro adicional por individuo. Los hijos se recortan a `[0,1]` con `restringir_limites()` y se validan; las entradas inválidas se rechazan. Se devuelven copias independientes, sin alterar padres ni discretizar genes, compartiendo el Generator de la corrida.
+Es la pérdida temprana de diversidad alrededor de una solución potencialmente subóptima. Se diagnostica combinando descenso sostenido de diversidad, estabilización de fitness y estancamiento; diversidad baja por sí sola no basta. En las seis corridas anteriores, A/B acabaron con diversidad mucho menor que C, pero eso no prueba convergencia prematura: B obtuvo la media más alta y aquella comparación desactivó la parada por estancamiento para igualar presupuestos. Reducir presión selectiva, ajustar mutación o introducir inmigrantes son medidas posibles; inmigración y reinicios no están implementados. Evidencia: [Día 4 de Rol 4](../rol4_dia4.md).
 
-### 3.4 Pregunta Teórica 3 (Rol 3)
-> **Pregunta Oficial:** *Explica el balance exploración vs. explotación. ¿Qué operador empuja más hacia la exploración y cuál hacia la explotación? Respalda con datos.*
+## Experimento del Rol 5
 
-**Explorar** introduce o visita valores diferentes; **explotar** concentra la búsqueda en soluciones prometedoras. BLX-alpha ofrece más exploración de valores nuevos que uniforme porque puede salir del intervalo parental; uniforme recombina valores existentes. El torneo favorece explotación al elegir al mejor participante. La gaussiana introduce perturbaciones; la no uniforme reduce sus desplazamientos con el tiempo, favoreciendo ajustes finales. Son tendencias de implementación, no garantías universales.
+Se reutilizaron los CSV y checkpoints guardados del factorial, sin repetir corridas: población {20, 50, 100}, elitismo {1, 2}, mutación {0.02, 0.08}, cinco semillas (42, 101, 2024, 7, 999), 12 configuraciones y 60 corridas por métrica. Se fijó B (torneo, uniforme, gaussiana, sigma=0.08) como opción experimental provisional. Se mantuvieron los demás parámetros y la parada por estancamiento existentes. Chroma y STFT se procesaron por separado. STFT como métrica primaria y B siguen pendientes de ratificación colectiva.
 
-La comparación principal guardada usa únicamente semillas **42 y 101**, N=50, dos élites y 50 reemplazos: **2550 evaluaciones reales por corrida**, con tolerancia cero para igualar presupuesto. STFT se maximiza y sigue **provisional**, sin ratificación colectiva. Este bloque no se mezcla con el factorial del Rol 5.
+### Pregunta teórica 5 — Rol 5: AG frente a búsqueda aleatoria
 
-| Combinación | Mejor STFT medio ± DE muestral | Diversidad final media |
-|---|---:|---:|
-| A: torneo / BLX / gaussiana | 0.726136 ± 0.008259 | 0.009409 |
-| B: torneo / uniforme / gaussiana | **0.730850 ± 0.001608** | 0.009313 |
-| C: SUS / BLX / no uniforme | 0.724787 ± 0.006706 | 0.125190 |
+Cada corrida AG se emparejó con búsqueda aleatoria por configuración, semilla y métrica, usando el presupuesto real de evaluaciones de esa corrida:
 
-La diversidad —media de las desviaciones por gen normalizado— partió de 0.285487 en promedio. A/B concentraron más la población; C mantuvo mayor dispersión sin mejorar el fitness medio. Esto vincula explotación con concentración observada, pero **más diversidad no implica mejor rendimiento**. C cambia selección y mutación simultáneamente: no aísla el efecto de SUS ni de la mutación. A–B examina el cambio de cruce; A ganó con semilla 42 y B con 101. **B se recomienda preliminarmente por mayor media**, con solo dos réplicas, sin afirmar significación estadística, superioridad general ni óptimo universal.
+| Métrica | Media AG (DE) | Media baseline (DE) | Diferencia pareada media (DE) | Mediana diferencia | AG mayor |
+|---|---:|---:|---:|---:|---:|
+| STFT | 0.729882 (0.003367) | 0.717397 (0.001472) | 0.012485 (0.003424) | 0.013607 | 60/60 |
+| Chroma | 0.958681 (0.001454) | 0.954582 (0.000978) | 0.004099 (0.001224) | 0.004168 | 60/60 |
 
-Fuentes: [tabla principal](../../resultados/operadores/dia3_2026-10-21_64617f8/resumen.csv), [diversidad por generación](../../resultados/operadores/dia3_2026-10-21_64617f8/diversidad.svg) e [informe del experimento](../rol3_dia3.md).
+Las varianzas muestrales (ddof=1) sobre los 60 mejores fitness agrupados por método/métrica son: STFT, AG 1.13349×10⁻⁵ y baseline 2.16822×10⁻⁶; chroma, AG 2.11307×10⁻⁶ y baseline 9.56984×10⁻⁷. Agrupan factores y semillas; no estiman variabilidad dentro de una configuración.
 
----
+El ANOVA factorial usó semilla como bloque y ajuste Holm conjunto para 14 contrastes. En chroma quedaron efectos ajustados de población (p=1.87×10⁻⁸) y mutación (p=0.00587); ningún término STFT conservó p ajustada <0.05. El ANOVA evalúa hiperparámetros, no AG contra baseline. No se comprobaron normalidad ni homogeneidad de residuos. No se hizo prueba inferencial AG–baseline ni se demuestra superioridad general: hay una melodía/referencia, cinco semillas por configuración y ninguna encuesta auditiva aplicada.
 
-## 4. Capa 4: Dinámica Poblacional y Convergencia (Rol 4)
+Los [boxplots STFT](../../resultados/rol5/dia4_metaevaluacion/boxplot_corridas_stft.svg) y [chroma](../../resultados/rol5/dia4_metaevaluacion/boxplot_corridas_croma.svg) muestran por separado 60 resultados agrupados entre configuraciones. El [tornado](../../resultados/rol5/dia4_metaevaluacion/tornado_hiperparametros.svg) representa efectos marginales de población, elitismo y mutación, no sensibilidad de genes del Rol 1. Protocolo: [Día 3 de Rol 5](../rol5_dia3.md).
 
-### 4.1 Arquitectura del Ciclo Reproductivo (`ejecutar_ag`)
+## Audios y escucha
 
-El ciclo recibe una función de aptitud escalar y una `ConfiguracionAG` validada. Inicializa una población normalizada, evalúa sus individuos en orden y, en cada reemplazo, conserva dos élites y completa la siguiente población con selección, cruce y mutación. Un único `numpy.random.Generator` explícito gobierna la aleatoriedad de la corrida; la síntesis mantiene una semilla independiente. El resultado incluye ganador, fitness, historial, generaciones, evaluaciones reales y motivo de parada.
+Los cuatro audios requeridos existen y se verificaron como WAV PCM16, mono, 22050 Hz y finitos:
 
-### 4.2 Preservación de Élite y Criterios de Parada por Estancamiento
+| Papel | Ruta | Duración y procedencia |
+|---|---|---|
+| Silbido original | datos/audio/silbidos/silbido_01.wav | 2.694966 s. |
+| Generación 0 | resultados/audios/rol5_dia3_stft_N20_E1_pm0.02_seed42/generacion_0_individuo_0.wav | 2.704989 s; individuo índice 0 reconstruido con inicializador determinista y semilla AG 42. |
+| Referencia | resultados/audios/referencia_flauta.wav | 2.704989 s; SHA-256 coincide con la referencia fuente. |
+| Mejor evolucionado | resultados/audios/rol5_dia3_stft_N20_E1_pm0.02_seed42/mejor_evolucionado_misma_corrida.wav | 2.704989 s; mejor cromosoma final del mismo checkpoint que generación 0. |
 
-La configuración final propuesta para la demostración STFT usa población 100, máximo 50 reemplazos, elitismo 2, torneo de tamaño 3, cruce uniforme con probabilidad 0.90 y mutación gaussiana por gen con probabilidad 0.08 y `sigma=0.08`. La parada compara el mejor fitness dentro de una ventana de paciencia 10 y exige una mejora mayor que `1e-4`. La métrica STFT primaria y croma complementaria siguen pendientes de ratificación colectiva.
+El checkpoint y los módulos fuente coinciden con las huellas del manifiesto; la diversidad de la población reconstruida coincide con el registro de generación 0. El checkpoint no guardó la población completa: el WAV es el primer individuo, no el mejor inicial. No se presenta el audio del Día 2 como generación 0. Procedencia y hashes: [manifiesto de audios](../../resultados/audios/rol5_dia3_stft_N20_E1_pm0.02_seed42/manifiesto_audios.json).
 
-La combinación B —torneo, uniforme y gaussiana— es una recomendación preliminar: con semillas 42 y 101 alcanzó fitness medio final 0.730850220, frente a 0.726136022 de A y 0.724787225 de C. Las corridas comparativas consumieron 2550 evaluaciones cada una y usaron tolerancia cero para igualar el presupuesto; no prueban la parada operativa ni superioridad general.
+La [encuesta](../encuesta_auditiva_rol5.md) está preparada con referencia, candidatos inicial/final de una corrida, preguntas neutrales y plantilla para 5–10 personas. No tiene participantes ni respuestas; no hay conclusiones perceptuales. No se encontró un deck grupal editable: la lámina individual de Rol 5 está en [SVG](../presentacion/rol5_metaanalisis.svg); el equipo debe proporcionar el deck maestro. El notebook integrado y los WAV pueden apoyar una demo, aún pendiente de coordinación.
 
-El factorial integrado del Rol 5 mantuvo B y sí usó la parada operativa en 12 configuraciones × cinco semillas por métrica. Para STFT, N=100, elitismo=2 y mutación=0.08 obtuvo la mayor media, 0.731952986. Para croma, N=100, elitismo=1 y mutación=0.08 obtuvo 0.959702027. Se adopta provisionalmente la primera por el criterio STFT primario; la discrepancia de elitismo y la falta de validación perceptual impiden presentarla como óptimo universal.
+## Conclusión
 
-### 4.3 Pregunta Teórica 4 (Rol 4)
-> **Pregunta Oficial:** *¿Qué es la convergencia prematura? ¿Cómo se detecta y cómo se evita? Da evidencia concreta.*
+El proyecto integra extracción, representación continua, síntesis, fitness, operadores, ciclo poblacional y análisis experimental. En estas condiciones el AG tuvo fitness mayor que el baseline en 60/60 pares por métrica, pero la comparación es descriptiva y limitada: no demuestra significación, superioridad general ni calidad perceptual. STFT como métrica primaria y B siguen provisionales. Pendientes del equipo: ratificación, encuesta real, deck grupal, demo y verificación de la paginación oficial.
 
-La convergencia prematura ocurre cuando la población pierde diversidad antes de explorar adecuadamente y se concentra alrededor de una solución subóptima. Se detecta combinando estancamiento del mejor fitness, estabilización de la media y dispersión del fitness, y una caída sostenida de diversidad; una sola señal no basta.
+## Referencias y documentación
 
-En las seis corridas principales, la diversidad inicial media fue 0.285487. A y B terminaron en 0.009409 y 0.009313, conservando aproximadamente 3.3 %; C terminó en 0.125190 y conservó aproximadamente 43.9 %. Esto demuestra mayor concentración en A/B, pero no confirma convergencia prematura: B logró el mayor fitness medio y la parada por tolerancia se desactivó para el experimento. El riesgo puede reducirse moderando elitismo o presión selectiva, adaptando la mutación y, si persiste el estancamiento, usando inmigrantes o reinicios parciales. Estas dos últimas estrategias son propuestas no implementadas.
-
----
-
-## 5. Capa 5: Meta-evaluación y Validación Experimental (Rol 5)
-
-### 5.1 Plan Experimental Factorial (12 Configuraciones x 5 Réplicas)
-
-Se reutilizaron los resultados guardados en `resultados/rol5/dia3_factorial/ejecucion_20261021T184758Z_c5dc431/`; no se repitieron las corridas. El diseño fue población `{20, 50, 100}` × elitismo `{1, 2}` × probabilidad de mutación `{0.02, 0.08}`, con cinco semillas por celda (`42, 101, 2024, 7, 999`). Se mantuvieron los parámetros restantes y la parada por estancamiento de `ConfiguracionAG`. El operador B (torneo + uniforme + gaussiana, `sigma=0.08`) se fijó durante el factorial como elección provisional, no ratificada colectivamente. STFT fue la métrica inicial por defecto; su ratificación como métrica primaria sigue pendiente. Chroma se analizó por separado.
-
-El nuevo notebook `notebooks/05_rol5_metaevaluacion.ipynb` y `scripts/analizar_rol5_dia4.py` validan la matriz y calculan un ANOVA factorial completo, con todas las interacciones, semilla como bloque y corrección Holm conjunta para los 14 contrastes de los dos bloques métricos. Es un análisis exploratorio condicionado a una melodía, una referencia y cinco semillas por configuración; no se comprobaron los supuestos de normalidad y homogeneidad de residuos. Tras Holm, población (`p_ajustada=1.87×10⁻⁸`) y probabilidad de mutación (`0.00587`) muestran efectos en chroma; ningún término de STFT conserva `p_ajustada<0.05`. El ANOVA evalúa los hiperparámetros, no prueba que el AG supere al baseline. Esto no resuelve la ratificación colectiva de STFT ni constituye una recomendación universal. Las diferencias marginales y el gráfico de sensibilidad describen los niveles examinados; no son sensibilidad de genes.
-
-La lámina de Rol 5 para la presentación está en `documentacion/presentacion/rol5_metaanalisis.svg`, con fuente y notas en `documentacion/presentacion/rol5_metaanalisis.md`. Es una contribución SVG lista para insertar; su integración en la presentación grupal y la demo se coordinan con el equipo.
-
-### 5.2 Comparativa Estadística: AG vs. Búsqueda Aleatoria (Baseline)
-
-Cada corrida AG se emparejó con una búsqueda aleatoria por configuración, semilla y métrica, usando el número real de evaluaciones de esa corrida. En STFT, la media de fitness fue `0.729882` (DE muestral `0.003367`) para AG y `0.717397` (`0.001472`) para baseline; la diferencia media pareada fue `0.012485` (DE `0.003424`), mediana `0.013607`, con AG mayor en 60/60 pares. En chroma, las medias fueron `0.958681` (`0.001454`) y `0.954582` (`0.000978`); diferencia pareada `0.004099` (`0.001224`), mediana `0.004168`, AG mayor en 60/60.
-
-Estos son descriptivos. No se realizó una prueba inferencial AG–baseline ni se demuestra superioridad general. Los resultados provienen de una melodía y referencia y cinco semillas por configuración; no incluyen validación perceptual. El script de análisis comprueba registros y pares sin llamar al fitness.
-
-La varianza muestral `s²` (`ddof=1`) calculada directamente sobre los 60 valores de `mejor_fitness` de cada CSV es: STFT, AG `1.1334941×10⁻⁵` y baseline `2.1682236×10⁻⁶`; chroma, AG `2.1130664×10⁻⁶` y baseline `9.5698380×10⁻⁷`. Cada cifra agrupa las 12 configuraciones y sus cinco semillas de esa métrica; describe la dispersión total entre configuraciones y semillas, no la varianza dentro de una configuración. Los CSV originales se conservaron.
-
-Los boxplots de método se exportaron por separado desde esos mismos CSV: [STFT](../../resultados/rol5/dia4_metaevaluacion/boxplot_corridas_stft.svg) y [chroma](../../resultados/rol5/dia4_metaevaluacion/boxplot_corridas_croma.svg). Cada uno muestra 60 observaciones por método y señala que están agrupadas entre las configuraciones. El [tornado de hiperparámetros](../../resultados/rol5/dia4_metaevaluacion/tornado_hiperparametros.svg) representa los contrastes marginales alto−bajo de población, elitismo y tasa de mutación, separados por métrica; no es el tornado de sensibilidad de genes del Rol 1.
-
-### 5.3 Encuesta Subjetiva de Calidad Acústica
-
-No hay respuestas ni evidencia de una encuesta auditiva ciega de 5–10 personas en esta copia. Por tanto, no se reporta una preferencia subjetiva ni se equipara fitness espectral con calidad percibida. Se preparó el [instrumento y la plantilla vacía](../encuesta_auditiva_rol5.md); falta organizar la escucha, recopilar 5–10 respuestas y completar la tabla y conclusión con datos reales. El instrumento compara percepción del audio existente con la referencia, no AG contra baseline, porque no hay audios pareados de baseline guardados.
-
-En la revisión del repositorio no se encontró un audio identificado como generación 0. `resultados/audios/rol5_dia2_mejor.wav` es la salida de la demostración del Día 2 y no se presenta como generación 0. Tampoco se encontró una presentación grupal editable: `documentacion/presentacion/rol4_convergencia.pptx` es una diapositiva de Rol 4 y la contribución del Rol 5 está en SVG. El equipo debe proporcionar el deck grupal para integrar esa lámina sin crear una presentación paralela.
-
-### 5.4 Pregunta Teórica 5 (Rol 5)
-> **Pregunta Oficial:** *¿Cómo demuestras que tu AG es mejor que una búsqueda aleatoria? ¿Qué métricas usarías y qué resultados obtuviste?*
-
-La comparación adecuada debe usar la misma función de aptitud, entradas, métrica, semilla y presupuesto real de evaluaciones, con varias réplicas pareadas; conviene reportar diferencias pareadas y su incertidumbre, además de medidas perceptuales si se afirma calidad sonora. En los registros disponibles, el AG alcanzó fitness mayor que la búsqueda aleatoria en los 60 pares STFT y en los 60 pares chroma, con las diferencias descritas arriba. Esto es evidencia descriptiva favorable para estas condiciones, no una demostración de superioridad general: hay una sola melodía/referencia, cinco semillas por configuración, no se hizo contraste inferencial AG–baseline ni encuesta auditiva. STFT como métrica primaria y la configuración B siguen pendientes de ratificación colectiva.
-
----
-
-## 6. Conclusiones Generales del Proyecto
-
-El prototipo integra extracción de la melodía silbada, representación continua de ocho parámetros, síntesis aditiva, funciones de aptitud espectral y cromática, operadores genéticos y un ciclo poblacional con registro de evaluaciones y parada. El notebook `notebooks/00_integracion.ipynb` documenta la demostración end-to-end del Día 2; las corridas factoriales y sus baselines se conservan por separado como evidencia experimental.
-
-En las condiciones examinadas, el AG obtuvo fitness mayor que la búsqueda aleatoria en los 60 pares de STFT y los 60 de chroma, con presupuestos reales igualados por corrida. El factorial mostró diferencias descriptivas entre niveles y efectos ajustados para población y mutación en chroma; no se detectaron términos ajustados significativos en STFT. Estos resultados se limitan a una melodía y referencia, cinco semillas por configuración y los factores/operatoria registrados. No establecen superioridad general, causalidad fuera del diseño ni calidad sonora percibida.
-
-STFT como métrica primaria y la combinación B permanecen provisionales hasta la ratificación colectiva. La validación auditiva está pendiente; también falta localizar/producir legítimamente el audio de generación 0, integrar las diapositivas en el deck grupal editable, coordinar una demo en vivo y completar nombres y firmas con el equipo. No se atribuyen aquí resultados de encuesta ni artefactos ausentes.
-
----
-
-## Referencias Bibliográficas
-1. Goldberg, D. E. (1989). *Genetic Algorithms in Search, Optimization, and Machine Learning*. Addison-Wesley.
-2. Herrera, F., Lozano, M., & Verdegay, J. L. (1998). *Tackling real-coded genetic algorithms: Operators and tools for behavioural analysis*. Artificial Intelligence Review, 12(4), 265-319.
-3. Klapuri, A., & Davy, M. (Eds.). (2007). *Signal processing methods for music transcription*. Springer Science & Business Media.
-4. Mauch, M., & Dixon, S. (2014). *pYIN: A fundamental frequency estimator using probabilistic threshold distributions*. In IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) (pp. 659-663).
-5. Michalewicz, Z. (1996). *Genetic Algorithms + Data Structures = Evolution Programs*. Springer-Verlag.
+- Goldberg, D. E. (1989). *Genetic Algorithms in Search, Optimization, and Machine Learning*. Addison-Wesley.
+- [Implementación de fitness](../../src/fitness.py); [diseño](../diseno/dia1.md).
+- [Operadores](../rol3_dia3.md); [convergencia](../rol4_dia4.md); [factorial y baseline](../rol5_dia3.md).
+- [Auditoría de entregables](../auditoria_entregables_rol5_dia4.md); [verificaciones](../verificacion_notebooks.md).

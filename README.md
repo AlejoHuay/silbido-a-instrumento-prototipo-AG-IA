@@ -7,11 +7,11 @@ Algoritmo Genético implementado desde cero.
 
 | Integrante | Responsabilidad |
 |---|---|
-| JMjuanma | Rol 1: representación y extracción |
-| Por completar | Rol 2: síntesis y fitness |
-| Por completar | Rol 3: operadores genéticos |
-| Por completar | Rol 4: dinámica poblacional |
-| Por completar | Rol 5: integración reproducible y análisis experimental |
+| Juan Mateo Soruco | Rol 1: representación y extracción |
+| Marcelo David Navia Rocabado | Rol 2: síntesis y fitness |
+| Alejandro Alvarez Huayhua | Rol 3: operadores genéticos |
+| César Cádiz Rivero | Rol 4: dinámica poblacional |
+| Tairin Andrea Muñoz Claros | Rol 5: integración reproducible y análisis experimental |
 
 ## Objetivo
 
@@ -81,9 +81,9 @@ La evidencia de la última corrida está en
 - **Evidencia de demostración:** semilla 2026, población 10, cinco generaciones, torneo, cruce BLX y mutación gaussiana; 60 evaluaciones reales y fitness STFT 0.7152406. Esta corrida valida la integración y no es parte del análisis estadístico del Día 3.
 - **Día 3:** factorial de 12 configuraciones y cinco semillas ejecutado para STFT y chroma, con 60 corridas AG y 60 baselines pareados por métrica. Los resultados y checkpoints están en `resultados/rol5/dia3_factorial/`; el protocolo y los resultados descriptivos están en `documentacion/rol5_dia3.md`.
 - **Decisiones provisionales:** STFT se usó como métrica inicial y B (torneo + cruce uniforme + mutación gaussiana, sigma 0.08) como operadores del factorial. Ambas decisiones siguen pendientes de ratificación del equipo; STFT y chroma tienen resultados separados.
-- **Limitaciones:** comparación AG–baseline descriptiva para una melodía/referencia y cinco semillas por configuración, sin afirmar superioridad general. El ANOVA factorial exploratorio evalúa hiperparámetros, no la diferencia AG–baseline. No hay evaluación auditiva ciega. La suite completa requiere pandas para importar la prueba de sensibilidad de Rol 1.
-- **Día 4:** `notebooks/05_rol5_metaevaluacion.ipynb` y `scripts/analizar_rol5_dia4.py` analizan los CSV guardados sin repetir corridas. El informe final contiene la comparación, ANOVA factorial exploratorio con ajuste Holm y las limitaciones; la encuesta auditiva sigue pendiente. La lámina Meta-análisis está en SVG y su fuente/resumen en `documentacion/presentacion/rol5_metaanalisis.md`.
-- **Entregables:** `notebooks/00_integracion.ipynb`, `notebooks/05_rol5_metaevaluacion.ipynb`, `scripts/ejecutar_rol5_factorial.py`, `scripts/analizar_rol5_dia4.py`, `documentacion/analisis_rol5.md`, `documentacion/rol5_dia3.md` y `documentacion/informe/informe_final_ag.md`.
+- **Limitaciones:** comparación AG–baseline descriptiva para una melodía/referencia y cinco semillas por configuración, sin afirmar superioridad general. El ANOVA factorial exploratorio evalúa hiperparámetros, no la diferencia AG–baseline. No hay evaluación auditiva ciega. La suite completa requiere pandas para importar la prueba de sensibilidad de Rol 1; el kernel Jupyter actualmente registrado es Python 3.12 y no tiene scipy, aunque el proceso Python 3.14 sí lo tiene.
+- **Día 4:** `notebooks/05_rol5_metaevaluacion.ipynb` y `scripts/analizar_rol5_dia4.py` analizan los CSV guardados sin repetir corridas. Se añadieron boxplots separados para STFT y chroma, un tornado de sensibilidad de hiperparámetros y varianzas descriptivas. `scripts/exportar_audios_rol5_corrida.py` reconstruye determinísticamente el individuo 0 de generación 0 y exporta junto con el mejor final guardado de la misma corrida, registrando procedencia. La encuesta tiene plantilla vacía, sin respuestas; el deck grupal y la demo siguen pendientes. STFT y B conservan estado provisional.
+- **Entregables:** `notebooks/00_integracion.ipynb`, `notebooks/05_rol5_metaevaluacion.ipynb`, `scripts/ejecutar_rol5_factorial.py`, `scripts/analizar_rol5_dia4.py`, `scripts/exportar_audios_rol5_corrida.py`, `documentacion/analisis_rol5.md`, `documentacion/rol5_dia3.md`, `documentacion/auditoria_entregables_rol5_dia4.md`, `documentacion/encuesta_auditiva_rol5.md` y `documentacion/informe/informe_final_ag.md`.
 
 ## Acuerdos y Diseño
 
