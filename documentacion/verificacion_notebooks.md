@@ -77,3 +77,18 @@ Entorno del proceso verificador: Python 3.14.5, `nbclient` 0.11.0,
 terminó correctamente con advertencias informativas de Windows Proactor/zmq
 (se creó un hilo selector auxiliar) y de transporte TCP local sin cifrado.
 Estas advertencias no interrumpieron las celdas ni modificaron los resultados.
+
+## Auditoría de cierre — 26 de octubre de 2026
+
+- `python -B scripts/analizar_rol5_dia4.py`: terminó con código 0. Leyó los CSV existentes, validó 60 pares por métrica y calculó descriptivos/ANOVA; no ejecutó AG, baseline ni fitness.
+- `python -B scripts/exportar_audios_rol5_corrida.py`: después de corregir la carga local de `src`, terminó con código 0. Reconstruyó la generación 0 y exportó dos WAV desde cromosomas guardados/reproducidos determinísticamente, sin ejecutar AG ni fitness.
+- `notebooks/05_rol5_metaevaluacion.ipynb`: hay una ejecución limpia exitosa previa, fechada el 25-oct-2026, documentada arriba. En la revisión actual se intentó ejecutar con el kernel Jupyter `python3` registrado; ese kernel usa Python 3.12 y falló en la primera celda con `ModuleNotFoundError: scipy`. Python 3.14 del proceso sí tiene scipy, pero un intento de crear un kernelspec temporal para esa versión quedó bloqueado por `WinError 5` al asignar permisos al archivo de conexión. No se instaló nada. El notebook y los CSV no se reescribieron.
+- `python -B -m unittest discover -s tests -p test_rol5.py -v`: 8/8 pruebas pasaron al ejecutar fuera del sandbox. Dentro del sandbox, una prueba que escribe en `%TEMP%` falló con `PermissionError`; al elevar el mismo comando pasó.
+- Los cuatro SVG de boxplots/sensibilidad/tornado parsearon como XML válido. Los enlaces internos del informe compacto se comprobaron y todos existen.
+- Se regeneraron boxplots STFT/chroma y tornado desde los CSV en una carpeta temporal exclusiva; los tres SVG nuevos parsearon como XML y la carpeta temporal se retiró después. No se tocaron los gráficos guardados. Matplotlib avisó que no podía escribir su caché de fuentes en el perfil del usuario; no impidió la exportación.
+- Se validaron los cuatro WAV con SoundFile/NumPy: PCM16, mono, 22050 Hz, finitos; los hashes del manifiesto coinciden y la referencia conserva el hash de su fuente.
+- `documentacion/informe/informe_final_ag.md` se compactó a 1438 palabras. Todos sus enlaces locales existen; el conteo de páginas no se verificó por ausencia del formato oficial.
+- `python -B -m unittest discover -s tests -v`: 52 pruebas ejecutables; 51 pasaron y una prueba no pudo importarse porque falta `pandas` (`tests/test_sensibilidad_rol1.py`). No se instalaron paquetes. El primer intento dentro del sandbox añadió errores `WinError 5` al escribir en `%TEMP%`; al repetir fuera del sandbox, esas dos pruebas pasaron y quedó únicamente la importación faltante.
+- `python -B -m unittest discover -v` no descubrió pruebas desde la raíz (0 tests); se usó la forma explícita con `-s tests`.
+
+La rama no ejecutó experimentos factoriales ni regeneró fitness. Los tests unitarios del proyecto sí incluyen evaluaciones acotadas propias de sus casos de prueba. El Jupyter actualmente registrado no ofrece scipy; la ejecución limpia histórica exitosa corresponde a otro kernel/entorno y no se debe atribuir al kernel actual.
