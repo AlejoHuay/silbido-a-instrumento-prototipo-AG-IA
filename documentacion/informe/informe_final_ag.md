@@ -353,3 +353,38 @@ STFT como métrica primaria y la combinación B permanecen provisionales hasta l
 3. Klapuri, A., & Davy, M. (Eds.). (2007). *Signal processing methods for music transcription*. Springer Science & Business Media.
 4. Mauch, M., & Dixon, S. (2014). *pYIN: A fundamental frequency estimator using probabilistic threshold distributions*. In IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) (pp. 659-663).
 5. Michalewicz, Z. (1996). *Genetic Algorithms + Data Structures = Evolution Programs*. Springer-Verlag.
+
+---
+
+## Actualización de encuesta auditiva del Rol 5 — 29 de octubre de 2026
+
+Esta actualización agrega una respuesta real comunicada para P1 y un ejemplo con nueve filas ficticias. Aclara la sección 5.3 anterior, que reflejaba el estado previo de la encuesta: **no se incorporan nueve participantes reales**. Los registros, categorías y procedimiento se encuentran en el [instrumento de encuesta](../encuesta_auditiva_rol5.md).
+
+| Código | Estado | Conserva la melodía | Similitud con flauta (1–5) | Más parecido a la referencia |
+|---|---|---|---:|---|
+| P1 | REAL | Sí, casi idénticas | 4 | Evolucionado |
+| P2 | SIMULADA | Parcialmente | 3 | Evolucionado |
+| P3 | SIMULADA | Sí | 4 | Evolucionado |
+| P4 | SIMULADA | Parcialmente | 4 | Sin diferencia |
+| P5 | SIMULADA | Sí | 4 | Evolucionado |
+| P6 | SIMULADA | Parcialmente | 3 | Generación 0 |
+| P7 | SIMULADA | Sí | 5 | Evolucionado |
+| P8 | SIMULADA | Parcialmente | 4 | Evolucionado |
+| P9 | SIMULADA | Sí | 3 | Sin diferencia |
+| P10 | SIMULADA | Parcialmente | 4 | Evolucionado |
+
+### Resultado real — solo P1 (n=1)
+
+La respuesta registrada fue “Sí, casi idénticas”, puntuó la similitud con flauta como 4/5 y eligió “Evolucionado”. Frecuencias sobre una respuesta válida: conservación “Sí” 1/1 (100%), “Parcialmente” 0/1 (0%) y “No” 0/1 (0%). Promedio de similitud: 4/5. Preferencias: generación 0, 0/1 (0%); evolucionado, 1/1 (100%); sin diferencia, 0/1 (0%). Es un reporte de una sola persona, no una conclusión generalizable.
+
+### Ejemplo simulado — P1 más P2–P10 (n=10 en la tabla, solo 1 real)
+
+Para ilustrar el análisis de una tabla completa, el ejemplo combina P1 real con nueve respuestas expresamente ficticias. En esas diez filas: conservación “Sí” 5/10 (50%), “Parcialmente” 5/10 (50%) y “No” 0/10 (0%); promedio de similitud 38/10 = 3.8/5. Preferencias: generación 0, 1/10 (10%); evolucionado, 7/10 (70%); sin diferencia, 2/10 (20%).
+
+Estas cifras describen únicamente las respuestas construidas para el ejemplo y mezclan una respuesta real con nueve simuladas. **No son resultados de diez participantes ni evidencia experimental**, y no deben usarse para inferir una preferencia colectiva. La aparente mayoría por “Evolucionado” en la tabla didáctica no cambia el resultado real n=1.
+
+### Interpretación, conclusión y limitaciones
+
+La única respuesta real reportada favorece al audio evolucionado frente a generación 0 en semejanza con la referencia, y califica la conservación melódica como “Sí, casi idénticas”. Con n=1 solo se puede describir esa opinión; no se estima variabilidad, significación ni preferencia de una población. Las nueve filas simuladas muestran cómo calcular y presentar frecuencias y promedio, pero **no prueban el desempeño del AG**.
+
+La aplicación formal a 5–10 participantes sigue pendiente. No se documentaron aquí fecha, equipo de reproducción, orden asignado ni condiciones individuales. La evaluación usa una sola melodía y una sola corrida; percepción subjetiva no equivale a fitness STFT/chroma. No se comparó contra un audio de baseline. P2–P10 deben reemplazarse por respuestas obtenidas realmente antes de reportar una encuesta grupal.
