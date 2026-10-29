@@ -12,7 +12,7 @@ Datos: una melodía/referencia; 12 configuraciones × 5 semillas, por métrica. 
 
 **Lectura:** comparación pareada descriptiva con igual presupuesto real. En el ANOVA factorial exploratorio, con semilla como bloque y Holm para 14 contrastes, población (`p ajustada=1.87×10⁻⁸`) y mutación (`0.00587`) mostraron efectos en chroma; ningún término de STFT conservó `p ajustada < 0.05`. No se demuestra superioridad general ni calidad perceptual; no se comprobaron supuestos de residuos.
 
-**Encuesta auditiva:** se registró una respuesta real (P1: conservación “Sí, casi idénticas”, similitud 4/5, preferencia Evolucionado). P2–P10 del instrumento son simuladas para ilustrar cálculos y no representan participantes ni resultados. La aplicación real a 5–10 personas sigue pendiente.
+**Encuesta auditiva (n real=1):** P1 indicó “Sí, casi idénticas”, calificó la similitud con flauta con 4/5 y prefirió el audio evolucionado. El informe incluye además un ejemplo de cálculo con nueve respuestas ilustrativas. La aplicación a 5–10 participantes sigue pendiente.
 
 **Pendiente de equipo:** ratificar STFT como métrica primaria y B como operadores. Los resultados algorítmicos cubren una melodía/referencia y cinco semillas por configuración.
 

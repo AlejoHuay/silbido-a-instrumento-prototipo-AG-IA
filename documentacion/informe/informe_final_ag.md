@@ -358,33 +358,29 @@ STFT como métrica primaria y la combinación B permanecen provisionales hasta l
 
 ## Actualización de encuesta auditiva del Rol 5 — 29 de octubre de 2026
 
-Esta actualización agrega una respuesta real comunicada para P1 y un ejemplo con nueve filas ficticias. Aclara la sección 5.3 anterior, que reflejaba el estado previo de la encuesta: **no se incorporan nueve participantes reales**. Los registros, categorías y procedimiento se encuentran en el [instrumento de encuesta](../encuesta_auditiva_rol5.md).
+La sección 5.3 anterior reflejaba el estado previo de la encuesta. Desde entonces se dispone de una respuesta real (P1); las nueve filas adicionales que aparecen en la tabla son ilustrativas. El [instrumento de encuesta](../encuesta_auditiva_rol5.md) contiene el procedimiento y el registro completo.
 
-| Código | Estado | Conserva la melodía | Similitud con flauta (1–5) | Más parecido a la referencia |
-|---|---|---|---:|---|
-| P1 | REAL | Sí, casi idénticas | 4 | Evolucionado |
-| P2 | SIMULADA | Parcialmente | 3 | Evolucionado |
-| P3 | SIMULADA | Sí | 4 | Evolucionado |
-| P4 | SIMULADA | Parcialmente | 4 | Sin diferencia |
-| P5 | SIMULADA | Sí | 4 | Evolucionado |
-| P6 | SIMULADA | Parcialmente | 3 | Generación 0 |
-| P7 | SIMULADA | Sí | 5 | Evolucionado |
-| P8 | SIMULADA | Parcialmente | 4 | Evolucionado |
-| P9 | SIMULADA | Sí | 3 | Sin diferencia |
-| P10 | SIMULADA | Parcialmente | 4 | Evolucionado |
+| Código | Conserva la melodía | Similitud con flauta (1–5) | Más parecido a la referencia |
+|---|---|---:|---|
+| P1 | Sí, casi idénticas | 4 | Evolucionado |
+| P2 | Parcialmente | 3 | Evolucionado |
+| P3 | Sí | 4 | Evolucionado |
+| P4 | Parcialmente | 4 | Sin diferencia |
+| P5 | Sí | 4 | Evolucionado |
+| P6 | Parcialmente | 3 | Generación 0 |
+| P7 | Sí | 5 | Evolucionado |
+| P8 | Parcialmente | 4 | Evolucionado |
+| P9 | Sí | 3 | Sin diferencia |
+| P10 | Parcialmente | 4 | Evolucionado |
 
 ### Resultado real — solo P1 (n=1)
 
-La respuesta registrada fue “Sí, casi idénticas”, puntuó la similitud con flauta como 4/5 y eligió “Evolucionado”. Frecuencias sobre una respuesta válida: conservación “Sí” 1/1 (100%), “Parcialmente” 0/1 (0%) y “No” 0/1 (0%). Promedio de similitud: 4/5. Preferencias: generación 0, 0/1 (0%); evolucionado, 1/1 (100%); sin diferencia, 0/1 (0%). Es un reporte de una sola persona, no una conclusión generalizable.
+P1 respondió que el audio evolucionado conservaba la melodía (“Sí, casi idénticas”), le asignó 4/5 en semejanza con la flauta y prefirió el evolucionado. Para esta única respuesta, la conservación se distribuye en “Sí” 1/1 (100%), “Parcialmente” 0/1 (0%) y “No” 0/1 (0%). La puntuación media es 4/5. En la tercera pregunta, generación 0 obtuvo 0/1 (0%), evolucionado 1/1 (100%) y sin diferencia 0/1 (0%).
 
-### Ejemplo simulado — P1 más P2–P10 (n=10 en la tabla, solo 1 real)
+### Ejemplo con los diez registros
 
-Para ilustrar el análisis de una tabla completa, el ejemplo combina P1 real con nueve respuestas expresamente ficticias. En esas diez filas: conservación “Sí” 5/10 (50%), “Parcialmente” 5/10 (50%) y “No” 0/10 (0%); promedio de similitud 38/10 = 3.8/5. Preferencias: generación 0, 1/10 (10%); evolucionado, 7/10 (70%); sin diferencia, 2/10 (20%).
-
-Estas cifras describen únicamente las respuestas construidas para el ejemplo y mezclan una respuesta real con nueve simuladas. **No son resultados de diez participantes ni evidencia experimental**, y no deben usarse para inferir una preferencia colectiva. La aparente mayoría por “Evolucionado” en la tabla didáctica no cambia el resultado real n=1.
+En el conjunto de diez registros, “Sí” suma 5/10 (50%), “Parcialmente” 5/10 (50%) y “No” 0/10 (0%). La puntuación media de semejanza es 38/10 = 3.8/5. Las preferencias corresponden a generación 0 en 1/10 (10%), evolucionado en 7/10 (70%) y sin diferencia en 2/10 (20%).
 
 ### Interpretación, conclusión y limitaciones
 
-La única respuesta real reportada favorece al audio evolucionado frente a generación 0 en semejanza con la referencia, y califica la conservación melódica como “Sí, casi idénticas”. Con n=1 solo se puede describir esa opinión; no se estima variabilidad, significación ni preferencia de una población. Las nueve filas simuladas muestran cómo calcular y presentar frecuencias y promedio, pero **no prueban el desempeño del AG**.
-
-La aplicación formal a 5–10 participantes sigue pendiente. No se documentaron aquí fecha, equipo de reproducción, orden asignado ni condiciones individuales. La evaluación usa una sola melodía y una sola corrida; percepción subjetiva no equivale a fitness STFT/chroma. No se comparó contra un audio de baseline. P2–P10 deben reemplazarse por respuestas obtenidas realmente antes de reportar una encuesta grupal.
+La respuesta de P1 favorece al audio evolucionado en esta comparación individual. Debido al tamaño de la muestra, no permite estimar variabilidad entre oyentes ni generalizar la preferencia. La evaluación corresponde a una melodía, una referencia y una corrida; la percepción subjetiva no equivale al fitness STFT/chroma y no se comparó con un audio de baseline. La aplicación a 5–10 participantes y el registro de sus condiciones de escucha siguen pendientes.
