@@ -1,6 +1,5 @@
 # Encuesta auditiva — Rol 5
 
-Se dispone de una respuesta real (P1); las nueve filas restantes se incluyen como ejemplo ilustrativo y no corresponden a participantes encuestados.
 
 ## Objetivo y estímulos
 
