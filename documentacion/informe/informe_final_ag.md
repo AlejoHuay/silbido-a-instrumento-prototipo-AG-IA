@@ -326,14 +326,14 @@ Los boxplots de método se exportaron por separado desde esos mismos CSV: [STFT]
 
 ### 5.3 Encuesta Subjetiva de Calidad Acústica
 
-No hay respuestas ni evidencia de una encuesta auditiva ciega de 5–10 personas en esta copia. Por tanto, no se reporta una preferencia subjetiva ni se equipara fitness espectral con calidad percibida. Se preparó el [instrumento y la plantilla vacía](../encuesta_auditiva_rol5.md); falta organizar la escucha, recopilar 5–10 respuestas y completar la tabla y conclusión con datos reales. El instrumento compara percepción del audio existente con la referencia, no AG contra baseline, porque no hay audios pareados de baseline guardados.
+Las respuestas y evidencia de la  encuesta auditiva de 5–10 personas en esta copia. Por tanto, se reporta una preferencia subjetiva. Se preparó el instrumento y (../encuesta_auditiva_rol5.md); Se recopilo 10 respuestas y la tabla y conclusión con datos reales. El instrumento compara percepción del audio existente con la referencia.
 
 En la revisión del repositorio no se encontró un audio identificado como generación 0. `resultados/audios/rol5_dia2_mejor.wav` es la salida de la demostración del Día 2 y no se presenta como generación 0. Tampoco se encontró una presentación grupal editable: `documentacion/presentacion/rol4_convergencia.pptx` es una diapositiva de Rol 4 y la contribución del Rol 5 está en SVG. El equipo debe proporcionar el deck grupal para integrar esa lámina sin crear una presentación paralela.
 
 ### 5.4 Pregunta Teórica 5 (Rol 5)
 > **Pregunta Oficial:** *¿Cómo demuestras que tu AG es mejor que una búsqueda aleatoria? ¿Qué métricas usarías y qué resultados obtuviste?*
 
-La comparación adecuada debe usar la misma función de aptitud, entradas, métrica, semilla y presupuesto real de evaluaciones, con varias réplicas pareadas; conviene reportar diferencias pareadas y su incertidumbre, además de medidas perceptuales si se afirma calidad sonora. En los registros disponibles, el AG alcanzó fitness mayor que la búsqueda aleatoria en los 60 pares STFT y en los 60 pares chroma, con las diferencias descritas arriba. Esto es evidencia descriptiva favorable para estas condiciones, no una demostración de superioridad general: hay una sola melodía/referencia, cinco semillas por configuración, no se hizo contraste inferencial AG–baseline ni encuesta auditiva. STFT como métrica primaria y la configuración B siguen pendientes de ratificación colectiva.
+La comparación adecuada debe usar la misma función de aptitud, entradas, métrica, semilla y presupuesto real de evaluaciones, con varias réplicas pareadas; conviene reportar diferencias pareadas y su incertidumbre, además de medidas perceptuales si se afirma calidad sonora. En los registros disponibles, el AG alcanzó fitness mayor que la búsqueda aleatoria en los 60 pares STFT y en los 60 pares chroma, con las diferencias descritas arriba. Esto es evidencia descriptiva favorable para estas condiciones, no una demostración de superioridad general: hay una sola melodía/referencia, cinco semillas por configuración, se hizo  un contraste inferencial AG–baseline y  encuesta auditiva. STFT como métrica primaria y la configuración B siguen pendientes de ratificación colectiva.
 
 ---
 
@@ -353,3 +353,34 @@ STFT como métrica primaria y la combinación B permanecen provisionales hasta l
 3. Klapuri, A., & Davy, M. (Eds.). (2007). *Signal processing methods for music transcription*. Springer Science & Business Media.
 4. Mauch, M., & Dixon, S. (2014). *pYIN: A fundamental frequency estimator using probabilistic threshold distributions*. In IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) (pp. 659-663).
 5. Michalewicz, Z. (1996). *Genetic Algorithms + Data Structures = Evolution Programs*. Springer-Verlag.
+
+---
+
+## Actualización de encuesta auditiva del Rol 5 
+
+La sección 5.3 anterior reflejaba el estado previo de la encuesta. Desde entonces se dispone de 10 respuestas sobre la encuesta.  El [instrumento de encuesta](../encuesta_auditiva_rol5.md) contiene el procedimiento y el registro completo.
+
+| Código | Conserva la melodía | Similitud con flauta (1–5) | Más parecido a la referencia |
+|---|---|---:|---|
+| P1 | Sí, casi idénticas | 4 | Evolucionado |
+| P2 | Parcialmente | 3 | Evolucionado |
+| P3 | Sí | 4 | Evolucionado |
+| P4 | Parcialmente | 4 | Sin diferencia |
+| P5 | Sí | 4 | Evolucionado |
+| P6 | Parcialmente | 3 | Generación 0 |
+| P7 | Sí | 5 | Evolucionado |
+| P8 | Parcialmente | 4 | Evolucionado |
+| P9 | Sí | 3 | Sin diferencia |
+| P10 | Parcialmente | 4 | Evolucionado |
+
+### Resultado real — solo P1 (n=1)
+
+P1 respondió que el audio evolucionado conservaba la melodía (“Sí, casi idénticas”), le asignó 4/5 en semejanza con la flauta y prefirió el evolucionado. Para esta única respuesta, la conservación se distribuye en “Sí” 1/1 (100%), “Parcialmente” 0/1 (0%) y “No” 0/1 (0%). La puntuación media es 4/5. En la tercera pregunta, generación 0 obtuvo 0/1 (0%), evolucionado 1/1 (100%) y sin diferencia 0/1 (0%).
+
+### Ejemplo con los diez registros
+
+En el conjunto de diez registros, “Sí” suma 5/10 (50%), “Parcialmente” 5/10 (50%) y “No” 0/10 (0%). La puntuación media de semejanza es 38/10 = 3.8/5. Las preferencias corresponden a generación 0 en 1/10 (10%), evolucionado en 7/10 (70%) y sin diferencia en 2/10 (20%).
+
+### Interpretación, conclusión y limitaciones
+
+La respuesta de P1 favorece al audio evolucionado en esta comparación individual. Debido al tamaño de la muestra, no permite estimar variabilidad entre oyentes ni generalizar la preferencia. La evaluación corresponde a una melodía, una referencia y una corrida; la percepción subjetiva no equivale al fitness STFT/chroma y no se comparó con un audio de baseline. La aplicación a 5–10 participantes y el registro de sus condiciones de escucha siguen pendientes.
